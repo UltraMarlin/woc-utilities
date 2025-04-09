@@ -1,39 +1,59 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useRef, useState } from "react";
+import cn from "classnames";
 import {
   downloadImage,
   exportAsImage,
 } from "../utils/html2canvas/exportAsImage";
 import { DownloadIcon } from "./icons/DownloadIcon";
 
-type DownloadWrapperProps = {
-  children: ReactNode;
+export type DownloadableComponentProps = {
+  onLoad?: () => void;
+  hotReload?: boolean;
 };
 
-export const DownloadWrapper = ({ children }: DownloadWrapperProps) => {
+type DownloadWrapperProps = {
+  children: (props: DownloadableComponentProps) => ReactNode;
+  fileBaseName?: string;
+  className?: string;
+  delay?: number;
+};
+
+export const DownloadWrapper = ({
+  children,
+  fileBaseName = "download",
+  className,
+  delay = 0,
+}: DownloadWrapperProps) => {
   const [imgSrc, setImgSrc] = useState("");
   const componentRef = useRef<HTMLDivElement>(null);
 
   const startDownload = () => {
-    downloadImage(imgSrc, "download.png");
+    downloadImage(imgSrc, `${fileBaseName}.png`);
   };
 
-  useEffect(() => {
-    const generateImage = async () => {
-      if (!componentRef.current) return;
-      const imageBlob = await exportAsImage(componentRef.current);
-      setImgSrc(imageBlob);
-    };
+  const generateImage = async () => {
+    if (!componentRef.current) return;
+    const imageBlob = await exportAsImage(componentRef.current);
+    setImgSrc(imageBlob);
+  };
 
-    generateImage();
-  }, [children]);
+  const handleLoadWithDelay = () => {
+    console.log("Handle load");
+    setTimeout(() => {
+      generateImage();
+    }, delay);
+  };
 
   return (
-    <div className="relative flex aspect-square size-[360px] w-fit flex-col items-center justify-center">
-      {!imgSrc && (
-        <div ref={componentRef} className="absolute -top-[6000px]">
-          {children}
-        </div>
+    <div
+      className={cn(
+        "relative flex aspect-square items-center justify-center",
+        className
       )}
+    >
+      <div ref={componentRef} className="absolute -top-[9999px]">
+        {children({ onLoad: handleLoadWithDelay })}
+      </div>
       {imgSrc && <img className="peer" src={imgSrc} />}
       {!imgSrc && <div className="size-full animate-pulse bg-neutral-200" />}
       <button

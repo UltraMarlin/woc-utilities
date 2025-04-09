@@ -1,15 +1,12 @@
-import { DownloadWrapper } from "./components/DownloadWrapper";
-import { ExampleComponent } from "./components/ExampleComponent";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Outlet } from "react-router-dom";
 
 export const App = () => {
+  const client = new QueryClient();
+
   return (
-    <main className="p-10">
-      <DownloadWrapper>
-        <ExampleComponent headline="WOC Plan" />
-      </DownloadWrapper>
-      <DownloadWrapper>
-        <ExampleComponent headline="WOC Plan Nummer 2" />
-      </DownloadWrapper>
-    </main>
+    <QueryClientProvider client={client}>
+      <Outlet />
+    </QueryClientProvider>
   );
 };
