@@ -3,6 +3,7 @@ import {
   downloadImage,
   exportAsImage,
 } from "../utils/html2canvas/exportAsImage";
+import { DownloadIcon } from "./icons/DownloadIcon";
 
 type DownloadWrapperProps = {
   children: ReactNode;
@@ -37,9 +38,9 @@ export const DownloadWrapper = ({ children }: DownloadWrapperProps) => {
       {!imgSrc && <div className="size-full animate-pulse bg-neutral-200" />}
       <button
         onClick={startDownload}
-        className="absolute rounded bg-neutral-800/50 px-5 py-2.5 text-white transition-colors hover:bg-neutral-900/60"
+        className="absolute rounded-xl bg-neutral-800/50 p-4 text-white transition-colors hover:bg-neutral-900/60"
       >
-        Download
+        <DownloadIcon className="size-10" />
       </button>
     </div>
   );
