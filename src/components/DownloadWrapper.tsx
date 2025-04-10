@@ -54,7 +54,7 @@ export const DownloadWrapper = ({
       <div ref={componentRef} className="absolute -top-[9999px]">
         {children({ onLoad: handleLoadWithDelay })}
       </div>
-      {imgSrc && <img className="peer" src={imgSrc} />}
+      {imgSrc && <img className="peer" src={imgSrc} alt="" />}
       {!imgSrc && <div className="size-full animate-pulse bg-neutral-200" />}
       <button
         onClick={startDownload}

@@ -43,6 +43,7 @@ export const ExampleComponent = ({
             <img
               className="mt-2"
               src={`${import.meta.env.VITE_API_BASE_URL}/assets/${stream.activity.icon}?width=64&height=64&quality=100&fit=cover&format=webp`}
+              alt=""
             />
           </li>
         ))}
