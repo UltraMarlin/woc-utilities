@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 import exampleBg from "../assets/images/example-background.png";
@@ -22,16 +22,20 @@ export const ExampleComponent = ({
 }: ExampleComponentProps) => {
   const { data: streams, status: streamsStatus } = useStreams();
 
-  const groupedStreams = streams?.reduce(
-    (acc, stream) => {
-      const date = stream.start.split("T")[0];
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(stream);
-      return acc;
-    },
-    {} as Record<string, typeof streams>
+  const groupedStreams = useMemo(
+    () =>
+      streams?.reduce(
+        (acc, stream) => {
+          const date = stream.start.split("T")[0];
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(stream);
+          return acc;
+        },
+        {} as Record<string, typeof streams>
+      ),
+    [streams]
   );
 
   useEffect(() => {
