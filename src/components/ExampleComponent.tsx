@@ -1,22 +1,38 @@
 import cn from "classnames";
+import { useEffect } from "react";
 import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
-import { useEffect } from "react";
+import exampleBg from "../assets/images/example-background.png";
+import exampleLogo from "../assets/images/example-logo.png";
 
 export type ExampleComponentProps = DownloadableComponentProps & {
   className?: string;
-  headline?: string;
 };
 
+const formatTime = (date: Date) =>
+  date.toLocaleTimeString("de-DE", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
 export const ExampleComponent = ({
-  headline,
   className,
   onLoad,
   hotReload = false,
 }: ExampleComponentProps) => {
   const { data: streams, status: streamsStatus } = useStreams();
 
-  const firstThreeStreams = streams?.slice(0, 3);
+  const groupedStreams = streams?.reduce(
+    (acc, stream) => {
+      const date = stream.start.split("T")[0];
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(stream);
+      return acc;
+    },
+    {} as Record<string, typeof streams>
+  );
 
   useEffect(() => {
     if (streamsStatus === "success") onLoad?.();
@@ -29,26 +45,57 @@ export const ExampleComponent = ({
   return (
     <div
       className={cn(
-        "size-[1440px] origin-top-left bg-gradient-to-tr from-blue-400 to-pink-600 p-4 text-white",
+        "relative flex size-[1440px] origin-top-left flex-col items-center bg-contain bg-no-repeat text-neutral-800",
         className
       )}
+      style={{ backgroundImage: `url(${exampleBg})` }}
     >
-      <h1 className="mb-4 text-center text-4xl font-bold">{headline}</h1>
-      <p>Hallos</p>
-      <ul className="mb-8 text-2xl">
-        {firstThreeStreams?.map((stream) => (
-          <li key={stream.id}>
-            <span>{stream.start}</span>
-            <span>{stream.streamer.name}</span>
-            <img
-              className="mt-2"
-              src={`${import.meta.env.VITE_API_BASE_URL}/assets/${stream.activity.icon}?width=64&height=64&quality=100&fit=cover&format=webp`}
-              alt=""
-            />
-          </li>
+      <img src={exampleLogo} alt="" className="mb-24 mt-4 h-56" />
+      <h1 className="font-pixel mb-10 text-center text-[6rem]">
+        Upcoming Streams
+      </h1>
+
+      <div>
+        {Object.entries(groupedStreams || {}).map(([date, streams]) => (
+          <div className="mb-10 w-[800px] text-3xl">
+            <h2>
+              {new Date(date).toLocaleDateString("de", {
+                weekday: "long",
+                day: "numeric",
+                month: "numeric",
+              })}
+            </h2>
+            <ul>
+              {streams.map((stream) => (
+                <li key={stream.id} className="flex w-full items-center gap-4">
+                  <div
+                    className="relative flex flex-col items-center bg-contain"
+                    style={{ backgroundImage: `url(${exampleBg})` }}
+                  >
+                    <span>{formatTime(new Date(stream.start))}</span>
+                    <span>{formatTime(new Date(stream.end))}</span>
+                  </div>
+                  <div
+                    className="relative flex w-full gap-4 bg-contain"
+                    style={{ backgroundImage: `url(${exampleBg})` }}
+                  >
+                    <img
+                      className="mt-2"
+                      src={`${import.meta.env.VITE_API_BASE_URL}/assets/${stream.activity.icon}?width=104&height=104&quality=100&fit=cover&format=webp`}
+                      alt=""
+                    />
+                    <div className="flex flex-col justify-center">
+                      <span>{stream.activity.name}</span>
+                      <span>{`twitch.tv${stream.streamer.stream_link.split("twitch.tv")[1]}`}</span>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         ))}
-      </ul>
-      <p>More Info</p>
+      </div>
+      <p className="absolute bottom-24 text-4xl">More Info</p>
     </div>
   );
 };

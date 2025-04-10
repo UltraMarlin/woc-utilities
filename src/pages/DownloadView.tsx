@@ -4,10 +4,8 @@ import { ExampleComponent } from "../components/ExampleComponent";
 export const DownloadView = () => {
   return (
     <main className="p-10">
-      <DownloadWrapper>
-        {({ onLoad }) => (
-          <ExampleComponent headline="WOC Plan" onLoad={onLoad} />
-        )}
+      <DownloadWrapper className="size-[360px]">
+        {({ onLoad }) => <ExampleComponent onLoad={onLoad} />}
       </DownloadWrapper>
     </main>
   );

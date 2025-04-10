@@ -3,34 +3,19 @@ import axios from "axios";
 import { useMemo } from "react";
 
 export type Stream = {
-  activity: {
-    icon: string;
-    id: number;
-    name: string;
-    hidden: boolean;
-  };
-  end: string;
-  fellows: {
-    people_id: {
-      icon: string;
-      id: number;
-      name: string;
-      hide_from_team_page: boolean;
-    };
-  }[];
-  highlight: boolean;
   id: number;
   start: string;
-  language: StreamLanguage;
-  status: boolean;
-  streamer: {
-    icon: string;
+  end: string;
+  activity: {
     id: number;
+    icon: string;
     name: string;
-    stream_link: string;
-    hide_from_team_page: boolean;
   };
-  vod_link: string;
+  language: StreamLanguage;
+  streamer: {
+    id: number;
+    stream_link: string;
+  };
 };
 
 export type StreamWithAlternatives = Omit<Stream, "activity"> & {
@@ -50,7 +35,8 @@ export const useStreams = (lang: "de" | "en" = "de") => {
     queryKey: ["streams"],
     queryFn: async () => {
       const { data } = await axios.get<{ data: StreamWithAlternatives[] }>(
-        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=*,activity.icon,activity.id,activity.name,activity.name_en,activity.hidden,fellows.people_id.icon,fellows.people_id.id,fellows.people_id.name,fellows.people_id.hide_from_team_page,streamer.icon,streamer.id,streamer.name,streamer.stream_link,streamer.hide_from_team_page&sort=start`
+        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,streamer.id,streamer.stream_link&sort=start` +
+          "&filter[_and][0][end][_gt]=2024-10-11T18:00:00&filter[_and][1][end][_lte]=2024-10-12T6:00:00"
       );
       return data.data;
     },

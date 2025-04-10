@@ -5,11 +5,9 @@ export const DevView = () => {
   return (
     <main className="flex flex-col gap-6 p-10">
       <DownloadWrapper className="size-[720px]">
-        {({ onLoad }) => (
-          <ExampleComponent headline="WOC Plan" onLoad={onLoad} hotReload />
-        )}
+        {({ onLoad }) => <ExampleComponent onLoad={onLoad} hotReload />}
       </DownloadWrapper>
-      <ExampleComponent headline="WOC Plan" />
+      <ExampleComponent />
     </main>
   );
 };
