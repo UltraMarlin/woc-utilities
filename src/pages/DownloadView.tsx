@@ -1,11 +1,11 @@
 import { DownloadWrapper } from "../components/DownloadWrapper";
-import { ExampleComponent } from "../components/ExampleComponent";
+import { ScheduleLayout } from "../components/ScheduleLayout";
 
 export const DownloadView = () => {
   return (
     <main className="p-10">
       <DownloadWrapper className="size-[360px]">
-        {({ onLoad }) => <ExampleComponent onLoad={onLoad} />}
+        {({ onLoad }) => <ScheduleLayout onLoad={onLoad} />}
       </DownloadWrapper>
     </main>
   );

@@ -5,7 +5,13 @@ export default {
     extend: {
       fontFamily: {
         pixel: ["DePixelHalbfett", "sans-serif"],
+        standard: ["Carlito"],
       },
+      colors: {
+        night: {
+          highlight: "#ACE1B2"
+        }
+      }
     },
   },
   plugins: [],
