@@ -5,6 +5,7 @@ import "./globals.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DownloadView } from "./pages/DownloadView.tsx";
 import { DevView } from "./pages/DevView.tsx";
+import { SpecificDownloadView } from "./pages/SpecificDownloadView.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />}>
           <Route index element={<DownloadView />} />
           <Route path="dev" element={<DevView />} />
+          <Route path="specific" element={<SpecificDownloadView />} />
         </Route>
       </Routes>
     </BrowserRouter>
