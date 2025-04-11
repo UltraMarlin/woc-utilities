@@ -38,7 +38,6 @@ export const DownloadWrapper = ({
   };
 
   const handleLoadWithDelay = () => {
-    console.log("Handle load");
     setTimeout(() => {
       generateImage();
     }, delay);
@@ -51,16 +50,18 @@ export const DownloadWrapper = ({
         className
       )}
     >
-      <div ref={componentRef} className="absolute -top-[9999px]">
+      <div ref={componentRef} className="absolute -left-[9999px]">
         {children({ onLoad: handleLoadWithDelay })}
       </div>
       {imgSrc && <img className="peer" src={imgSrc} alt="" />}
-      {!imgSrc && <div className="size-full animate-pulse bg-neutral-200" />}
+      {!imgSrc && <div className="size-full animate-pulse bg-neutral-400" />}
+      <div className="absolute size-full bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
+      <span className="absolute bottom-2 text-white">{fileBaseName}.png</span>
       <button
         onClick={startDownload}
-        className="absolute rounded-xl bg-neutral-800/50 p-4 text-white transition-colors hover:bg-neutral-900/60"
+        className="absolute rounded-xl bg-black/60 p-5 text-white transition-colors hover:bg-black/80"
       >
-        <DownloadIcon className="size-10" />
+        <DownloadIcon className="size-12" />
       </button>
     </div>
   );

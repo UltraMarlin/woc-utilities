@@ -11,8 +11,12 @@ export default {
         night: {
           highlight: "#ACE1B2",
           background: "#00141E",
-        }
-      }
+        },
+        day: {
+          highlight: "#203737",
+          background: "#E1DFAC",
+        },
+      },
     },
   },
   plugins: [],

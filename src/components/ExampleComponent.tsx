@@ -20,7 +20,10 @@ export const ExampleComponent = ({
   onLoad,
   hotReload = false,
 }: ExampleComponentProps) => {
-  const { data: streams, status: streamsStatus } = useStreams();
+  const { data: streams, status: streamsStatus } = useStreams(
+    "2024-10-11T18:00:00",
+    "2024-10-12T06:00:00"
+  );
 
   const groupedStreams = useMemo(
     () =>
@@ -55,7 +58,7 @@ export const ExampleComponent = ({
       style={{ backgroundImage: `url(${exampleBg})` }}
     >
       <img src={exampleLogo} alt="" className="mb-24 mt-4 h-56" />
-      <h1 className="font-pixel mb-10 text-center text-[6rem]">
+      <h1 className="mb-10 text-center font-pixel text-[6rem]">
         Upcoming Streams
       </h1>
 

@@ -1,7 +1,10 @@
 import html2canvas from "html2canvas";
 
 export const exportAsImage = async (element: HTMLElement) => {
-  const canvas = await html2canvas(element, { useCORS: true, allowTaint: true });
+  const canvas = await html2canvas(element, {
+    useCORS: true,
+    allowTaint: true,
+  });
   return canvas.toDataURL("image/png", 1.0);
 };
 
