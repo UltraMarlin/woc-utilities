@@ -9,7 +9,8 @@ export default {
       },
       colors: {
         night: {
-          highlight: "#ACE1B2"
+          highlight: "#ACE1B2",
+          background: "#00141E",
         }
       }
     },

@@ -2,7 +2,7 @@ import cn from "classnames";
 import { useEffect, useMemo } from "react";
 import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
-import logo from "../assets/images/logo.png";
+import nightLogo from "../assets/images/night-logo.png";
 import nightBg from "../assets/images/night-background.png";
 import nightTimeBox from "../assets/images/night-time-box.png";
 import nightStreamBox from "../assets/images/night-stream-box.png";
@@ -52,32 +52,38 @@ export const ScheduleLayout = ({
   return (
     <div
       className={cn(
-        "relative flex size-[1584px] origin-top-left flex-col items-center bg-contain bg-no-repeat text-neutral-800 -z-10",
+        "relative flex size-[1584px] origin-top-left flex-col items-center bg-contain bg-no-repeat text-night-background",
         className
       )}
       style={{ backgroundImage: `url(${nightBg})` }}
     >
-      <img src={logo} alt="" className="mb-24 mt-4 h-56" />
-      <h1 className="font-pixel mb-10 text-center text-[6rem] night-outline">
+      <img src={nightLogo} alt="" className="mb-20 mt-20 h-48" />
+      <h1 className="night-outline mb-10 text-center font-pixel text-[72px] font-bold">
         Upcoming Streams
       </h1>
 
-      <div className="text-night-highlight font-standard">
+      <div className="flex flex-col items-center font-standard text-night-highlight">
         {Object.entries(groupedStreams || {}).map(([date, streams]) => (
-          <div className="mb-10 w-[800px] text-3xl">
-            <h2>
+          <div className="mb-10 text-3xl">
+            <h2 className="text-[36px] font-bold">
               {new Date(date).toLocaleDateString("de", {
                 weekday: "long",
                 day: "numeric",
                 month: "numeric",
               })}
             </h2>
-            <div className="w-[955px] h-[12px]" style={{ backgroundImage: `url(${nightLine})` }} />
-            <ul>
+            <div
+              className="mb-4 h-[12px] w-[955px]"
+              style={{ backgroundImage: `url(${nightLine})` }}
+            />
+            <ul className="flex flex-col gap-3">
               {streams.map((stream) => (
-                <li key={stream.id} className="grid grid-cols-[154px_778px] grid-rows-[113px] w-full gap-4">
+                <li
+                  key={stream.id}
+                  className="grid w-full grid-cols-[154px_778px] grid-rows-[113px] gap-6"
+                >
                   <div
-                    className="relative flex flex-col items-center bg-contain"
+                    className="relative flex flex-col items-center justify-center bg-contain text-[2rem]/6 font-bold"
                     style={{ backgroundImage: `url(${nightTimeBox})` }}
                   >
                     <span>{formatTime(new Date(stream.start))}</span>
@@ -86,14 +92,19 @@ export const ScheduleLayout = ({
                   </div>
                   <div className="relative flex w-full">
                     <img
-                      className="absolute rounded-l-xl left-2 top-2"
+                      className="absolute left-2 top-2 rounded-l-xl"
                       src={`${import.meta.env.VITE_API_BASE_URL}/assets/${stream.activity.icon}?width=104&height=97&quality=100&fit=cover&format=webp`}
                       alt=""
                     />
-                    <div className="absolute size-full bg-contain gap-4 pl-[112px]" style={{ backgroundImage: `url(${nightStreamBox})` }}>
-                      <div className="flex flex-col justify-center p-2">
-                        <span>{stream.activity.name}</span>
-                        <span>{`twitch.tv${stream.streamer.stream_link.split("twitch.tv")[1]}`}</span>
+                    <div
+                      className="absolute size-full gap-4 bg-contain pl-[112px]"
+                      style={{ backgroundImage: `url(${nightStreamBox})` }}
+                    >
+                      <div className="flex h-full flex-col justify-center gap-1 pl-6">
+                        <div className="text-[36px] font-bold">
+                          {stream.activity.name}
+                        </div>
+                        <div className="text-[28px]">{`twitch.tv${stream.streamer.stream_link.split("twitch.tv")[1]}`}</div>
                       </div>
                     </div>
                   </div>
@@ -102,8 +113,13 @@ export const ScheduleLayout = ({
             </ul>
           </div>
         ))}
+        <div className="absolute bottom-24 flex gap-3 text-[44px] font-bold">
+          Mehr Infos gibt es auf
+          <div className="h-14 border-b-4 border-current">
+            www.weekofcharity.de
+          </div>
+        </div>
       </div>
-      <p className="absolute bottom-24 text-4xl">More Info</p>
     </div>
   );
 };
