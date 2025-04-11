@@ -9,6 +9,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Carlito";
+  src: url("assets/fonts/Carlito-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .night-outline {
   -webkit-text-stroke-width: 3px;
   -webkit-text-stroke-color: #ACE1B2;
