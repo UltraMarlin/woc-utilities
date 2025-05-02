@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 import nightLogo from "../assets/images/night-logo.png";
@@ -25,6 +25,13 @@ const formatTime = (date: Date) =>
   date.toLocaleTimeString("de-DE", {
     hour: "2-digit",
     minute: "2-digit",
+  });
+
+const formatTimeAlt = (date: Date) => `${date.getHours()} Uhr`;
+
+const getWeekday = (date: Date) =>
+  date.toLocaleDateString("de-DE", {
+    weekday: "long",
   });
 
 export const ScheduleLayout = ({
@@ -56,12 +63,34 @@ export const ScheduleLayout = ({
     [streams]
   );
 
+  const getAltText = useCallback(() => {
+    if (!streams) return "";
+    const startDate = new Date(streams[0].start);
+    const endDate = new Date(streams[streams.length - 1].end);
+    const startTimeText = `${getWeekday(startDate)} ${formatTimeAlt(startDate)}`;
+    const endTimeText = `${getWeekday(endDate)} ${formatTimeAlt(endDate)}`;
+    const timeRangeText = `${startTimeText} bis ${endTimeText}`;
+    const streamInfo = streams
+      .map(
+        (stream) =>
+          `${formatTimeAlt(new Date(stream.start))}: ${stream.activity.name} bei ${stream.streamer.name}`
+      )
+      .join("; ");
+    return `Der Week of Charity Streamplan von ${timeRangeText}; ${streamInfo}; Mehr Infos gibt es auf weekofcharity.de`;
+  }, [streams]);
+
   useEffect(() => {
-    if (streamsStatus === "success") onLoad?.();
-  }, [streamsStatus, onLoad, minEndTimestampUTC, maxEndTimestampUTC]);
+    if (streamsStatus === "success") onLoad?.(getAltText());
+  }, [
+    streamsStatus,
+    onLoad,
+    minEndTimestampUTC,
+    maxEndTimestampUTC,
+    getAltText,
+  ]);
 
   if (hotReload && streamsStatus === "success") {
-    onLoad?.();
+    onLoad?.(getAltText());
   }
 
   return (

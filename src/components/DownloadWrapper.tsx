@@ -7,7 +7,7 @@ import {
 import { DownloadIcon } from "./icons/DownloadIcon";
 
 export type DownloadableComponentProps = {
-  onLoad?: () => void;
+  onLoad?: (alt?: string) => void;
   hotReload?: boolean;
 };
 
@@ -25,6 +25,7 @@ export const DownloadWrapper = ({
   delay = 0,
 }: DownloadWrapperProps) => {
   const [imgSrc, setImgSrc] = useState("");
+  const [altText, setAltText] = useState("");
   const componentRef = useRef<HTMLDivElement>(null);
 
   const startDownload = () => {
@@ -37,9 +38,10 @@ export const DownloadWrapper = ({
     setImgSrc(imageBlob);
   };
 
-  const handleLoadWithDelay = () => {
+  const handleLoadWithDelay = (alt?: string) => {
     setTimeout(() => {
       generateImage();
+      if (alt) setAltText(alt);
     }, delay);
   };
 
@@ -62,6 +64,12 @@ export const DownloadWrapper = ({
         className="absolute rounded-xl bg-black/60 p-5 text-white transition-colors hover:bg-black/80"
       >
         <DownloadIcon className="size-12" />
+      </button>
+      <button
+        onClick={() => window.alert(altText)}
+        className="absolute right-2 top-2 rounded-lg bg-black/60 px-2 py-0.5 text-white transition-colors hover:bg-black/80"
+      >
+        ALT
       </button>
     </div>
   );

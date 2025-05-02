@@ -15,6 +15,7 @@ export type Stream = {
   streamer: {
     id: number;
     stream_link: string;
+    name: string;
   };
 };
 
@@ -39,7 +40,7 @@ export const useStreams = (
     queryKey: ["streams", minEndTimestamp, maxEndTimestamp],
     queryFn: async () => {
       const { data } = await axios.get<{ data: StreamWithAlternatives[] }>(
-        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,streamer.id,streamer.stream_link&sort=start` +
+        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,streamer.id,streamer.stream_link,streamer.name&sort=start` +
           `&filter[_and][0][end][_gt]=${minEndTimestamp}&filter[_and][1][end][_lte]=${maxEndTimestamp}`
       );
       return data.data;
