@@ -13,7 +13,10 @@ export const DownloadView = () => {
   );
 
   const downloadAll = () => {
-    const downloadButtons = downloadGrid.current?.querySelectorAll("button");
+    const downloadButtons =
+      downloadGrid.current?.querySelectorAll<HTMLButtonElement>(
+        "button[data-download]"
+      );
     downloadButtons?.forEach((button) => {
       button.click();
     });

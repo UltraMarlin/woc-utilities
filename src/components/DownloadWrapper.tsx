@@ -60,6 +60,8 @@ export const DownloadWrapper = ({
       <div className="absolute size-full bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
       <span className="absolute bottom-2 text-white">{fileBaseName}.png</span>
       <button
+        type="button"
+        data-download
         onClick={startDownload}
         className="absolute rounded-xl bg-black/60 p-5 text-white transition-colors hover:bg-black/80"
       >
