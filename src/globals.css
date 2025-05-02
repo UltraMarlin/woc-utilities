@@ -41,3 +41,7 @@
     @apply inline-block;
   }
 }
+
+*:focus-visible {
+  outline-offset: 2px;
+}

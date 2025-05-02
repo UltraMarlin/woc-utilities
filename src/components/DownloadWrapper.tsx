@@ -69,7 +69,7 @@ export const DownloadWrapper = ({
       </button>
       <button
         onClick={() => window.alert(altText)}
-        className="absolute right-2 top-2 rounded-lg bg-black/60 px-2 py-0.5 text-white transition-colors hover:bg-black/80"
+        className="absolute right-2 top-2 rounded-lg bg-black/60 px-2.5 py-0.5 font-semibold text-white underline decoration-transparent decoration-2 underline-offset-[-1px] transition-[background-color,text-decoration-color,text-underline-offset] hover:bg-black/80 hover:decoration-white hover:underline-offset-1"
       >
         ALT
       </button>
