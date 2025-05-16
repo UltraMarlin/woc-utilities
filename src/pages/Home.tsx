@@ -15,17 +15,18 @@ const links = [
 export const Home = () => {
   return (
     <PageContainer>
-      <div className="flex flex-col gap-4 rounded-lg bg-neutral-200 p-4">
+      <ul className="flex flex-col gap-4 rounded-lg bg-neutral-200 p-4">
         {links.map((link) => (
-          <Link
-            to={link.href}
-            key={link.href}
-            className="w-fit text-2xl underline hover:decoration-2"
-          >
-            {link.label}
-          </Link>
+          <li key={link.href}>
+            <Link
+              to={link.href}
+              className="text-2xl underline hover:decoration-2"
+            >
+              {link.label}
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </PageContainer>
   );
 };
