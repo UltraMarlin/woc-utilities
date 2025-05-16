@@ -7,15 +7,19 @@ const links = [
     label: "Schedule Images",
   },
   {
-    href: "/youtube",
-    label: "Youtube",
+    href: "/yt-descriptions",
+    label: "Youtube Descriptions (WIP)",
+  },
+  {
+    href: "/yt-thumbnails",
+    label: "Youtube Thumbnails (WIP)",
   },
 ];
 
 export const Home = () => {
   return (
-    <PageContainer>
-      <ul className="flex flex-col gap-4 rounded-lg bg-neutral-200 p-4">
+    <PageContainer isHome>
+      <ul className="flex flex-col gap-4">
         {links.map((link) => (
           <li key={link.href}>
             <Link

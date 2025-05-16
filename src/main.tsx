@@ -7,7 +7,8 @@ import { DownloadView } from "./pages/DownloadView.tsx";
 import { DevView } from "./pages/DevView.tsx";
 import { SpecificDownloadView } from "./pages/SpecificDownloadView.tsx";
 import { Home } from "./pages/Home.tsx";
-import { Youtube } from "./pages/Youtube.tsx";
+import { YoutubeDescriptions } from "./pages/YoutubeDescriptions.tsx";
+import { YoutubeThumbnails } from "./pages/YoutubeThumbnails.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -21,7 +22,8 @@ createRoot(document.getElementById("root")!).render(
             path="schedule-images/specific"
             element={<SpecificDownloadView />}
           />
-          <Route path="youtube" element={<Youtube />} />
+          <Route path="yt-descriptions" element={<YoutubeDescriptions />} />
+          <Route path="yt-thumbnails" element={<YoutubeThumbnails />} />
         </Route>
       </Routes>
     </BrowserRouter>
