@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { DownloadWrapper } from "../components/DownloadWrapper";
 import { ScheduleLayout } from "../components/ScheduleLayout";
 import { formatFileDate } from "../utils/formatting/formatFileDate";
+import { PageContainer } from "../components/PageContainer";
 
 export const SpecificDownloadView = () => {
   const [searchParams] = useSearchParams();
@@ -15,8 +16,6 @@ export const SpecificDownloadView = () => {
   const minEndDate = new Date(minEnd);
   const maxEndDate = new Date(maxEnd);
 
-  console.log(minEndDate);
-  console.log(maxEndDate);
   if (isNaN(minEndDate.getTime()) || isNaN(maxEndDate.getTime()))
     return <div>Invalid dates in search params</div>;
 
@@ -24,21 +23,23 @@ export const SpecificDownloadView = () => {
   const fileBaseName = `${formatFileDate(minEndDate)}${isNight ? "night" : "day"}`;
 
   return (
-    <main className="flex flex-col items-center p-4 sm:p-8">
-      <DownloadWrapper
-        key={minEnd}
-        className="aspect-square max-w-[720px]"
-        fileBaseName={fileBaseName}
-      >
-        {({ onLoad }) => (
-          <ScheduleLayout
-            onLoad={onLoad}
-            minEndTimestampUTC={minEnd}
-            maxEndTimestampUTC={maxEnd}
-            night={isNight}
-          />
-        )}
-      </DownloadWrapper>
-    </main>
+    <PageContainer>
+      <div className="flex flex-col items-center p-4 sm:p-8">
+        <DownloadWrapper
+          key={minEnd}
+          className="aspect-square max-w-[720px]"
+          fileBaseName={fileBaseName}
+        >
+          {({ onLoad }) => (
+            <ScheduleLayout
+              onLoad={onLoad}
+              minEndTimestampUTC={minEnd}
+              maxEndTimestampUTC={maxEnd}
+              night={isNight}
+            />
+          )}
+        </DownloadWrapper>
+      </div>
+    </PageContainer>
   );
 };
