@@ -46,12 +46,7 @@ export const DownloadWrapper = ({
   };
 
   return (
-    <div
-      className={cn(
-        "relative flex aspect-square items-center justify-center",
-        className
-      )}
-    >
+    <div className={cn("relative flex items-center justify-center", className)}>
       <div ref={componentRef} className="absolute -left-[9999px]">
         {children({ onLoad: handleLoadWithDelay })}
       </div>
@@ -67,12 +62,14 @@ export const DownloadWrapper = ({
       >
         <DownloadIcon className="size-12" />
       </button>
-      <button
-        onClick={() => window.alert(altText)}
-        className="absolute right-2 top-2 rounded-lg bg-black/60 px-2.5 py-0.5 font-semibold text-white underline decoration-transparent decoration-2 underline-offset-[-1px] transition-[background-color,text-decoration-color,text-underline-offset] hover:bg-black/80 hover:decoration-white hover:underline-offset-1"
-      >
-        ALT
-      </button>
+      {altText && (
+        <button
+          onClick={() => window.alert(altText)}
+          className="absolute right-2 top-2 rounded-lg bg-black/60 px-2.5 py-0.5 font-semibold text-white underline decoration-transparent decoration-2 underline-offset-[-1px] transition-[background-color,text-decoration-color,text-underline-offset] hover:bg-black/80 hover:decoration-white hover:underline-offset-1"
+        >
+          ALT
+        </button>
+      )}
     </div>
   );
 };
