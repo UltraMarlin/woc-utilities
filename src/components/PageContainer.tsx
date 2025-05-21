@@ -21,7 +21,7 @@ export const PageContainer = ({
           </nav>
         )}
       </header>
-      <main className="p-4 sm:p-8">{children}</main>
+      <main className="p-4">{children}</main>
     </div>
   );
 };

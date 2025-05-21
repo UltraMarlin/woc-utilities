@@ -16,6 +16,7 @@ type DownloadWrapperProps = {
   fileBaseName?: string;
   className?: string;
   delay?: number;
+  downloadPosition?: "center" | "top-left";
 };
 
 export const DownloadWrapper = ({
@@ -23,6 +24,7 @@ export const DownloadWrapper = ({
   fileBaseName = "download",
   className,
   delay = 0,
+  downloadPosition = "center",
 }: DownloadWrapperProps) => {
   const [imgSrc, setImgSrc] = useState("");
   const [altText, setAltText] = useState("");
@@ -58,7 +60,10 @@ export const DownloadWrapper = ({
         type="button"
         data-download
         onClick={startDownload}
-        className="absolute rounded-xl bg-black/60 p-5 text-white transition-colors hover:bg-black/80"
+        className={cn(
+          "absolute rounded-xl bg-black/60 p-5 text-white transition-colors hover:bg-black/80",
+          { "left-4 top-4": downloadPosition === "top-left" }
+        )}
       >
         <DownloadIcon className="size-12" />
       </button>

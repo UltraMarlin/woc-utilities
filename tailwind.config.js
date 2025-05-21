@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         pixel: ["DePixelHalbfett", "sans-serif"],
         standard: ["Carlito"],
+        ubuntu: ["Ubuntu"],
+        explorer: ["Explorer"],
+        lilita: ["Lilita One"],
       },
       colors: {
         night: {

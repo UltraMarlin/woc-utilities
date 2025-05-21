@@ -23,6 +23,28 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Ubuntu";
+  src: url("assets/fonts/Ubuntu-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lilita One";
+  src: url("assets/fonts/LilitaOne-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Explorer";
+  src: url("assets/fonts/Explorer.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .night-outline {
   -webkit-text-stroke-width: 8px;
   -webkit-text-stroke-color: #ace1b2;
@@ -34,6 +56,20 @@
   -webkit-text-stroke-width: 8px;
   -webkit-text-stroke-color: #203737;
   paint-order: stroke fill;
+}
+
+.yt-thumbnail-text {
+  text-shadow: 10px 10px 12px rgba(0, 0, 0, 1);
+}
+
+.yt-thumbnail-text-logo {
+  text-shadow: 8px 10px 6px rgba(0, 0, 0, 1);
+}
+
+.yt-thumbnail-text-logo-year {
+  text-shadow:
+    6px 5px 8px rgba(0, 0, 0, 1),
+    3px 7px 4px rgba(0, 0, 0, 1);
 }
 
 @layer base {
