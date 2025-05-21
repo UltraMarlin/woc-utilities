@@ -11,11 +11,18 @@ export type Stream = {
     icon: string;
     name: string;
   };
+  fellows: {
+    people_id: {
+      id: number;
+      name: string;
+      stream_link: string | null;
+    };
+  }[];
   language: StreamLanguage;
   streamer: {
     id: number;
-    stream_link: string;
     name: string;
+    stream_link: string;
   };
 };
 
@@ -32,16 +39,21 @@ export enum StreamLanguage {
 }
 
 export const useStreams = (
-  minEndTimestamp: string,
-  maxEndTimestamp: string,
+  minEndTimestamp?: string,
+  maxEndTimestamp?: string,
   lang: "de" | "en" = "de"
 ) => {
   const rawQueryResult = useQuery({
     queryKey: ["streams", minEndTimestamp, maxEndTimestamp],
     queryFn: async () => {
+      const minFilter = minEndTimestamp
+        ? `&filter[_and][0][end][_gt]=${minEndTimestamp}`
+        : "";
+      const maxFilter = maxEndTimestamp
+        ? `&filter[_and][1][end][_lte]=${maxEndTimestamp}`
+        : "";
       const { data } = await axios.get<{ data: StreamWithAlternatives[] }>(
-        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,streamer.id,streamer.stream_link,streamer.name&sort=start` +
-          `&filter[_and][0][end][_gt]=${minEndTimestamp}&filter[_and][1][end][_lte]=${maxEndTimestamp}`
+        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,fellows.people_id.id,fellows.people_id.name,fellows.people_id.stream_link,streamer.id,streamer.stream_link,streamer.name&sort=start${minFilter}${maxFilter}`
       );
       return data.data;
     },
