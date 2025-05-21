@@ -8,11 +8,11 @@ const links = [
   },
   {
     href: "/yt-descriptions",
-    label: "Youtube Descriptions (WIP)",
+    label: "Youtube Descriptions",
   },
   {
     href: "/yt-thumbnails",
-    label: "Youtube Thumbnails (WIP)",
+    label: "Youtube Thumbnails",
   },
 ];
 

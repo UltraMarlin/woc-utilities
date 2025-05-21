@@ -64,7 +64,7 @@ Website: https://weekofcharity.de/
 
 Socials: 
 Twitter: https://x.com/WeekOfCharity
-Instagram:  https://www.instagram.com/weekofcharity/
+Instagram: https://www.instagram.com/weekofcharity/
 Mastodon: https://tech.lgbt/@weekofcharity 
 Bluesky: https://bsky.app/profile/chesster.weekofcharity.de
 TikTok: https://www.tiktok.com/@weekofcharity
