@@ -64,7 +64,7 @@ export const ScheduleLayout = ({
   );
 
   const getAltText = useCallback(() => {
-    if (!streams) return "";
+    if (!streams || streams.length <= 0) return "";
     const startDate = new Date(streams[0].start);
     const endDate = new Date(streams[streams.length - 1].end);
     const startTimeText = `${getWeekday(startDate)} ${formatTimeAlt(startDate)}`;
