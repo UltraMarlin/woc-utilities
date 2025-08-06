@@ -14,6 +14,10 @@ const links = [
     href: "/yt-thumbnails",
     label: "Youtube Thumbnails",
   },
+  {
+    href: "/introductions",
+    label: "Introductions",
+  },
 ];
 
 export const Home = () => {

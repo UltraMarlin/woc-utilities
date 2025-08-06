@@ -2,7 +2,6 @@ import { Stream } from "../../hooks/useStreams";
 import { formatShortTime } from "./time";
 
 const formatTime = (stream: Stream) => {
-  console.log(stream.start);
   const start = new Date(stream.start);
   const end = new Date(stream.end);
 
@@ -41,7 +40,6 @@ const getNonStreamerPlayers = (stream: Stream) => {
 };
 
 export const formatYTDescription = (stream: Stream) => {
-  console.log(stream);
   const additionalPlayers = getNonStreamerPlayers(stream);
   const additionalPlayersString =
     additionalPlayers.length > 0
