@@ -100,7 +100,7 @@ export const ScheduleLayout25 = ({
         <div className="schedule-layout-25-text-shadow-dark flex size-full flex-col gap-8 px-11 pt-10 text-3xl text-schedule25-light">
           {Object.entries(groupedStreams || {}).map(([date, streams]) => {
             return (
-              <div>
+              <div key={date}>
                 <h2 className="mb-3 text-[30px] font-bold tracking-tighter">
                   {formatDay(date)}
                 </h2>
