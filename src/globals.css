@@ -80,13 +80,24 @@
 
 @layer utilities {
   .bg-schedule-layout-25 {
-    background-image:
-      url("assets/images/grid-25.png"),
-      linear-gradient(to top in oklch, #ff94ff, #1486ff);
+    background-image: url("assets/images/Background.png");
   }
 
   .schedule-layout-25-text-shadow-dark {
-    text-shadow: 3px 3px #150477;
+    text-shadow: 5px 5px #150477;
+  }
+
+  .bg-scan-lines {
+    opacity: 0.1;
+    --scan-line-thickness: 5px;
+    background: linear-gradient(
+      transparent,
+      transparent var(--scan-line-thickness),
+      black var(--scan-line-thickness),
+      black calc(2 * var(--scan-line-thickness))
+    );
+    background-repeat: repeat-y;
+    background-size: 100% calc(2 * var(--scan-line-thickness));
   }
 }
 

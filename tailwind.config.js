@@ -24,6 +24,9 @@ export default {
           dark: "#150477",
         },
       },
+      dropShadow: {
+        "layout-dark": "4px 4px 0 #150477",
+      },
     },
   },
   plugins: [],

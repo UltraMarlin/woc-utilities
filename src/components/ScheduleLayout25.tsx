@@ -4,11 +4,11 @@ import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 
 import wocLogo from "../assets/images/logo-25.png";
-import windowBg from "../assets/images/window-25.png";
 
 import { formatShortTime, formatTimeAlt } from "../utils/formatting/time";
-import { getWeekday } from "../utils/formatting/formatDay";
-import { getShortTwitchUrl } from "../utils/formatting/twitch";
+import { formatDay, getWeekday } from "../utils/formatting/formatDay";
+import { getTwitchUsername } from "../utils/formatting/twitch";
+import { TwitchIcon } from "./icons/TwitchIcon";
 
 export type ExampleComponentProps = DownloadableComponentProps & {
   minEndTimestampUTC: string;
@@ -79,85 +79,81 @@ export const ScheduleLayout25 = ({
   return (
     <div
       className={cn(
-        "bg-schedule-layout-25 relative flex size-[1584px] origin-top-left flex-col items-center",
+        "bg-schedule-layout-25 relative flex size-[1584px] origin-top-left flex-col items-center font-pixel",
         className
       )}
     >
-      <img src={wocLogo} alt="" className="mb-20 mt-20 h-48" />
+      <img src={wocLogo} alt="" className="absolute top-[60px] h-[182px]" />
 
       <div
         className={cn(
-          "flex h-[992px] w-[1008px] flex-col items-center gap-2 p-3 font-pixel",
+          "absolute left-[144px] top-[284px] mt-1 flex h-[1138px] w-[1298px] flex-col items-center p-3",
           {
             "text-night-highlight": night,
             "text-day-highlight": !night,
           }
         )}
-        style={{ backgroundImage: `url(${windowBg})` }}
       >
-        <div className="text-schedule25-dark w-full pl-3 text-left text-[26px]">
+        <div className="w-full pl-3 text-left text-[32px] text-schedule25-dark">
           UpcomingStreams.exe
         </div>
-        <div className="text-schedule25-light bg-schedule25-dark/40 schedule-layout-25-text-shadow-dark flex size-full flex-col gap-6 px-8 pt-5 font-standard text-3xl backdrop-blur-[7px]">
+        <div className="schedule-layout-25-text-shadow-dark flex size-full flex-col gap-8 px-11 pt-10 text-3xl text-schedule25-light">
           {Object.entries(groupedStreams || {}).map(([date, streams]) => {
             return (
               <div>
-                <h2 className="border-schedule25-light mb-3 border-b-4 pb-1 text-[34px] font-bold">
-                  {new Date(date).toLocaleDateString("de", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "numeric",
-                  })}
+                <h2 className="mb-3 text-[30px] font-bold tracking-tighter">
+                  {formatDay(date)}
                 </h2>
-                <ul className="flex flex-col gap-6">
-                  {streams.map(({ start, activity, end, streamer }) => {
+                <div className="relative mb-3 h-[4px] w-[92%] bg-schedule25-light after:absolute after:bottom-[-4px] after:left-[4px] after:h-1 after:w-full after:bg-schedule25-dark" />
+                <ul className="flex flex-col gap-2">
+                  {streams.map(({ start, activity, streamer }) => {
                     const { name: activityName, icon: activityIcon } = activity;
                     const { stream_link } = streamer;
-
                     return (
                       <li
                         key={start}
                         className={cn(
-                          "flex items-center gap-6 px-3",
+                          "flex items-start gap-10 px-3",
                           className
                         )}
                       >
-                        <div className="flex flex-col items-center justify-center text-[32px]">
-                          <div>
-                            {formatShortTime(new Date(start + "+02:00"))}
-                          </div>
-                          <div className="mb-1 text-[30px]/[12px]">-</div>
-                          <div>{formatShortTime(new Date(end + "+02:00"))}</div>
+                        <div className="mt-12 flex w-[118px] flex-col items-center justify-center text-[36px] font-bold">
+                          {formatShortTime(new Date(start + "+02:00"))}
                         </div>
-                        <div className="custom-text-shadow-dark grid w-full grid-cols-[max-content_1fr] gap-6 py-2">
-                          <div className="size-24 shrink-0 overflow-hidden rounded-lg">
-                            {activityIcon && (
-                              <img
-                                src={`${import.meta.env.VITE_API_BASE_URL}/assets/${activityIcon}?width=256&height=256&quality=75&fit=cover&format=webp`}
-                                alt=""
-                              />
-                            )}
+                        <div className="custom-text-shadow-dark grid w-full grid-cols-[max-content_1fr] gap-8">
+                          <div className="py-2.5">
+                            <div className="size-[114px] shrink-0 overflow-hidden rounded-lg">
+                              {activityIcon && (
+                                <img
+                                  src={`${import.meta.env.VITE_API_BASE_URL}/assets/${activityIcon}?width=256&height=256&quality=75&fit=cover&format=webp`}
+                                  alt=""
+                                />
+                              )}
+                            </div>
                           </div>
-                          <div className="flex flex-col justify-center gap-3">
+                          <div className="flex flex-col justify-center gap-2">
                             {activityName && (
                               <div
-                                className={cn({
-                                  "text-[40px]/[1]": activityName.length <= 20,
-                                  "text-[37px]/[1]":
+                                className={cn("leading-snug", {
+                                  "text-[41px] tracking-tighter":
+                                    activityName.length <= 20,
+                                  "text-[37px] tracking-tighter":
                                     activityName.length > 20 &&
                                     activityName.length <= 30,
-                                  "text-[32px]/[1]":
+                                  "text-[31px] tracking-tight":
                                     activityName.length > 30 &&
-                                    activityName.length <= 48,
-                                  "text-[30px]/[1]": activityName.length > 48,
+                                    activityName.length <= 40,
+                                  "text-[27px] tracking-tight":
+                                    activityName.length > 40,
                                 })}
                               >
                                 {activityName}
                               </div>
                             )}
                             {stream_link && (
-                              <div className="text-[30px]">
-                                {getShortTwitchUrl(stream_link)}
+                              <div className="flex items-center gap-3 text-[26px] tracking-tight">
+                                <TwitchIcon className="drop-shadow-layout-dark size-[44px]" />{" "}
+                                <span>{getTwitchUsername(stream_link)}</span>
                               </div>
                             )}
                           </div>
@@ -171,12 +167,13 @@ export const ScheduleLayout25 = ({
           })}
         </div>
       </div>
-      <div className="text-schedule25-dark mt-14 flex gap-3 text-[40px] font-bold">
+      <div className="absolute bottom-[68px] flex gap-3 text-[34px] font-bold text-schedule25-dark">
         Mehr Infos gibt es auf
-        <div className="underline decoration-4 underline-offset-4">
+        <span className="relative after:absolute after:bottom-[2px] after:left-0 after:h-1 after:w-full after:bg-schedule25-dark">
           www.weekofcharity.de
-        </div>
+        </span>
       </div>
+      <div className="bg-scan-lines pointer-events-none absolute inset-0" />
     </div>
   );
 };
