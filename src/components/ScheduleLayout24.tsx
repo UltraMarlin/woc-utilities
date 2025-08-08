@@ -15,6 +15,7 @@ import dayStreamBox from "../assets/images/day-stream-box.png";
 import dayLine from "../assets/images/day-line.png";
 import { formatShortTime, formatTimeAlt } from "../utils/formatting/time";
 import { getWeekday } from "../utils/formatting/formatDay";
+import { getShortTwitchUrl } from "../utils/formatting/twitch";
 
 export type ExampleComponentProps = DownloadableComponentProps & {
   minEndTimestampUTC: string;
@@ -161,7 +162,9 @@ export const ScheduleLayout24 = ({
                           <div className="text-[36px] font-bold">
                             {stream.activity.name}
                           </div>
-                          <div className="text-[28px]">{`twitch.tv${stream.streamer.stream_link.split("twitch.tv")[1]}`}</div>
+                          <div className="text-[28px]">
+                            {getShortTwitchUrl(stream.streamer.stream_link)}
+                          </div>
                         </div>
                       </div>
                     </div>

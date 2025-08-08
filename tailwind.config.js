@@ -19,6 +19,10 @@ export default {
           highlight: "#203737",
           background: "#E1DFAC",
         },
+        schedule25: {
+          light: "#FFF0F4",
+          dark: "#150477",
+        },
       },
     },
   },

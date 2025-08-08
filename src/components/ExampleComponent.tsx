@@ -4,6 +4,7 @@ import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 import exampleBg from "../assets/images/example-background.png";
 import exampleLogo from "../assets/images/example-logo.png";
+import { getShortTwitchUrl } from "../utils/formatting/twitch";
 
 export type ExampleComponentProps = DownloadableComponentProps & {
   className?: string;
@@ -93,7 +94,9 @@ export const ExampleComponent = ({
                     />
                     <div className="flex flex-col justify-center">
                       <span>{stream.activity.name}</span>
-                      <span>{`twitch.tv${stream.streamer.stream_link.split("twitch.tv")[1]}`}</span>
+                      <span>
+                        {getShortTwitchUrl(stream.streamer.stream_link)}
+                      </span>
                     </div>
                   </div>
                 </li>

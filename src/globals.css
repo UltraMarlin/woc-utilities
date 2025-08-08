@@ -81,8 +81,12 @@
 @layer utilities {
   .bg-schedule-layout-25 {
     background-image:
-      url("assets/images/night-background.png"),
+      url("assets/images/grid-25.png"),
       linear-gradient(to top in oklch, #ff94ff, #1486ff);
+  }
+
+  .schedule-layout-25-text-shadow-dark {
+    text-shadow: 3px 3px #150477;
   }
 }
 
