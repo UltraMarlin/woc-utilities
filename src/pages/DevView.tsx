@@ -1,17 +1,19 @@
 import { DownloadWrapper } from "../components/DownloadWrapper";
 import { PageContainer } from "../components/PageContainer";
-import { ScheduleLayout } from "../components/ScheduleLayout";
+import { ScheduleLayout25 } from "../components/ScheduleLayout25";
 
 export const DevView = () => {
-  const minEndTimestampUTC = "2024-10-10T18:00:00";
-  const maxEndTimestampUTC = "2024-10-11T06:00:00";
+  const minEndTimestampUTC = "2025-07-18T12:00:00";
+  const maxEndTimestampUTC = "2025-07-20T20:00:00";
+
+  const LayoutComponent = ScheduleLayout25;
 
   return (
     <PageContainer>
       <div className="flex flex-col gap-6 p-10">
         <DownloadWrapper className="aspect-square size-[720px]">
           {({ onLoad }) => (
-            <ScheduleLayout
+            <LayoutComponent
               onLoad={onLoad}
               hotReload
               minEndTimestampUTC={minEndTimestampUTC}
@@ -20,7 +22,7 @@ export const DevView = () => {
             />
           )}
         </DownloadWrapper>
-        <ScheduleLayout
+        <LayoutComponent
           minEndTimestampUTC={minEndTimestampUTC}
           maxEndTimestampUTC={maxEndTimestampUTC}
           night

@@ -8,3 +8,8 @@ export const formatDay = (value: string) => {
     month: "2-digit",
   })}`;
 };
+
+export const getWeekday = (date: Date) =>
+  date.toLocaleDateString("de-DE", {
+    weekday: "long",
+  });

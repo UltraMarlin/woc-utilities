@@ -2,17 +2,18 @@ import cn from "classnames";
 import { useCallback, useEffect, useMemo } from "react";
 import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
+
 import nightLogo from "../assets/images/night-logo.png";
-import nightBg from "../assets/images/night-background.png";
 import nightTimeBox from "../assets/images/night-time-box.png";
 import nightStreamBox from "../assets/images/night-stream-box.png";
 import nightLine from "../assets/images/night-line.png";
 
 import dayLogo from "../assets/images/day-logo.png";
-import dayBg from "../assets/images/day-background.png";
 import dayTimeBox from "../assets/images/day-time-box.png";
 import dayStreamBox from "../assets/images/day-stream-box.png";
 import dayLine from "../assets/images/day-line.png";
+import { formatShortTime, formatTimeAlt } from "../utils/formatting/time";
+import { getWeekday } from "../utils/formatting/formatDay";
 
 export type ExampleComponentProps = DownloadableComponentProps & {
   minEndTimestampUTC: string;
@@ -21,20 +22,7 @@ export type ExampleComponentProps = DownloadableComponentProps & {
   className?: string;
 };
 
-const formatTime = (date: Date) =>
-  date.toLocaleTimeString("de-DE", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-const formatTimeAlt = (date: Date) => `${date.getHours()} Uhr`;
-
-const getWeekday = (date: Date) =>
-  date.toLocaleDateString("de-DE", {
-    weekday: "long",
-  });
-
-export const ScheduleLayout = ({
+export const ScheduleLayout25 = ({
   className,
   minEndTimestampUTC,
   maxEndTimestampUTC,
@@ -62,6 +50,8 @@ export const ScheduleLayout = ({
       ),
     [streams]
   );
+
+  console.log(streams);
 
   const getAltText = useCallback(() => {
     if (!streams || streams.length <= 0) return "";
@@ -96,11 +86,9 @@ export const ScheduleLayout = ({
   return (
     <div
       className={cn(
-        "relative flex size-[1584px] origin-top-left flex-col items-center bg-contain bg-no-repeat",
-        { "text-night-background": night, "text-day-background": !night },
+        "bg-schedule-layout-25 relative flex size-[1584px] origin-top-left flex-col items-center",
         className
       )}
-      style={{ backgroundImage: `url(${night ? nightBg : dayBg})` }}
     >
       <img
         src={night ? nightLogo : dayLogo}
@@ -150,9 +138,9 @@ export const ScheduleLayout = ({
                         backgroundImage: `url(${night ? nightTimeBox : dayTimeBox})`,
                       }}
                     >
-                      <span>{formatTime(new Date(stream.start))}</span>
+                      <span>{formatShortTime(new Date(stream.start))}</span>
                       <span>-</span>
-                      <span>{formatTime(new Date(stream.end))}</span>
+                      <span>{formatShortTime(new Date(stream.end))}</span>
                     </div>
                     <div className="relative flex w-full">
                       <div className="absolute left-2 top-2 flex h-[97px] w-[104px] items-center justify-center overflow-hidden rounded-l-xl">

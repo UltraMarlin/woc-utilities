@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { DownloadWrapper } from "../components/DownloadWrapper";
-import { ScheduleLayout } from "../components/ScheduleLayout";
+import { ScheduleLayout24 } from "../components/ScheduleLayout24";
 import { formatFileDate } from "../utils/formatting/formatFileDate";
 import { getLayoutTimestamps } from "../utils/getLayoutTimestamps";
 import { DownloadIcon } from "../components/icons/DownloadIcon";
@@ -42,7 +42,7 @@ export const DownloadView = () => {
                 fileBaseName={fileBaseName}
               >
                 {({ onLoad }) => (
-                  <ScheduleLayout
+                  <ScheduleLayout24
                     onLoad={onLoad}
                     minEndTimestampUTC={minEnd}
                     maxEndTimestampUTC={maxEnd}

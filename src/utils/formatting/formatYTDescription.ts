@@ -1,18 +1,13 @@
 import { Stream } from "../../hooks/useStreams";
+import { formatShortTime } from "./time";
 
 const formatTime = (stream: Stream) => {
   console.log(stream.start);
   const start = new Date(stream.start);
   const end = new Date(stream.end);
 
-  const startTime = start.toLocaleTimeString("de", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  const endTime = end.toLocaleTimeString("de", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const startTime = formatShortTime(start);
+  const endTime = formatShortTime(end);
   const startDate = start.toLocaleDateString("de", {
     day: "2-digit",
     month: "2-digit",

@@ -78,6 +78,14 @@
   }
 }
 
+@layer utilities {
+  .bg-schedule-layout-25 {
+    background-image:
+      url("assets/images/night-background.png"),
+      linear-gradient(to top in oklch, #ff94ff, #1486ff);
+  }
+}
+
 *:focus-visible {
   outline-offset: 2px;
 }

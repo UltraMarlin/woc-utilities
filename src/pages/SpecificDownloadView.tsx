@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { DownloadWrapper } from "../components/DownloadWrapper";
-import { ScheduleLayout } from "../components/ScheduleLayout";
+import { ScheduleLayout24 } from "../components/ScheduleLayout24";
 import { formatFileDate } from "../utils/formatting/formatFileDate";
 import { PageContainer } from "../components/PageContainer";
 
@@ -31,7 +31,7 @@ export const SpecificDownloadView = () => {
           fileBaseName={fileBaseName}
         >
           {({ onLoad }) => (
-            <ScheduleLayout
+            <ScheduleLayout24
               onLoad={onLoad}
               minEndTimestampUTC={minEnd}
               maxEndTimestampUTC={maxEnd}
