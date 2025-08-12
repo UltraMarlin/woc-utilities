@@ -4,6 +4,7 @@ import { useStreams } from "../hooks/useStreams";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 
 import wocLogo from "../assets/images/logo-25.png";
+import activityFrame from "../assets/images/stream-frame-25.png";
 
 import { formatShortTime, formatTimeAlt } from "../utils/formatting/time";
 import { formatDay, getWeekday } from "../utils/formatting/formatDay";
@@ -97,14 +98,14 @@ export const ScheduleLayout25 = ({
         <div className="w-full pl-3 text-left text-[32px] text-schedule25-dark">
           UpcomingStreams.exe
         </div>
-        <div className="schedule-layout-25-text-shadow-dark flex size-full flex-col gap-8 px-11 pt-10 text-3xl text-schedule25-light">
+        <div className="schedule-layout-25-text-shadow-dark flex size-full flex-col gap-8 px-11 pt-8 text-3xl text-schedule25-light">
           {Object.entries(groupedStreams || {}).map(([date, streams]) => {
             return (
               <div key={date}>
                 <h2 className="mb-3 text-[30px] font-bold tracking-tighter">
                   {formatDay(date)}
                 </h2>
-                <div className="relative mb-3 h-[4px] w-[92%] bg-schedule25-light after:absolute after:bottom-[-4px] after:left-[4px] after:h-1 after:w-full after:bg-schedule25-dark" />
+                <div className="relative mb-3.5 h-[4px] w-[92%] bg-schedule25-light after:absolute after:bottom-[-4px] after:left-[4px] after:h-1 after:w-full after:bg-schedule25-dark" />
                 <ul className="flex flex-col gap-2">
                   {streams.map(({ start, activity, streamer }) => {
                     const { name: activityName, icon: activityIcon } = activity;
@@ -117,12 +118,12 @@ export const ScheduleLayout25 = ({
                           className
                         )}
                       >
-                        <div className="mt-12 flex w-[118px] flex-col items-center justify-center text-[36px] font-bold">
+                        <div className="mt-12 flex w-[116px] flex-col items-center justify-center text-[36px] font-bold">
                           {formatShortTime(new Date(start + "+02:00"))}
                         </div>
-                        <div className="custom-text-shadow-dark grid w-full grid-cols-[max-content_1fr] gap-8">
-                          <div className="py-2.5">
-                            <div className="size-[114px] shrink-0 overflow-hidden rounded-lg">
+                        <div className="custom-text-shadow-dark relative grid w-full grid-cols-[max-content_1fr] gap-8">
+                          <div className="py-2">
+                            <div className="size-[118px] shrink-0 overflow-hidden rounded-2xl">
                               {activityIcon && (
                                 <img
                                   src={`${import.meta.env.VITE_API_BASE_URL}/assets/${activityIcon}?width=256&height=256&quality=75&fit=cover&format=webp`}
@@ -131,6 +132,11 @@ export const ScheduleLayout25 = ({
                               )}
                             </div>
                           </div>
+                          <img
+                            className="absolute left-[-10px] top-[0px] h-[130px] w-[135px]"
+                            src={activityFrame}
+                            alt=""
+                          />
                           <div className="flex flex-col justify-center gap-2">
                             {activityName && (
                               <div
@@ -152,7 +158,7 @@ export const ScheduleLayout25 = ({
                             )}
                             {stream_link && (
                               <div className="flex items-center gap-3 text-[26px] tracking-tight">
-                                <TwitchIcon className="drop-shadow-layout-dark size-[44px]" />{" "}
+                                <TwitchIcon className="size-[44px] drop-shadow-layout-dark" />{" "}
                                 <span>{getTwitchUsername(stream_link)}</span>
                               </div>
                             )}
