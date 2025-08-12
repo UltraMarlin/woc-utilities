@@ -98,7 +98,7 @@ export const ScheduleLayout25 = ({
         <div className="w-full pl-3 text-left text-[32px] text-schedule25-dark">
           UpcomingStreams.exe
         </div>
-        <div className="schedule-layout-25-text-shadow-dark flex size-full flex-col gap-8 px-11 pt-8 text-3xl text-schedule25-light">
+        <div className="schedule-layout-25-text-shadow-dark flex size-full flex-col gap-8 px-11 pt-10 text-3xl text-schedule25-light">
           {Object.entries(groupedStreams || {}).map(([date, streams]) => {
             return (
               <div key={date}>
@@ -106,24 +106,21 @@ export const ScheduleLayout25 = ({
                   {formatDay(date)}
                 </h2>
                 <div className="relative mb-3.5 h-[4px] w-[92%] bg-schedule25-light after:absolute after:bottom-[-4px] after:left-[4px] after:h-1 after:w-full after:bg-schedule25-dark" />
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-2.5">
                   {streams.map(({ start, activity, streamer }) => {
                     const { name: activityName, icon: activityIcon } = activity;
                     const { stream_link } = streamer;
                     return (
                       <li
                         key={start}
-                        className={cn(
-                          "flex items-start gap-10 px-3",
-                          className
-                        )}
+                        className={cn("flex items-start gap-8 px-3", className)}
                       >
                         <div className="mt-12 flex w-[116px] flex-col items-center justify-center text-[36px] font-bold">
                           {formatShortTime(new Date(start + "+02:00"))}
                         </div>
-                        <div className="custom-text-shadow-dark relative grid w-full grid-cols-[max-content_1fr] gap-8">
-                          <div className="py-2">
-                            <div className="size-[118px] shrink-0 overflow-hidden rounded-2xl">
+                        <div className="custom-text-shadow-dark relative grid w-full grid-cols-[max-content_1fr] gap-6">
+                          <div className="p-2">
+                            <div className="size-[114px] shrink-0 overflow-hidden rounded-2xl bg-schedule25-dark">
                               {activityIcon && (
                                 <img
                                   src={`${import.meta.env.VITE_API_BASE_URL}/assets/${activityIcon}?width=256&height=256&quality=75&fit=cover&format=webp`}
@@ -133,7 +130,7 @@ export const ScheduleLayout25 = ({
                             </div>
                           </div>
                           <img
-                            className="absolute left-[-10px] top-[0px] h-[130px] w-[135px]"
+                            className="absolute size-[130px]"
                             src={activityFrame}
                             alt=""
                           />
