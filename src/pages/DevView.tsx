@@ -3,8 +3,8 @@ import { PageContainer } from "../components/PageContainer";
 import { ScheduleLayout25 } from "../components/ScheduleLayout25";
 
 export const DevView = () => {
-  const minEndTimestampUTC = "2025-07-18T12:00:00";
-  const maxEndTimestampUTC = "2025-07-20T20:00:00";
+  const minEndTimestampUTC = "2025-09-15T12:00:00";
+  const maxEndTimestampUTC = "2025-09-15T23:00:00";
 
   const LayoutComponent = ScheduleLayout25;
 
