@@ -45,6 +45,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Bubbly";
+  src: url("assets/fonts/Bubbly.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .night-outline {
   -webkit-text-stroke-width: 8px;
   -webkit-text-stroke-color: #ace1b2;

@@ -9,6 +9,7 @@ export default {
         ubuntu: ["Ubuntu"],
         explorer: ["Explorer"],
         lilita: ["Lilita One"],
+        bubbly: ["Bubbly"],
       },
       colors: {
         night: {
