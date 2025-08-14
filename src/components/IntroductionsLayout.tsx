@@ -1,5 +1,4 @@
-import cn from "classnames";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import backgroundImage from "../assets/images/introductions-background-1.png";
 import profilePictureBackground from "../assets/images/introductions-image-background-1.png";
 
@@ -41,6 +40,32 @@ const getSocialIcon = (platform: SocialPlatform) => {
   }
 };
 
+const MAX_NAME_FONTSIZE = 124;
+const FONTSIZE_STEP = 2;
+const MIN_NAME_FONTSIZE = 96;
+
+const getOptimizedFontSize = (value: string, maxWidth: number) => {
+  const testElement = document.createElement("span");
+  testElement.classList.add("font-bubbly");
+  testElement.innerHTML = value;
+  document.body.appendChild(testElement);
+
+  let rect: DOMRect;
+  let fontSize = MAX_NAME_FONTSIZE + FONTSIZE_STEP;
+  do {
+    fontSize -= FONTSIZE_STEP;
+    if (fontSize <= MIN_NAME_FONTSIZE) break;
+    testElement.style.fontSize = `${fontSize}px`;
+    rect = testElement.getBoundingClientRect();
+  } while (maxWidth <= rect.width);
+
+  document.body.removeChild(testElement);
+  const optimizedFontsize =
+    fontSize <= MIN_NAME_FONTSIZE ? MIN_NAME_FONTSIZE : fontSize;
+
+  return optimizedFontsize;
+};
+
 export const IntroductionsLayout = ({
   onLoad,
   hotReload = false,
@@ -52,7 +77,11 @@ export const IntroductionsLayout = ({
   socials,
   description,
 }: IntroductionsLayoutProps) => {
+  const [nameFontSize, setNameFontSize] = useState(MAX_NAME_FONTSIZE);
   const cloudContainer = useRef<HTMLDivElement>(null);
+  const cloudTextRef = useRef<HTMLDivElement>(null);
+  const pronounsRef = useRef<HTMLDivElement>(null);
+  const cloudTextContainer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!cloudContainer.current) return;
@@ -69,6 +98,34 @@ export const IntroductionsLayout = ({
   if (hotReload) {
     onLoad?.();
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        !name ||
+        !cloudTextRef.current ||
+        !pronounsRef.current ||
+        !cloudContainer.current ||
+        !cloudTextContainer.current
+      )
+        return setNameFontSize(MAX_NAME_FONTSIZE);
+      const textContainerComputedStyle = window.getComputedStyle(
+        cloudTextContainer.current
+      );
+      const paddingLeft = parseInt(textContainerComputedStyle.paddingLeft);
+      const paddingRight = parseInt(textContainerComputedStyle.paddingRight);
+      const horizontalTextPadding = paddingLeft + paddingRight;
+      const maxWidth =
+        cloudContainer.current.getBoundingClientRect().width -
+        horizontalTextPadding -
+        parseInt(window.getComputedStyle(cloudTextRef.current).columnGap) -
+        pronounsRef.current.getBoundingClientRect().width;
+
+      const fontSize = getOptimizedFontSize(name, maxWidth);
+
+      return setNameFontSize(fontSize);
+    });
+  }, [name, pronouns]);
 
   return (
     <div className="relative aspect-square size-[1584px] select-none bg-black text-5xl">
@@ -110,28 +167,32 @@ export const IntroductionsLayout = ({
             className="row-start-3 w-[850px] bg-no-repeat"
             alt=""
           />
-          <div className="row-span-full pb-[90px] pl-[150px] pr-[64px] pt-[80px] text-[#303989]">
-            <div className="mb-2 flex w-fit flex-wrap gap-x-4 gap-y-2">
+          <div
+            ref={cloudTextContainer}
+            className="row-span-full pb-[90px] pl-[150px] pr-[64px] pt-[44px] text-[#303989]"
+          >
+            <div
+              ref={cloudTextRef}
+              className="mb-2 flex w-fit flex-wrap gap-x-[16px] gap-y-2"
+            >
               {name && (
                 <div
-                  className={cn(
-                    "font-bubbly odd:*:text-[#ff9ae5] even:*:text-[#829eff]",
-                    {
-                      "mb-16 text-[15px]": name.length >= 9,
-                      "mb-20 text-[17px]": !(name.length >= 9),
-                    }
-                  )}
+                  style={{ fontSize: nameFontSize }}
+                  className="font-bubbly odd:*:text-[#ff9ae5] even:*:text-[#829eff]"
                 >
                   {name.split("").map((letter, index) => (
                     <span key={letter + index}>{letter}</span>
                   ))}
                 </div>
               )}
-              <div className="font-bubbly mb-8 ml-auto self-end text-right text-[6px]">
+              <div
+                ref={pronounsRef}
+                className="ml-auto self-end text-right font-bubbly text-[56px]"
+              >
                 {pronouns}
               </div>
             </div>
-            <ul className="flex flex-col gap-4 pl-8 font-ubuntu text-[42px]">
+            <ul className="mt-10 flex flex-col gap-6 pl-8 font-ubuntu text-[40px]">
               {socials?.map((social) => {
                 const SocialIcon = getSocialIcon(social.platform);
                 return (

@@ -7,16 +7,16 @@ const links = [
     label: "Schedule Images",
   },
   {
+    href: "/introductions",
+    label: "Introductions",
+  },
+  {
     href: "/yt-descriptions",
     label: "Youtube Descriptions",
   },
   {
     href: "/yt-thumbnails",
     label: "Youtube Thumbnails",
-  },
-  {
-    href: "/introductions",
-    label: "Introductions",
   },
 ];
 

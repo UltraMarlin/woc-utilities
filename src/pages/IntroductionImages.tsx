@@ -175,7 +175,6 @@ export const IntroductionImages = () => {
   };
 
   const handleMouseDown: MouseEventHandler<HTMLDivElement> = (event) => {
-    console.log(window.devicePixelRatio);
     if (!scrollContainer.current) return;
     lastMousePosition.current = { x: event.clientX, y: event.clientY };
   };
