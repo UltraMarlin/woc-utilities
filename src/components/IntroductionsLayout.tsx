@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import backgroundImage from "../assets/images/introductions-background-1.png";
 import profilePictureBackground from "../assets/images/introductions-image-background-1.png";
 
@@ -12,6 +12,12 @@ import { BlueskyIcon } from "./icons/BlueskyIcon";
 import { TwitterIcon } from "./icons/TwitterIcon";
 import { MastodonIcon } from "./icons/MastodonIcon";
 import { InstagramIcon } from "./icons/InstagramIcon";
+import {
+  MAX_DESCRIPTION_FONTSIZE,
+  MAX_DESCRIPTION_LINEHEIGHT,
+  MIN_DESCRIPTION_FONTSIZE,
+  MIN_DESCRIPTION_LINEHEIGHT,
+} from "../pages/IntroductionImages";
 
 export type IntroductionsLayoutProps = DownloadableComponentProps & {
   name?: string;
@@ -20,7 +26,9 @@ export type IntroductionsLayoutProps = DownloadableComponentProps & {
   picturePositionX?: number;
   picturePositionY?: number;
   socials?: SocialsOption[];
+  descriptionIntro?: string;
   description?: string;
+  descriptionFontSize?: number;
 };
 
 const getSocialIcon = (platform: SocialPlatform) => {
@@ -66,6 +74,8 @@ const getOptimizedFontSize = (value: string, maxWidth: number) => {
   return optimizedFontsize;
 };
 
+const isWhitespaceString = (str: string) => str.replace(/\s/g, "").length > 0;
+
 export const IntroductionsLayout = ({
   onLoad,
   hotReload = false,
@@ -75,7 +85,9 @@ export const IntroductionsLayout = ({
   picturePositionX = 50,
   picturePositionY = 50,
   socials,
+  descriptionIntro,
   description,
+  descriptionFontSize,
 }: IntroductionsLayoutProps) => {
   const [nameFontSize, setNameFontSize] = useState(MAX_NAME_FONTSIZE);
   const cloudContainer = useRef<HTMLDivElement>(null);
@@ -90,6 +102,21 @@ export const IntroductionsLayout = ({
     const fractionalPartY = y - Math.floor(y);
     cloudContainer.current.style.transform = `translateY(${fractionalPartY}px)`;
   });
+
+  const descriptionLineHeight = useMemo(() => {
+    if (!descriptionFontSize) return MAX_DESCRIPTION_LINEHEIGHT;
+    const percent =
+      (descriptionFontSize - MIN_DESCRIPTION_FONTSIZE) /
+      (MAX_DESCRIPTION_FONTSIZE - MIN_DESCRIPTION_FONTSIZE);
+    const lineheightSpan =
+      MAX_DESCRIPTION_LINEHEIGHT - MIN_DESCRIPTION_LINEHEIGHT;
+    const lineheight = MIN_DESCRIPTION_LINEHEIGHT + lineheightSpan * percent;
+    return lineheight;
+  }, [descriptionFontSize]);
+
+  const descriptionParts = useMemo(() => {
+    return description?.split("\n").filter(isWhitespaceString);
+  }, [description]);
 
   useEffect(() => {
     onLoad?.();
@@ -127,6 +154,21 @@ export const IntroductionsLayout = ({
     });
   }, [name, pronouns]);
 
+  const sortedSocials = useMemo(() => {
+    if (!socials) return [];
+    const socialsOrder: SocialPlatform[] = [
+      "Twitch",
+      "Instagram",
+      "Twitter",
+      "Bluesky",
+      "Mastodon",
+    ];
+    return [...socials].sort(
+      (a, b) =>
+        socialsOrder.indexOf(a.platform) - socialsOrder.indexOf(b.platform)
+    );
+  }, [socials]);
+
   return (
     <div className="relative aspect-square size-[1584px] select-none bg-black text-5xl">
       <div
@@ -151,6 +193,9 @@ export const IntroductionsLayout = ({
         className="absolute size-full object-cover"
         draggable={false}
       />
+      <div className="absolute left-[68px] top-[258px] font-pixel text-[28px] text-schedule25-dark">
+        {name?.toLowerCase()}.png
+      </div>
       <div className="absolute left-[640px] top-[52px] flex h-[580px] w-[850px] items-center">
         <div
           className="grid w-full grid-rows-[165px_1fr_195px] *:col-start-1"
@@ -193,7 +238,7 @@ export const IntroductionsLayout = ({
               </div>
             </div>
             <ul className="mt-10 flex flex-col gap-6 pl-8 font-ubuntu text-[40px]">
-              {socials?.map((social) => {
+              {sortedSocials?.map((social) => {
                 const SocialIcon = getSocialIcon(social.platform);
                 return (
                   <li key={social.platform} className="flex items-center gap-4">
@@ -206,12 +251,27 @@ export const IntroductionsLayout = ({
           </div>
         </div>
       </div>
-      <p className="absolute left-[246px] top-[746px] w-[1248px] p-3">
-        <span className="float-start h-[90px] w-[360px]" />
-        <span className="schedule-layout-25-text-shadow-dark whitespace-pre-line font-ubuntu text-[44px] text-schedule25-light">
-          {description}
+      <div className="absolute left-[246px] top-[746px] w-[1248px] px-6 py-3">
+        <span className="float-start h-[110px] w-[360px]" />
+        <span
+          style={{
+            fontSize: descriptionFontSize,
+            lineHeight: descriptionLineHeight,
+          }}
+          className="schedule-layout-25-text-shadow-dark whitespace-pre-wrap font-ubuntu text-schedule25-light"
+        >
+          {descriptionIntro && (
+            <div className="flex h-[115px] items-center pb-[24px]">
+              {descriptionIntro}
+            </div>
+          )}
+          {descriptionParts?.map((part) => (
+            <p className="mb-[0.7em] last-of-type:mb-0" key={part}>
+              {part}
+            </p>
+          ))}
         </span>
-      </p>
+      </div>
     </div>
   );
 };

@@ -21,12 +21,18 @@ import {
 } from "../utils/socials";
 import { RangeSlider } from "../components/RangeSlider";
 
+export const MIN_DESCRIPTION_LINEHEIGHT = 1.05;
+export const MAX_DESCRIPTION_LINEHEIGHT = 1.25;
+export const MIN_DESCRIPTION_FONTSIZE = 32;
+export const MAX_DESCRIPTION_FONTSIZE = 100;
+
 export const IntroductionImages = () => {
   const [searchParams] = useSearchParams();
   const lastMousePosition = useRef<{
     x: number;
     y: number;
   } | null>(null);
+
   const [downloadActive, setDownloadActive] = useState(false);
   const [renderButtonDisabled, setRenderButtonDisabled] = useState(false);
   const [mirrored, setMirrored] = useState(false);
@@ -35,7 +41,9 @@ export const IntroductionImages = () => {
   const [profilePicture, setProfilePicture] = useState("");
   const [picturePositionX, setPicturePositionX] = useState(50);
   const [picturePositionY, setPicturePositionY] = useState(50);
+  const [descriptionIntro, setDescriptionIntro] = useState("");
   const [description, setDescription] = useState("");
+  const [descriptionFontSize, setDescriptionFontSize] = useState(64);
   const [socialLinks, setSocialLinks] = useState<Array<SocialsOption>>([]);
   const [copied, setCopied] = useState(false);
   const scrollContainer = useRef<HTMLDivElement>(null);
@@ -54,6 +62,10 @@ export const IntroductionImages = () => {
     setName(searchParams.get("name") || "");
     setPronouns(searchParams.get("pronouns") || "");
     setDescription(searchParams.get("description") || "");
+    setDescriptionIntro(searchParams.get("descriptionIntro") || "");
+    setDescriptionFontSize(
+      parseInt(searchParams.get("descriptionFontSize") || "") || 64
+    );
     setPicturePositionX(parseInt(searchParams.get("x") || "") || 50);
     setPicturePositionY(parseInt(searchParams.get("y") || "") || 50);
     const newSocialLinks: Array<SocialsOption> = [];
@@ -109,11 +121,23 @@ export const IntroductionImages = () => {
     setPronouns(event.target.value);
   };
 
+  const handleDescriptionIntroChange: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setDownloadActive(false);
+    setDescriptionIntro(event.target.value);
+  };
+
   const handleDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (
     event
   ) => {
     setDownloadActive(false);
     setDescription(event.target.value);
+  };
+
+  const handleDescriptionFontSizeChange = (value: number) => {
+    setDownloadActive(false);
+    setDescriptionFontSize(value);
   };
 
   const handleSocialChange = (value: string, platform: SocialPlatform) => {
@@ -131,6 +155,8 @@ export const IntroductionImages = () => {
   };
 
   useEffect(() => {
+    setRenderButtonDisabled(window.devicePixelRatio !== 1);
+
     const handleResize = () => {
       setRenderButtonDisabled(window.devicePixelRatio !== 1);
     };
@@ -145,11 +171,15 @@ export const IntroductionImages = () => {
     if (mirrored) paramsArray.push(["mirrored", "true"]);
     if (name) paramsArray.push(["name", name]);
     if (pronouns) paramsArray.push(["pronouns", pronouns]);
+    if (descriptionIntro)
+      paramsArray.push(["descriptionIntro", descriptionIntro]);
     if (description) paramsArray.push(["description", description]);
     if (picturePositionX && picturePositionX !== 50)
       paramsArray.push(["x", `${picturePositionX}`]);
     if (picturePositionY && picturePositionX !== 50)
       paramsArray.push(["y", `${picturePositionY}`]);
+    if (descriptionFontSize && descriptionFontSize !== 64)
+      paramsArray.push(["descriptionFontSize", `${descriptionFontSize}`]);
     paramsArray.push(
       ...socialLinks.map((socialLinkEntry) => [
         socialLinkEntry.platform,
@@ -201,7 +231,9 @@ export const IntroductionImages = () => {
     profilePicture,
     picturePositionX,
     picturePositionY,
+    descriptionIntro,
     description,
+    descriptionFontSize,
     socials: socialLinks,
   };
 
@@ -289,6 +321,16 @@ export const IntroductionImages = () => {
             </label>
           ))}
         </div>
+        <label className="flex w-full cursor-pointer flex-col">
+          <span>Description Intro</span>
+          <input
+            className="text-lg text-black"
+            type="text"
+            name="description-intro"
+            value={descriptionIntro}
+            onChange={handleDescriptionIntroChange}
+          />
+        </label>
         <div className="mb-4 flex items-end gap-1.5">
           <label className="flex w-full cursor-pointer flex-col">
             <span>Description</span>
@@ -301,6 +343,15 @@ export const IntroductionImages = () => {
             />
           </label>
         </div>
+        <RangeSlider
+          className="w-full"
+          onChange={handleDescriptionFontSizeChange}
+          value={descriptionFontSize}
+          min={MIN_DESCRIPTION_FONTSIZE}
+          max={MAX_DESCRIPTION_FONTSIZE}
+        >
+          Description Font Size
+        </RangeSlider>
         {renderButtonDisabled && !downloadActive && (
           <div className="rounded-md border border-red-500/50 bg-red-500/10 px-2.5 py-2 text-red-200">
             Browser zoom has to be at 100% to render the image!
