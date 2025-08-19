@@ -7,6 +7,10 @@ const links = [
     label: "Schedule Images",
   },
   {
+    href: "/introductions",
+    label: "Introductions",
+  },
+  {
     href: "/yt-descriptions",
     label: "Youtube Descriptions",
   },

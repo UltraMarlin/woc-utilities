@@ -118,7 +118,7 @@ export const ScheduleLayout25 = ({
                         <div className="mt-12 flex w-[116px] flex-col items-center justify-center text-[36px] font-bold">
                           {formatShortTime(new Date(start + "+02:00"))}
                         </div>
-                        <div className="custom-text-shadow-dark relative grid w-full grid-cols-[max-content_1fr] gap-6">
+                        <div className="relative grid w-full grid-cols-[max-content_1fr] gap-6">
                           <div className="p-2">
                             <div className="size-[114px] shrink-0 overflow-hidden rounded-2xl bg-schedule25-dark">
                               {activityIcon && (

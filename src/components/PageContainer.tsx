@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { ComponentProps } from "react";
 import { Link } from "react-router-dom";
 
@@ -8,6 +9,7 @@ type PageContainerProps = ComponentProps<"main"> & {
 export const PageContainer = ({
   children,
   isHome = false,
+  className,
 }: PageContainerProps) => {
   return (
     <div className="h-full min-h-dvh bg-neutral-50 text-neutral-800">
@@ -21,7 +23,7 @@ export const PageContainer = ({
           </nav>
         )}
       </header>
-      <main className="p-4">{children}</main>
+      <main className={cn("p-4", className)}>{children}</main>
     </div>
   );
 };

@@ -89,6 +89,5 @@ export const getSmartLayoutTimestamps = (
     })
   );
 
-  console.log(timestamps);
   return timestamps;
 };
