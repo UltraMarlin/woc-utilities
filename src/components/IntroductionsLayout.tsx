@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import backgroundImage from "../assets/images/introductions-background-1.png";
-import profilePictureBackground from "../assets/images/introductions-image-background-1.png";
+import cn from "classnames";
 
-import bubbleTop from "../assets/images/introductions-bubble-1-top.png";
-import bubbleMiddle from "../assets/images/introductions-bubble-1-middle.png";
-import bubbleBottom from "../assets/images/introductions-bubble-1-bottom.png";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 import { SocialPlatform, SocialsOption } from "../utils/socials";
 import { TwitchIcon } from "./icons/TwitchIcon";
@@ -19,7 +15,20 @@ import {
   MIN_DESCRIPTION_LINEHEIGHT,
 } from "../pages/IntroductionImages";
 
+import backgroundImageDefault from "../assets/images/introductions-background-1.png";
+import backgroundImageMirrored from "../assets/images/introductions-background-2.png";
+import profilePictureBackgroundDefault from "../assets/images/introductions-image-background-1.png";
+import profilePictureBackgroundMirrored from "../assets/images/introductions-image-background-2.png";
+
+import bubbleTopDefault from "../assets/images/introductions-bubble-1-top.png";
+import bubbleMiddleDefault from "../assets/images/introductions-bubble-1-middle.png";
+import bubbleBottomDefault from "../assets/images/introductions-bubble-1-bottom.png";
+import bubbleTopMirrored from "../assets/images/introductions-bubble-2-top.png";
+import bubbleMiddleMirrored from "../assets/images/introductions-bubble-2-middle.png";
+import bubbleBottomMirrored from "../assets/images/introductions-bubble-2-bottom.png";
+
 export type IntroductionsLayoutProps = DownloadableComponentProps & {
+  mirrored?: boolean;
   name?: string;
   pronouns?: string;
   profilePicture?: string;
@@ -79,6 +88,7 @@ const isWhitespaceString = (str: string) => str.replace(/\s/g, "").length > 0;
 export const IntroductionsLayout = ({
   onLoad,
   hotReload = false,
+  mirrored,
   name,
   pronouns,
   profilePicture,
@@ -169,10 +179,25 @@ export const IntroductionsLayout = ({
     );
   }, [socials]);
 
+  const backgroundImage = mirrored
+    ? backgroundImageMirrored
+    : backgroundImageDefault;
+
+  const profilePictureBackground = mirrored
+    ? profilePictureBackgroundMirrored
+    : profilePictureBackgroundDefault;
+
+  const bubbleTop = mirrored ? bubbleTopMirrored : bubbleTopDefault;
+  const bubbleMiddle = mirrored ? bubbleMiddleMirrored : bubbleMiddleDefault;
+  const bubbleBottom = mirrored ? bubbleBottomMirrored : bubbleBottomDefault;
+
   return (
     <div className="relative aspect-square size-[1584px] select-none bg-black text-5xl">
       <div
-        className="absolute left-[53px] top-[305px] size-[530px] p-[5px]"
+        className={cn("absolute size-[530px] p-[5px]", {
+          "left-[53px] top-[305px]": !mirrored,
+          "left-[948px] top-[260px]": mirrored,
+        })}
         style={{
           backgroundImage: `url(${profilePictureBackground})`,
         }}
@@ -193,10 +218,20 @@ export const IntroductionsLayout = ({
         className="absolute size-full object-cover"
         draggable={false}
       />
-      <div className="absolute left-[68px] top-[258px] font-pixel text-[28px] text-schedule25-dark">
+      <div
+        className={cn("absolute font-pixel text-[28px] text-schedule25-dark", {
+          "left-[68px] top-[258px]": !mirrored,
+          "left-[963px] top-[213px]": mirrored,
+        })}
+      >
         {name?.toLowerCase()}.png
       </div>
-      <div className="absolute left-[640px] top-[52px] flex h-[580px] w-[850px] items-center">
+      <div
+        className={cn(
+          "absolute top-[52px] flex h-[580px] w-[850px] items-center",
+          { "left-[640px]": !mirrored, "left-[64px]": mirrored }
+        )}
+      >
         <div
           className="grid w-full grid-rows-[165px_1fr_195px] *:col-start-1"
           ref={cloudContainer}
@@ -214,7 +249,10 @@ export const IntroductionsLayout = ({
           />
           <div
             ref={cloudTextContainer}
-            className="row-span-full pb-[90px] pl-[150px] pr-[64px] pt-[44px] text-[#303989]"
+            className={cn("row-span-full pb-[90px] pt-[44px] text-[#303989]", {
+              "pl-[150px] pr-[64px]": !mirrored,
+              "pl-[64px] pr-[150px]": mirrored,
+            })}
           >
             <div
               ref={cloudTextRef}
@@ -251,8 +289,23 @@ export const IntroductionsLayout = ({
           </div>
         </div>
       </div>
-      <div className="absolute left-[246px] top-[746px] w-[1248px] px-6 py-3">
-        <span className="float-start h-[110px] w-[360px]" />
+      {mirrored && (
+        <div className="absolute left-[124px] top-[720px] font-pixel text-[28px] text-schedule25-dark">
+          README.md
+        </div>
+      )}
+      <div
+        className={cn("absolute w-[1248px] px-6 py-3", {
+          "left-[246px] top-[746px]": !mirrored,
+          "left-[124px] top-[776px]": mirrored,
+        })}
+      >
+        <span
+          className={cn({
+            "float-start h-[110px] w-[360px]": !mirrored,
+            "float-end h-[32px] w-[424px]": mirrored,
+          })}
+        />
         <span
           style={{
             fontSize: descriptionFontSize,

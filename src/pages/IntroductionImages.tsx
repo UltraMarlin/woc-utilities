@@ -226,6 +226,7 @@ export const IntroductionImages = () => {
   };
 
   const thumbnailLayoutProps: IntroductionsLayoutProps = {
+    mirrored,
     name,
     pronouns,
     profilePicture,
@@ -236,8 +237,6 @@ export const IntroductionImages = () => {
     descriptionFontSize,
     socials: socialLinks,
   };
-
-  const LayoutComponent = mirrored ? IntroductionsLayout : IntroductionsLayout;
 
   return (
     <PageContainer className="grid grid-cols-[1fr_minmax(0,1584px)] gap-4">
@@ -409,11 +408,11 @@ export const IntroductionImages = () => {
             downloadPosition="top-left"
           >
             {({ onLoad }) => (
-              <LayoutComponent onLoad={onLoad} {...thumbnailLayoutProps} />
+              <IntroductionsLayout onLoad={onLoad} {...thumbnailLayoutProps} />
             )}
           </DownloadWrapper>
         ) : (
-          <LayoutComponent {...thumbnailLayoutProps} />
+          <IntroductionsLayout {...thumbnailLayoutProps} />
         )}
       </div>
     </PageContainer>
