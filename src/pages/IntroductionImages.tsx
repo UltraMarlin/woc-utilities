@@ -239,7 +239,7 @@ export const IntroductionImages = () => {
   };
 
   return (
-    <PageContainer className="grid grid-cols-[1fr_minmax(0,1584px)] gap-4">
+    <PageContainer className="grid grid-cols-[1fr_minmax(0,792px)] gap-4">
       <div className="flex h-fit flex-col gap-1 rounded bg-neutral-700 p-4 text-white">
         <label className="flex w-fit cursor-pointer items-center gap-2 py-1 pr-2">
           <span>Mirrored</span>
@@ -251,7 +251,7 @@ export const IntroductionImages = () => {
             onChange={handleMirroredChange}
           />
         </label>
-        <div className="grid grid-cols-1 gap-x-4 gap-y-1 2xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-1 xl:grid-cols-2">
           <label className="flex w-full cursor-pointer flex-col">
             <span>Name</span>
             <input
@@ -284,7 +284,7 @@ export const IntroductionImages = () => {
               onChange={handleProfilePictureUpdate}
             />
           </label>
-          <div className="flex w-full flex-col gap-x-4 gap-y-2 2xl:flex-row">
+          <div className="flex w-full flex-col gap-x-4 gap-y-1 xl:flex-row xl:gap-y-2">
             <RangeSlider
               className="w-full"
               onChange={handlePicturePositionXChange}
@@ -301,7 +301,7 @@ export const IntroductionImages = () => {
             </RangeSlider>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-x-4 gap-y-1 2xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-4 gap-y-1 xl:grid-cols-2">
           {availableSocials.map((social) => (
             <label key={social} className="flex w-full cursor-pointer flex-col">
               <span>{social}</span>
@@ -338,7 +338,7 @@ export const IntroductionImages = () => {
               name="description"
               value={description}
               onChange={handleDescriptionChange}
-              rows={10}
+              rows={8}
             />
           </label>
         </div>
@@ -392,7 +392,8 @@ export const IntroductionImages = () => {
       </div>
       <div
         className={cn({
-          "max-h-[calc(100vh-100px)] overflow-scroll": !downloadActive,
+          "sticky top-4 max-h-[min(100vh-100px,792px)] overflow-scroll":
+            !downloadActive,
         })}
         ref={scrollContainer}
         onMouseEnter={handleMouseEnter}
@@ -412,7 +413,11 @@ export const IntroductionImages = () => {
             )}
           </DownloadWrapper>
         ) : (
-          <IntroductionsLayout {...thumbnailLayoutProps} />
+          <IntroductionsLayout
+            className="-mb-[792px] -mr-[792px] origin-top-left scale-50"
+            scale={0.5}
+            {...thumbnailLayoutProps}
+          />
         )}
       </div>
     </PageContainer>

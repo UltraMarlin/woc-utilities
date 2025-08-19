@@ -28,6 +28,8 @@ import bubbleMiddleMirrored from "../assets/images/introductions-bubble-2-middle
 import bubbleBottomMirrored from "../assets/images/introductions-bubble-2-bottom.png";
 
 export type IntroductionsLayoutProps = DownloadableComponentProps & {
+  scale?: number;
+  className?: string;
   mirrored?: boolean;
   name?: string;
   pronouns?: string;
@@ -61,11 +63,15 @@ const MAX_NAME_FONTSIZE = 124;
 const FONTSIZE_STEP = 2;
 const MIN_NAME_FONTSIZE = 96;
 
-const getOptimizedFontSize = (value: string, maxWidth: number) => {
+const getOptimizedFontSize = (
+  value: string,
+  maxWidth: number,
+  parent: HTMLElement
+) => {
   const testElement = document.createElement("span");
   testElement.classList.add("font-bubbly");
   testElement.innerHTML = value;
-  document.body.appendChild(testElement);
+  parent.appendChild(testElement);
 
   let rect: DOMRect;
   let fontSize = MAX_NAME_FONTSIZE + FONTSIZE_STEP;
@@ -76,7 +82,7 @@ const getOptimizedFontSize = (value: string, maxWidth: number) => {
     rect = testElement.getBoundingClientRect();
   } while (maxWidth <= rect.width);
 
-  document.body.removeChild(testElement);
+  parent.removeChild(testElement);
   const optimizedFontsize =
     fontSize <= MIN_NAME_FONTSIZE ? MIN_NAME_FONTSIZE : fontSize;
 
@@ -86,6 +92,8 @@ const getOptimizedFontSize = (value: string, maxWidth: number) => {
 const isWhitespaceString = (str: string) => str.replace(/\s/g, "").length > 0;
 
 export const IntroductionsLayout = ({
+  scale = 1,
+  className,
   onLoad,
   hotReload = false,
   mirrored,
@@ -104,6 +112,7 @@ export const IntroductionsLayout = ({
   const cloudTextRef = useRef<HTMLDivElement>(null);
   const pronounsRef = useRef<HTMLDivElement>(null);
   const cloudTextContainer = useRef<HTMLDivElement>(null);
+  const layoutRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!cloudContainer.current) return;
@@ -143,26 +152,33 @@ export const IntroductionsLayout = ({
         !cloudTextRef.current ||
         !pronounsRef.current ||
         !cloudContainer.current ||
-        !cloudTextContainer.current
+        !cloudTextContainer.current ||
+        !layoutRef.current
       )
         return setNameFontSize(MAX_NAME_FONTSIZE);
       const textContainerComputedStyle = window.getComputedStyle(
         cloudTextContainer.current
       );
-      const paddingLeft = parseInt(textContainerComputedStyle.paddingLeft);
-      const paddingRight = parseInt(textContainerComputedStyle.paddingRight);
+      const paddingLeft =
+        parseInt(textContainerComputedStyle.paddingLeft) * scale;
+      const paddingRight =
+        parseInt(textContainerComputedStyle.paddingRight) * scale;
       const horizontalTextPadding = paddingLeft + paddingRight;
+      const gap =
+        parseInt(window.getComputedStyle(cloudTextRef.current).columnGap) *
+        scale;
+
       const maxWidth =
         cloudContainer.current.getBoundingClientRect().width -
         horizontalTextPadding -
-        parseInt(window.getComputedStyle(cloudTextRef.current).columnGap) -
+        gap -
         pronounsRef.current.getBoundingClientRect().width;
 
-      const fontSize = getOptimizedFontSize(name, maxWidth);
+      const fontSize = getOptimizedFontSize(name, maxWidth, layoutRef.current);
 
       return setNameFontSize(fontSize);
     });
-  }, [name, pronouns]);
+  }, [name, pronouns, scale]);
 
   const sortedSocials = useMemo(() => {
     if (!socials) return [];
@@ -192,7 +208,13 @@ export const IntroductionsLayout = ({
   const bubbleBottom = mirrored ? bubbleBottomMirrored : bubbleBottomDefault;
 
   return (
-    <div className="relative aspect-square size-[1584px] select-none bg-black text-5xl">
+    <div
+      ref={layoutRef}
+      className={cn(
+        "relative aspect-square size-[1584px] select-none bg-black text-5xl",
+        className
+      )}
+    >
       <div
         className={cn("absolute size-[530px] p-[5px]", {
           "left-[53px] top-[305px]": !mirrored,
