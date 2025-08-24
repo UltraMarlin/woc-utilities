@@ -52,6 +52,17 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Pally";
+  src:
+    url("assets/fonts/Pally-Bold.woff2") format("woff2"),
+    url("assets/fonts/Pally-Bold.woff") format("woff"),
+    url("assets/fonts/Pally-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}
+
 .night-outline {
   -webkit-text-stroke-width: 8px;
   -webkit-text-stroke-color: #ace1b2;
@@ -65,12 +76,22 @@
   paint-order: stroke fill;
 }
 
-.yt-thumbnail-text {
-  text-shadow: 10px 10px 12px rgba(0, 0, 0, 1);
-}
-
 .yt-thumbnail-text-logo {
   text-shadow: 8px 10px 6px rgba(0, 0, 0, 1);
+}
+
+.checker-board {
+  --checker-opacity: 0.87;
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, var(--checker-opacity)),
+      rgba(255, 255, 255, var(--checker-opacity))
+    ),
+    linear-gradient(to right, black 50%, white 50%),
+    linear-gradient(to bottom, black 50%, white 50%);
+  background-blend-mode: normal, difference, normal;
+  background-size: 40px 40px;
 }
 
 .yt-thumbnail-text-logo-year {

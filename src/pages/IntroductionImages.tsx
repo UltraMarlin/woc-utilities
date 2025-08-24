@@ -20,6 +20,7 @@ import {
   SocialsOption,
 } from "../utils/socials";
 import { RangeSlider } from "../components/RangeSlider";
+import { lowerSanitize } from "../utils/formatting/sanitize";
 
 export const MIN_DESCRIPTION_LINEHEIGHT = 1.05;
 export const MAX_DESCRIPTION_LINEHEIGHT = 1.25;
@@ -405,7 +406,7 @@ export const IntroductionImages = () => {
         {downloadActive ? (
           <DownloadWrapper
             className="aspect-square w-[800px]"
-            fileBaseName={`selbstvorstellung${name ? "_" + name.toLowerCase().replace(" ", "_") : ""}`}
+            fileBaseName={`selbstvorstellung${name ? "_" + lowerSanitize(name) : ""}`}
             downloadPosition="top-left"
           >
             {({ onLoad }) => (

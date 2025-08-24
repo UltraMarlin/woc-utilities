@@ -10,6 +10,7 @@ export default {
         explorer: ["Explorer"],
         lilita: ["Lilita One"],
         bubbly: ["Bubbly"],
+        pally: ["Pally", "sans-serif"],
       },
       colors: {
         night: {

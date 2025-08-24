@@ -5,6 +5,7 @@ import {
   ThumbnailLayoutProps,
 } from "../components/ThumbnailLayout";
 import { DownloadWrapper } from "../components/DownloadWrapper";
+import { lowerSanitize } from "../utils/formatting/sanitize";
 
 export const YoutubeThumbnails = () => {
   const [downloadActive, setDownloadActive] = useState(false);
@@ -128,7 +129,7 @@ export const YoutubeThumbnails = () => {
         {downloadActive ? (
           <DownloadWrapper
             className="aspect-video w-[1600px]"
-            fileBaseName="thumbnail"
+            fileBaseName={`thumbnail${game ? "_" + lowerSanitize(game) : ""}`}
             downloadPosition="top-left"
           >
             {({ onLoad }) => (
