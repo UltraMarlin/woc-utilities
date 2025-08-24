@@ -89,6 +89,14 @@ const getOptimizedFontSize = (
   return optimizedFontsize;
 };
 
+const formatWindowName = (name: string | undefined) => {
+  if (!name) return "";
+  return `${name
+    .replace(" ", "-")
+    .split(/[^a-zA-Z0-9-äöüÄÖÜß]+/g)[0]
+    .toLowerCase()}.png`;
+};
+
 const isWhitespaceString = (str: string) => str.replace(/\s/g, "").length > 0;
 
 export const IntroductionsLayout = ({
@@ -246,7 +254,7 @@ export const IntroductionsLayout = ({
           "left-[963px] top-[213px]": mirrored,
         })}
       >
-        {name?.toLowerCase()}.png
+        {formatWindowName(name)}
       </div>
       <div
         className={cn(
