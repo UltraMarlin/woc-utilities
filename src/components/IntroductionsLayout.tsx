@@ -347,6 +347,7 @@ export const IntroductionsLayout = ({
           ))}
         </span>
       </div>
+      <div className="bg-scan-lines pointer-events-none absolute inset-0" />
     </div>
   );
 };
