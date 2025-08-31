@@ -18,14 +18,12 @@ export const DevView = () => {
               hotReload
               minEndTimestampUTC={minEndTimestampUTC}
               maxEndTimestampUTC={maxEndTimestampUTC}
-              night
             />
           )}
         </DownloadWrapper>
         <LayoutComponent
           minEndTimestampUTC={minEndTimestampUTC}
           maxEndTimestampUTC={maxEndTimestampUTC}
-          night
         />
       </div>
     </PageContainer>
