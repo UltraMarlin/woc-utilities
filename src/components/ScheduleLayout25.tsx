@@ -14,7 +14,6 @@ import { TwitchIcon } from "./icons/TwitchIcon";
 export type ExampleComponentProps = DownloadableComponentProps & {
   minEndTimestampUTC: string;
   maxEndTimestampUTC: string;
-  night: boolean;
   className?: string;
 };
 
@@ -22,7 +21,6 @@ export const ScheduleLayout25 = ({
   className,
   minEndTimestampUTC,
   maxEndTimestampUTC,
-  night,
   onLoad,
   hotReload = false,
 }: ExampleComponentProps) => {
@@ -86,15 +84,7 @@ export const ScheduleLayout25 = ({
     >
       <img src={wocLogo} alt="" className="absolute top-[60px] h-[182px]" />
 
-      <div
-        className={cn(
-          "absolute left-[144px] top-[284px] mt-1 flex h-[1138px] w-[1298px] flex-col items-center p-3",
-          {
-            "text-night-highlight": night,
-            "text-day-highlight": !night,
-          }
-        )}
-      >
+      <div className="absolute left-[144px] top-[284px] mt-1 flex h-[1138px] w-[1298px] flex-col items-center p-3">
         <div className="w-full pl-3 text-left text-[32px] text-schedule25-dark">
           UpcomingStreams.exe
         </div>

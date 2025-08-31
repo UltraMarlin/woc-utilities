@@ -10,6 +10,7 @@ import { Home } from "./pages/Home.tsx";
 import { YoutubeDescriptions } from "./pages/YoutubeDescriptions.tsx";
 import { YoutubeThumbnails } from "./pages/YoutubeThumbnails.tsx";
 import { IntroductionImages } from "./pages/IntroductionImages.tsx";
+import { SocialsPostImages } from "./pages/SocialsPostImages.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -26,6 +27,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="yt-descriptions" element={<YoutubeDescriptions />} />
           <Route path="yt-thumbnails" element={<YoutubeThumbnails />} />
           <Route path="introductions" element={<IntroductionImages />} />
+          <Route path="social-posts" element={<SocialsPostImages />} />
         </Route>
       </Routes>
     </BrowserRouter>

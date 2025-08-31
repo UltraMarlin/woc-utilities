@@ -11,6 +11,10 @@ const links = [
     label: "Introductions",
   },
   {
+    href: "/social-posts",
+    label: "Social Posts",
+  },
+  {
     href: "/yt-descriptions",
     label: "Youtube Descriptions",
   },

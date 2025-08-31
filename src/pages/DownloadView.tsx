@@ -128,7 +128,6 @@ export const DownloadView = () => {
                     onLoad={onLoad}
                     minEndTimestampUTC={minEnd}
                     maxEndTimestampUTC={maxEnd}
-                    night={isNight}
                   />
                 )}
               </DownloadWrapper>
