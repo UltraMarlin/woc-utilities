@@ -43,7 +43,7 @@ export const formatYTDescription = (stream: Stream) => {
   const additionalPlayers = getNonStreamerPlayers(stream);
   const additionalPlayersString =
     additionalPlayers.length > 0
-      ? `\n\nMitspieler*innen:
+      ? `\n\nWeitere Mitspieler*innen:
 ${additionalPlayers.join("\n")}`
       : "";
 
@@ -55,8 +55,7 @@ ${stream.activity.name}
 Links der Week of Charity (WoC):
 Website: https://weekofcharity.de/
 
-Socials: 
-Twitter: https://x.com/WeekOfCharity
+Socials:
 Instagram: https://www.instagram.com/weekofcharity/
 Mastodon: https://tech.lgbt/@weekofcharity 
 Bluesky: https://bsky.app/profile/chesster.weekofcharity.de
