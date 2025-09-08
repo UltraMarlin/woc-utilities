@@ -3,34 +3,14 @@ import { PageContainer } from "../components/PageContainer";
 
 const links = [
   {
-    href: "/schedule-images",
-    label: "Schedule Images",
-  },
-  {
-    href: "/introductions",
-    label: "Introductions",
-  },
-  {
-    href: "/social-posts",
-    label: "Social Posts",
-  },
-  {
-    href: "/yt-descriptions",
-    label: "Youtube Descriptions",
-  },
-  {
-    href: "/yt-thumbnails",
-    label: "Youtube Thumbnails",
-  },
-  {
-    href: "/widgets",
-    label: "Stream Widgets",
+    href: "/widgets/points-overlay",
+    label: "Points Overlay",
   },
 ];
 
-export const Home = () => {
+export const WidgetsHome = () => {
   return (
-    <PageContainer isHome>
+    <PageContainer>
       <ul className="flex flex-col gap-4">
         {links.map((link) => (
           <li key={link.href}>

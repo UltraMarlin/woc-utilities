@@ -18,7 +18,7 @@ export const PageContainer = ({
         {!isHome && (
           <nav>
             <Link to="/" className="text-xl underline hover:decoration-2">
-              Back to Overview
+              Back to Home
             </Link>
           </nav>
         )}
