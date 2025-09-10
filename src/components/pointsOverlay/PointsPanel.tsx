@@ -11,13 +11,13 @@ export const PointsPanel = ({
 }: PointsPanelProps) => {
   return (
     <div
-      className="flex w-full max-w-[440px] flex-col items-center rounded-t-3xl bg-[currentColor] py-4 text-5xl text-[--accentColor]"
+      className="flex w-full max-w-[440px] flex-col items-center rounded-lg border-4 border-[color-mix(in_oklab,currentColor,white_40%)] bg-gradient-to-tr from-[currentColor] to-[color-mix(in_oklab,currentColor,white_25%)] pb-4 pt-2 text-5xl text-[--accentColor]"
       style={{ "--accentColor": accentColor }}
     >
-      <div className="mb-4 font-semibold text-[color-mix(in_oklab,currentColor,black_60%)]">
+      <div className="mb-2 font-semibold text-[color-mix(in_oklab,currentColor,black_60%)]">
         {name}
       </div>
-      <div className="w-[180px] bg-[color-mix(in_oklab,currentColor,white_70%)] px-6 py-3 text-center text-[3.5rem]">
+      <div className="w-[180px] rounded-md bg-[color-mix(in_oklab,currentColor,white_60%)] px-6 py-1 text-center text-[3.5rem]">
         <span className="font-bold text-[color-mix(in_oklab,currentColor,black_50%)]">
           {points}
         </span>
