@@ -15,6 +15,8 @@ export type SocialPostLayoutProps = DownloadableComponentProps & {
   className?: string;
   moreInfoTextShown?: boolean;
   windowTitle?: string;
+  headline?: string;
+  headlineFontSize?: number;
   description?: string;
   descriptionFontSize?: number;
 };
@@ -27,6 +29,8 @@ export const SocialPostLayout = ({
   hotReload = false,
   moreInfoTextShown,
   windowTitle: windowTitleFromProps,
+  headline,
+  headlineFontSize,
   description,
   descriptionFontSize,
 }: SocialPostLayoutProps) => {
@@ -41,6 +45,17 @@ export const SocialPostLayout = ({
     const lineheight = MIN_DESCRIPTION_LINEHEIGHT + lineheightSpan * percent;
     return lineheight;
   }, [descriptionFontSize]);
+
+  const headlineLineHeight = useMemo(() => {
+    if (!headlineFontSize) return MAX_DESCRIPTION_LINEHEIGHT;
+    const percent =
+      (headlineFontSize - MIN_DESCRIPTION_FONTSIZE) /
+      (MAX_DESCRIPTION_FONTSIZE - MIN_DESCRIPTION_FONTSIZE);
+    const lineheightSpan =
+      MAX_DESCRIPTION_LINEHEIGHT - MIN_DESCRIPTION_LINEHEIGHT;
+    const lineheight = MIN_DESCRIPTION_LINEHEIGHT + lineheightSpan * percent;
+    return lineheight;
+  }, [headlineFontSize]);
 
   const descriptionParts = useMemo(() => {
     return description?.split("\n").filter(isWhitespaceString);
@@ -67,15 +82,27 @@ export const SocialPostLayout = ({
         <div className="pl-3 text-left text-[32px] text-schedule25-dark">
           {`${windowTitle}.txt`}
         </div>
-        <div
-          style={{
-            fontSize: descriptionFontSize,
-            lineHeight: descriptionLineHeight,
-          }}
-          className="schedule-layout-25-text-shadow-dark whitespace-pre-wrap p-8 font-ubuntu text-schedule25-light"
-        >
+        <div className="schedule-layout-25-text-shadow-dark whitespace-pre-wrap p-8 font-ubuntu text-schedule25-light">
+          {headline && (
+            <h1
+              className="mb-8 text-center"
+              style={{
+                fontSize: headlineFontSize,
+                lineHeight: headlineLineHeight,
+              }}
+            >
+              {headline}
+            </h1>
+          )}
           {descriptionParts?.map((part) => (
-            <p className="mb-[0.7em] last-of-type:mb-0" key={part}>
+            <p
+              key={part}
+              className="mb-[0.7em] last-of-type:mb-0"
+              style={{
+                fontSize: descriptionFontSize,
+                lineHeight: descriptionLineHeight,
+              }}
+            >
               {part}
             </p>
           ))}

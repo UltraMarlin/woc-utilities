@@ -32,6 +32,8 @@ export const SocialsPostImages = () => {
   const [renderButtonDisabled, setRenderButtonDisabled] = useState(false);
   const [moreInfoTextShown, setMoreInfoTextShown] = useState(true);
   const [windowTitle, setWindowTitle] = useState("");
+  const [headline, setHeadline] = useState("");
+  const [headlineFontSize, setHeadlineFontSize] = useState(92);
   const [description, setDescription] = useState("");
   const [descriptionFontSize, setDescriptionFontSize] = useState(64);
   const [copied, setCopied] = useState(false);
@@ -49,6 +51,10 @@ export const SocialsPostImages = () => {
   useEffect(() => {
     setMoreInfoTextShown(searchParams.get("moreInfoTextShown") !== "false");
     setWindowTitle(searchParams.get("windowTitle") || "");
+    setHeadline(searchParams.get("headline") || "");
+    setHeadlineFontSize(
+      parseInt(searchParams.get("headlineFontSize") || "") || 92
+    );
     setDescription(searchParams.get("description") || "");
     setDescriptionFontSize(
       parseInt(searchParams.get("descriptionFontSize") || "") || 64
@@ -57,6 +63,18 @@ export const SocialsPostImages = () => {
 
   const toggleDownloadActive = () => {
     setDownloadActive((prev) => !prev);
+  };
+
+  const handleHeadlineChange: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setDownloadActive(false);
+    setHeadline(event.target.value);
+  };
+
+  const handleHeadlineFontSizeChange = (value: number) => {
+    setDownloadActive(false);
+    setHeadlineFontSize(value);
   };
 
   const handleDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (
@@ -102,6 +120,9 @@ export const SocialsPostImages = () => {
     if (moreInfoTextShown) paramsArray.push(["moreInfoTextShown", "true"]);
     else paramsArray.push(["moreInfoTextShown", "false"]);
     if (windowTitle) paramsArray.push(["windowTitle", windowTitle]);
+    if (headline) paramsArray.push(["headline", headline]);
+    if (headlineFontSize && headlineFontSize !== 92)
+      paramsArray.push(["headlineFontSize", `${headlineFontSize}`]);
     if (description) paramsArray.push(["description", description]);
     if (descriptionFontSize && descriptionFontSize !== 64)
       paramsArray.push(["descriptionFontSize", `${descriptionFontSize}`]);
@@ -147,6 +168,8 @@ export const SocialsPostImages = () => {
   const socialPostLayoutProps: SocialPostLayoutProps = {
     moreInfoTextShown,
     windowTitle,
+    headline,
+    headlineFontSize,
     description,
     descriptionFontSize,
   };
@@ -174,6 +197,16 @@ export const SocialsPostImages = () => {
             onChange={handleWindowTitleChange}
           />
         </label>
+        <label className="flex w-full cursor-pointer flex-col">
+          <span>Headline</span>
+          <input
+            type="text"
+            className="text-lg text-black"
+            name="headline"
+            value={headline}
+            onChange={handleHeadlineChange}
+          />
+        </label>
         <label className="flex w-full cursor-pointer flex-col gap-1.5">
           <span>Description</span>
           <textarea
@@ -181,9 +214,18 @@ export const SocialsPostImages = () => {
             name="description"
             value={description}
             onChange={handleDescriptionChange}
-            rows={14}
+            rows={12}
           />
         </label>
+        <RangeSlider
+          className="w-full"
+          onChange={handleHeadlineFontSizeChange}
+          value={headlineFontSize}
+          min={MIN_DESCRIPTION_FONTSIZE}
+          max={MAX_DESCRIPTION_FONTSIZE}
+        >
+          Headline Font Size
+        </RangeSlider>
         <RangeSlider
           className="w-full"
           onChange={handleDescriptionFontSizeChange}
