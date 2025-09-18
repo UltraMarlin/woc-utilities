@@ -7,6 +7,7 @@ import { formatYTDescription } from "../utils/formatting/formatYTDescription";
 
 export const YoutubeDescriptions = () => {
   const { data: streams, status: streamsStatus } = useStreams();
+  const [currentStreamIndex, setCurrentStreamIndex] = useState<number>();
   const [dialogContent, setDialogContent] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -25,8 +26,24 @@ export const YoutubeDescriptions = () => {
   }, [streams]);
 
   const openDialogWithContent = (stream: Stream) => {
+    if (!streams) return;
+    setCurrentStreamIndex(streams.indexOf(stream));
     setDialogContent(formatYTDescription(stream));
     setDialogOpen(true);
+  };
+
+  const openDialogWithPreviousStreamContent = () => {
+    if (typeof currentStreamIndex === "undefined") return;
+    const previousStream = streams?.[currentStreamIndex - 1];
+    if (!previousStream) return;
+    openDialogWithContent(previousStream);
+  };
+
+  const openDialogWithNextStreamContent = () => {
+    if (typeof currentStreamIndex === "undefined") return;
+    const nextStream = streams?.[currentStreamIndex + 1];
+    if (!nextStream) return;
+    openDialogWithContent(nextStream);
   };
 
   const handleCopyPress = () => {
@@ -35,6 +52,7 @@ export const YoutubeDescriptions = () => {
   };
 
   const closeDialog = () => {
+    setCurrentStreamIndex(undefined);
     setDialogOpen(false);
     setCopied(false);
   };
@@ -89,37 +107,55 @@ export const YoutubeDescriptions = () => {
       )}
       <dialog
         open={dialogOpen}
-        className="fixed inset-1/2 w-full -translate-x-1/2 flex-col rounded-lg bg-neutral-700 p-4 shadow-2xl open:flex md:w-fit"
+        className="fixed left-1/2 right-1/2 top-20 w-full -translate-x-1/2 flex-col gap-4 rounded-lg bg-neutral-700 p-4 shadow-2xl open:flex md:w-fit"
       >
-        <div className="mb-5 w-full overflow-x-auto rounded bg-neutral-50 p-4 md:min-w-[40rem]">
-          <pre>{dialogContent}</pre>
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2 font-bold">
+            <button
+              className="rounded bg-neutral-100 px-2 py-1.5 text-neutral-800 transition-colors duration-150 enabled:hover:bg-neutral-300 disabled:opacity-40"
+              onClick={openDialogWithPreviousStreamContent}
+              disabled={currentStreamIndex === 0}
+            >
+              Prev
+            </button>
+            <button
+              className="rounded bg-neutral-100 px-2 py-1.5 text-neutral-800 transition-colors duration-150 enabled:hover:bg-neutral-300 disabled:opacity-40"
+              onClick={openDialogWithNextStreamContent}
+              disabled={streams && currentStreamIndex === streams?.length - 1}
+            >
+              Next
+            </button>
+          </div>
+          <div className="flex items-center gap-2 font-bold">
+            <span
+              className={cn(
+                "mr-1 text-neutral-50 transition-[opacity,transform] duration-300",
+                {
+                  "translate-y-0 opacity-100": copied,
+                  "translate-y-1 opacity-0": !copied,
+                }
+              )}
+              aria-hidden={!copied}
+              inert={!copied}
+            >
+              Copied to clipboard!
+            </span>
+            <button
+              className="mr-2 rounded bg-neutral-100 px-5 py-1.5 text-neutral-800 transition-colors duration-150 hover:bg-neutral-300"
+              onClick={handleCopyPress}
+            >
+              Copy
+            </button>
+            <button
+              className="size-9 rounded bg-red-300 text-4xl text-red-900 transition-colors duration-150 hover:bg-red-400"
+              onClick={closeDialog}
+            >
+              <div className="-translate-y-[9px]">⨯</div>
+            </button>
+          </div>
         </div>
-        <div className="flex items-center justify-end gap-2 font-bold">
-          <span
-            className={cn(
-              "mr-1 text-neutral-50 transition-[opacity,transform] duration-300",
-              {
-                "translate-y-0 opacity-100": copied,
-                "translate-y-1 opacity-0": !copied,
-              }
-            )}
-            aria-hidden={!copied}
-            inert={!copied}
-          >
-            Copied to clipboard!
-          </span>
-          <button
-            className="rounded bg-neutral-100 px-2 py-1.5 text-neutral-800 transition-colors duration-150 hover:bg-neutral-300"
-            onClick={handleCopyPress}
-          >
-            Copy
-          </button>
-          <button
-            className="rounded bg-neutral-100 px-2 py-1.5 text-neutral-800 transition-colors duration-150 hover:bg-neutral-300"
-            onClick={closeDialog}
-          >
-            Close
-          </button>
+        <div className="w-full overflow-x-auto rounded bg-neutral-50 p-4 md:min-w-[44rem]">
+          <pre>{dialogContent}</pre>
         </div>
       </dialog>
     </PageContainer>
