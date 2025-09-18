@@ -43,9 +43,13 @@ export const ThumbnailLayout = ({
         />
       )}
       <img src={shape} alt="" className="absolute left-0 top-0 size-full" />
-      <div className="yt-thumbnail-text absolute bottom-7 left-[32px] flex flex-col p-3 font-explorer text-[72px] leading-none text-[#4c0a49]">
-        <span style={{ fontSize: `${gameFontSize}px` }}>{game}</span>
-        <span style={{ fontSize: `${streamerFontSize}px` }}>{streamer}</span>
+      <div className="absolute bottom-7 left-[32px] flex flex-col p-3 font-pally text-[72px] leading-none text-[#4c0a49]">
+        <span style={{ fontSize: `${gameFontSize}px` }}>
+          {game?.toUpperCase()}
+        </span>
+        <span style={{ fontSize: `${streamerFontSize}px` }}>
+          {streamer?.toUpperCase()}
+        </span>
       </div>
       <div className="yt-thumbnail-text-logo absolute right-24 top-10 text-[#ffb2ff]">
         <div className="-rotate-3 -skew-x-6 transform-gpu font-explorer text-[78px] leading-none">

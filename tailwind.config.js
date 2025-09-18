@@ -7,7 +7,7 @@ export default {
         pixel: ["DePixelHalbfett", "sans-serif"],
         standard: ["Carlito"],
         ubuntu: ["Ubuntu"],
-        explorer: ["Explorer"],
+        explorer: ["Explorer", "Pally", "sans-serif"],
         lilita: ["Lilita One"],
         bubbly: ["Bubbly"],
         pally: ["Pally", "sans-serif"],
