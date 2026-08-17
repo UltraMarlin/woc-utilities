@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import cn from "classnames";
 import {
   downloadImage,
@@ -28,29 +28,33 @@ export const DownloadWrapper = ({
 }: DownloadWrapperProps) => {
   const [imgSrc, setImgSrc] = useState("");
   const [altText, setAltText] = useState("");
+  const [loadEvent, setLoadEvent] = useState<{ alt?: string } | null>(null);
   const componentRef = useRef<HTMLDivElement>(null);
 
   const startDownload = () => {
     downloadImage(imgSrc, `${fileBaseName}.png`);
   };
 
-  const generateImage = async () => {
-    if (!componentRef.current) return;
-    const imageBlob = await exportAsImage(componentRef.current);
-    setImgSrc(imageBlob);
+  const handleLoad = (alt?: string) => {
+    setLoadEvent({ alt });
   };
 
-  const handleLoadWithDelay = (alt?: string) => {
-    setTimeout(() => {
-      generateImage();
-      if (alt) setAltText(alt);
+  useEffect(() => {
+    if (!loadEvent) return;
+    const timeout = setTimeout(async () => {
+      if (loadEvent.alt) setAltText(loadEvent.alt);
+      if (!componentRef.current) return;
+      const imageBlob = await exportAsImage(componentRef.current);
+      setImgSrc(imageBlob);
     }, delay);
-  };
+
+    return () => clearTimeout(timeout);
+  }, [loadEvent, delay]);
 
   return (
     <div className={cn("relative flex items-center justify-center", className)}>
       <div ref={componentRef} className="absolute -left-[9999px]">
-        {children({ onLoad: handleLoadWithDelay })}
+        {children({ onLoad: handleLoad })}
       </div>
       {imgSrc && <img className="peer" src={imgSrc} alt="" />}
       {!imgSrc && <div className="size-full animate-pulse bg-neutral-400" />}

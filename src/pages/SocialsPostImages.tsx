@@ -8,6 +8,7 @@ import {
 } from "react";
 import { PageContainer } from "../components/PageContainer";
 import { useSearchParams } from "react-router";
+import { useIsBrowserZoomed } from "../hooks/useIsBrowserZoomed";
 
 import { DownloadWrapper } from "../components/DownloadWrapper";
 import { RangeSlider } from "../components/RangeSlider";
@@ -29,13 +30,25 @@ export const SocialsPostImages = () => {
   } | null>(null);
 
   const [downloadActive, setDownloadActive] = useState(false);
-  const [renderButtonDisabled, setRenderButtonDisabled] = useState(false);
-  const [moreInfoTextShown, setMoreInfoTextShown] = useState(true);
-  const [windowTitle, setWindowTitle] = useState("");
-  const [headline, setHeadline] = useState("");
-  const [headlineFontSize, setHeadlineFontSize] = useState(92);
-  const [description, setDescription] = useState("");
-  const [descriptionFontSize, setDescriptionFontSize] = useState(64);
+  const renderButtonDisabled = useIsBrowserZoomed();
+  const [moreInfoTextShown, setMoreInfoTextShown] = useState(
+    () => searchParams.get("moreInfoTextShown") !== "false"
+  );
+  const [windowTitle, setWindowTitle] = useState(
+    () => searchParams.get("windowTitle") || ""
+  );
+  const [headline, setHeadline] = useState(
+    () => searchParams.get("headline") || ""
+  );
+  const [headlineFontSize, setHeadlineFontSize] = useState(
+    () => parseInt(searchParams.get("headlineFontSize") || "") || 92
+  );
+  const [description, setDescription] = useState(
+    () => searchParams.get("description") || ""
+  );
+  const [descriptionFontSize, setDescriptionFontSize] = useState(
+    () => parseInt(searchParams.get("descriptionFontSize") || "") || 64
+  );
   const [copied, setCopied] = useState(false);
   const scrollContainer = useRef<HTMLDivElement>(null);
 
@@ -47,19 +60,6 @@ export const SocialsPostImages = () => {
 
     return () => clearTimeout(timeout);
   }, [copied]);
-
-  useEffect(() => {
-    setMoreInfoTextShown(searchParams.get("moreInfoTextShown") !== "false");
-    setWindowTitle(searchParams.get("windowTitle") || "");
-    setHeadline(searchParams.get("headline") || "");
-    setHeadlineFontSize(
-      parseInt(searchParams.get("headlineFontSize") || "") || 92
-    );
-    setDescription(searchParams.get("description") || "");
-    setDescriptionFontSize(
-      parseInt(searchParams.get("descriptionFontSize") || "") || 64
-    );
-  }, [searchParams]);
 
   const toggleDownloadActive = () => {
     setDownloadActive((prev) => !prev);
@@ -102,18 +102,6 @@ export const SocialsPostImages = () => {
     setDownloadActive(false);
     setWindowTitle(event.target.value);
   };
-
-  useEffect(() => {
-    setRenderButtonDisabled(window.devicePixelRatio !== 1);
-
-    const handleResize = () => {
-      setRenderButtonDisabled(window.devicePixelRatio !== 1);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleCopyPress = () => {
     const paramsArray: string[][] = [];

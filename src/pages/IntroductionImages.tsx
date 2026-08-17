@@ -21,6 +21,7 @@ import {
 } from "../utils/socials";
 import { RangeSlider } from "../components/RangeSlider";
 import { lowerSanitize } from "../utils/formatting/sanitize";
+import { useIsBrowserZoomed } from "../hooks/useIsBrowserZoomed";
 
 export const MIN_DESCRIPTION_LINEHEIGHT = 1.05;
 export const MAX_DESCRIPTION_LINEHEIGHT = 1.25;
@@ -35,17 +36,39 @@ export const IntroductionImages = () => {
   } | null>(null);
 
   const [downloadActive, setDownloadActive] = useState(false);
-  const [renderButtonDisabled, setRenderButtonDisabled] = useState(false);
-  const [mirrored, setMirrored] = useState(false);
-  const [name, setName] = useState("");
-  const [pronouns, setPronouns] = useState("");
+  const renderButtonDisabled = useIsBrowserZoomed();
+  const [mirrored, setMirrored] = useState(
+    () => !!searchParams.get("mirrored")
+  );
+  const [name, setName] = useState(() => searchParams.get("name") || "");
+  const [pronouns, setPronouns] = useState(
+    () => searchParams.get("pronouns") || ""
+  );
   const [profilePicture, setProfilePicture] = useState("");
-  const [picturePositionX, setPicturePositionX] = useState(50);
-  const [picturePositionY, setPicturePositionY] = useState(50);
-  const [descriptionIntro, setDescriptionIntro] = useState("");
-  const [description, setDescription] = useState("");
-  const [descriptionFontSize, setDescriptionFontSize] = useState(64);
-  const [socialLinks, setSocialLinks] = useState<Array<SocialsOption>>([]);
+  const [picturePositionX, setPicturePositionX] = useState(
+    () => parseInt(searchParams.get("x") || "") || 50
+  );
+  const [picturePositionY, setPicturePositionY] = useState(
+    () => parseInt(searchParams.get("y") || "") || 50
+  );
+  const [descriptionIntro, setDescriptionIntro] = useState(
+    () => searchParams.get("descriptionIntro") || ""
+  );
+  const [description, setDescription] = useState(
+    () => searchParams.get("description") || ""
+  );
+  const [descriptionFontSize, setDescriptionFontSize] = useState(
+    () => parseInt(searchParams.get("descriptionFontSize") || "") || 64
+  );
+  const [socialLinks, setSocialLinks] = useState<Array<SocialsOption>>(() => {
+    const newSocialLinks: Array<SocialsOption> = [];
+    availableSocials.forEach((social) => {
+      const socialValue = searchParams.get(social);
+      if (socialValue)
+        newSocialLinks.push({ platform: social, link: socialValue });
+    });
+    return newSocialLinks;
+  });
   const [copied, setCopied] = useState(false);
   const scrollContainer = useRef<HTMLDivElement>(null);
 
@@ -57,26 +80,6 @@ export const IntroductionImages = () => {
 
     return () => clearTimeout(timeout);
   }, [copied]);
-
-  useEffect(() => {
-    setMirrored(!!searchParams.get("mirrored"));
-    setName(searchParams.get("name") || "");
-    setPronouns(searchParams.get("pronouns") || "");
-    setDescription(searchParams.get("description") || "");
-    setDescriptionIntro(searchParams.get("descriptionIntro") || "");
-    setDescriptionFontSize(
-      parseInt(searchParams.get("descriptionFontSize") || "") || 64
-    );
-    setPicturePositionX(parseInt(searchParams.get("x") || "") || 50);
-    setPicturePositionY(parseInt(searchParams.get("y") || "") || 50);
-    const newSocialLinks: Array<SocialsOption> = [];
-    availableSocials.forEach((social) => {
-      const socialValue = searchParams.get(social);
-      if (socialValue)
-        newSocialLinks.push({ platform: social, link: socialValue });
-    });
-    setSocialLinks(newSocialLinks);
-  }, [searchParams]);
 
   const toggleDownloadActive = () => {
     setDownloadActive((prev) => !prev);
@@ -154,18 +157,6 @@ export const IntroductionImages = () => {
       return newArray.filter((option) => !!option.link);
     });
   };
-
-  useEffect(() => {
-    setRenderButtonDisabled(window.devicePixelRatio !== 1);
-
-    const handleResize = () => {
-      setRenderButtonDisabled(window.devicePixelRatio !== 1);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleCopyPress = () => {
     const paramsArray: string[][] = [];
