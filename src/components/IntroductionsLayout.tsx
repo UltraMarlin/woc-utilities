@@ -15,18 +15,6 @@ import {
   MIN_DESCRIPTION_LINEHEIGHT,
 } from "../pages/IntroductionImages";
 
-import backgroundImageDefault from "../assets/images/introductions-background-1.png";
-import backgroundImageMirrored from "../assets/images/introductions-background-2.png";
-import profilePictureBackgroundDefault from "../assets/images/introductions-image-background-1.png";
-import profilePictureBackgroundMirrored from "../assets/images/introductions-image-background-2.png";
-
-import bubbleTopDefault from "../assets/images/introductions-bubble-1-top.png";
-import bubbleMiddleDefault from "../assets/images/introductions-bubble-1-middle.png";
-import bubbleBottomDefault from "../assets/images/introductions-bubble-1-bottom.png";
-import bubbleTopMirrored from "../assets/images/introductions-bubble-2-top.png";
-import bubbleMiddleMirrored from "../assets/images/introductions-bubble-2-middle.png";
-import bubbleBottomMirrored from "../assets/images/introductions-bubble-2-bottom.png";
-
 export type IntroductionsLayoutProps = DownloadableComponentProps & {
   scale?: number;
   className?: string;
@@ -203,18 +191,6 @@ export const IntroductionsLayout = ({
     );
   }, [socials]);
 
-  const backgroundImage = mirrored
-    ? backgroundImageMirrored
-    : backgroundImageDefault;
-
-  const profilePictureBackground = mirrored
-    ? profilePictureBackgroundMirrored
-    : profilePictureBackgroundDefault;
-
-  const bubbleTop = mirrored ? bubbleTopMirrored : bubbleTopDefault;
-  const bubbleMiddle = mirrored ? bubbleMiddleMirrored : bubbleMiddleDefault;
-  const bubbleBottom = mirrored ? bubbleBottomMirrored : bubbleBottomDefault;
-
   return (
     <div
       ref={layoutRef}
@@ -228,9 +204,6 @@ export const IntroductionsLayout = ({
           "left-[53px] top-[305px]": !mirrored,
           "left-[948px] top-[260px]": mirrored,
         })}
-        style={{
-          backgroundImage: `url(${profilePictureBackground})`,
-        }}
       >
         {profilePicture && (
           <div
@@ -242,12 +215,6 @@ export const IntroductionsLayout = ({
           />
         )}
       </div>
-      <img
-        src={backgroundImage}
-        alt=""
-        className="absolute size-full object-cover"
-        draggable={false}
-      />
       <div
         className={cn("absolute font-pixel text-[28px] text-schedule25-dark", {
           "left-[68px] top-[258px]": !mirrored,
@@ -266,17 +233,6 @@ export const IntroductionsLayout = ({
           className="grid w-full grid-rows-[165px_1fr_195px] *:col-start-1"
           ref={cloudContainer}
         >
-          <img
-            src={bubbleTop}
-            className="row-start-1 w-[850px] bg-no-repeat"
-            alt=""
-          />
-          <img src={bubbleMiddle} className="row-start-2 h-full w-[850px]" />
-          <img
-            src={bubbleBottom}
-            className="row-start-3 w-[850px] bg-no-repeat"
-            alt=""
-          />
           <div
             ref={cloudTextContainer}
             className={cn("row-span-full pb-[90px] pt-[44px] text-[#303989]", {

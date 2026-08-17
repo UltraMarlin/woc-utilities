@@ -63,6 +63,22 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Exo2";
+  src: url("assets/fonts/Exo2-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Exo2";
+  src: url("assets/fonts/Exo2-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 .night-outline {
   -webkit-text-stroke-width: 8px;
   -webkit-text-stroke-color: #ace1b2;
@@ -106,9 +122,27 @@
   }
 }
 
+@layer components {
+  .font-smash-layered {
+    position: relative;
+    isolation: isolate;
+    font-family: cc-smash, sans-serif;
+  }
+
+  .font-smash-layered::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    font-family: cc-smash-open, sans-serif;
+    color: var(--smash-shadow-color, black);
+    user-select: none;
+  }
+}
+
 @layer utilities {
-  .bg-schedule-layout-25 {
-    background-image: url("assets/images/Background.png");
+  .bg-social-post {
+    background-image: url("assets/images/bg-social-post.png");
   }
 
   .schedule-layout-25-text-shadow-dark {

@@ -9,8 +9,6 @@ import {
   MIN_DESCRIPTION_LINEHEIGHT,
 } from "../pages/IntroductionImages";
 
-import wocLogo from "../assets/images/logo-25.png";
-
 export type SocialPostLayoutProps = DownloadableComponentProps & {
   className?: string;
   moreInfoTextShown?: boolean;
@@ -27,14 +25,11 @@ export const SocialPostLayout = ({
   className,
   onLoad,
   hotReload = false,
-  moreInfoTextShown,
-  windowTitle: windowTitleFromProps,
   headline,
   headlineFontSize,
   description,
   descriptionFontSize,
 }: SocialPostLayoutProps) => {
-  const windowTitle = windowTitleFromProps || "info";
   const descriptionLineHeight = useMemo(() => {
     if (!descriptionFontSize) return MAX_DESCRIPTION_LINEHEIGHT;
     const percent =
@@ -72,20 +67,15 @@ export const SocialPostLayout = ({
   return (
     <div
       className={cn(
-        "bg-schedule-layout-25 relative flex size-[1584px] origin-top-left flex-col items-center font-pixel",
+        "bg-social-post relative flex size-[1584px] origin-top-left flex-col items-center text-white",
         className
       )}
     >
-      <img src={wocLogo} alt="" className="absolute top-[60px] h-[182px]" />
-
-      <div className="absolute left-[144px] top-[284px] mt-1 flex h-[1138px] w-[1298px] flex-col p-3">
-        <div className="pl-3 text-left text-[32px] text-schedule25-dark">
-          {`${windowTitle}.txt`}
-        </div>
-        <div className="schedule-layout-25-text-shadow-dark whitespace-pre-wrap p-8 font-ubuntu text-schedule25-light">
+      <div className="absolute left-[131px] top-[284px] mt-1 flex h-[1112px] w-[1309px] flex-col p-14">
+        <div className="whitespace-pre-wrap">
           {headline && (
             <h1
-              className="mb-8 text-center"
+              className="font-smash-open mb-8 text-center tracking-[0.075em]"
               style={{
                 fontSize: headlineFontSize,
                 lineHeight: headlineLineHeight,
@@ -97,7 +87,7 @@ export const SocialPostLayout = ({
           {descriptionParts?.map((part) => (
             <p
               key={part}
-              className="mb-[0.7em] last-of-type:mb-0"
+              className="font-exo mb-[0.7em] px-10 font-medium last-of-type:mb-0"
               style={{
                 fontSize: descriptionFontSize,
                 lineHeight: descriptionLineHeight,
@@ -108,15 +98,6 @@ export const SocialPostLayout = ({
           ))}
         </div>
       </div>
-      {moreInfoTextShown && (
-        <div className="absolute bottom-[68px] flex gap-3 text-[34px] font-bold text-schedule25-dark">
-          Mehr Infos gibt es auf
-          <span className="relative after:absolute after:bottom-[2px] after:left-0 after:h-1 after:w-full after:bg-schedule25-dark">
-            www.weekofcharity.de
-          </span>
-        </div>
-      )}
-      <div className="bg-scan-lines pointer-events-none absolute inset-0" />
     </div>
   );
 };

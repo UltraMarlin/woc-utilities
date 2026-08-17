@@ -19,7 +19,7 @@ import {
 export const MIN_DESCRIPTION_LINEHEIGHT = 1.05;
 export const MAX_DESCRIPTION_LINEHEIGHT = 1.25;
 export const MIN_DESCRIPTION_FONTSIZE = 32;
-export const MAX_DESCRIPTION_FONTSIZE = 100;
+export const MAX_DESCRIPTION_FONTSIZE = 120;
 
 export const SocialsPostImages = () => {
   const [searchParams] = useSearchParams();
@@ -29,12 +29,6 @@ export const SocialsPostImages = () => {
   } | null>(null);
 
   const [downloadActive, setDownloadActive] = useState(false);
-  const [moreInfoTextShown, setMoreInfoTextShown] = useState(
-    () => searchParams.get("moreInfoTextShown") !== "false"
-  );
-  const [windowTitle, setWindowTitle] = useState(
-    () => searchParams.get("windowTitle") || ""
-  );
   const [headline, setHeadline] = useState(
     () => searchParams.get("headline") || ""
   );
@@ -87,25 +81,8 @@ export const SocialsPostImages = () => {
     setDescriptionFontSize(value);
   };
 
-  const handleMoreInfoTextShownChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setMoreInfoTextShown(event.target.checked);
-  };
-
-  const handleWindowTitleChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setWindowTitle(event.target.value);
-  };
-
   const handleCopyPress = () => {
     const paramsArray: string[][] = [];
-    if (moreInfoTextShown) paramsArray.push(["moreInfoTextShown", "true"]);
-    else paramsArray.push(["moreInfoTextShown", "false"]);
-    if (windowTitle) paramsArray.push(["windowTitle", windowTitle]);
     if (headline) paramsArray.push(["headline", headline]);
     if (headlineFontSize && headlineFontSize !== 92)
       paramsArray.push(["headlineFontSize", `${headlineFontSize}`]);
@@ -152,8 +129,6 @@ export const SocialsPostImages = () => {
   };
 
   const socialPostLayoutProps: SocialPostLayoutProps = {
-    moreInfoTextShown,
-    windowTitle,
     headline,
     headlineFontSize,
     description,
@@ -163,26 +138,6 @@ export const SocialsPostImages = () => {
   return (
     <PageContainer className="grid grid-cols-[1fr_minmax(0,792px)] gap-4">
       <div className="flex h-fit flex-col gap-3.5 rounded bg-neutral-700 p-4 text-white">
-        <label className="flex w-fit cursor-pointer items-center gap-2 py-1 pr-2">
-          <span>More Info Text Shown</span>
-          <input
-            type="checkbox"
-            className="size-4"
-            name="moreInfoTextShown"
-            checked={moreInfoTextShown}
-            onChange={handleMoreInfoTextShownChange}
-          />
-        </label>
-        <label className="flex w-full cursor-pointer flex-col">
-          <span>Window Title</span>
-          <input
-            type="text"
-            className="text-lg text-black"
-            name="windowTitle"
-            value={windowTitle}
-            onChange={handleWindowTitleChange}
-          />
-        </label>
         <label className="flex w-full cursor-pointer flex-col">
           <span>Headline</span>
           <input

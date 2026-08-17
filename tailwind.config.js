@@ -1,3 +1,9 @@
+import plugin from "tailwindcss/plugin";
+import flattenColorPaletteImport from "tailwindcss/lib/util/flattenColorPalette";
+
+const flattenColorPalette =
+  flattenColorPaletteImport.default ?? flattenColorPaletteImport;
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
@@ -11,6 +17,9 @@ export default {
         lilita: ["Lilita One"],
         bubbly: ["Bubbly"],
         pally: ["Pally", "sans-serif"],
+        exo: ["Exo2", "sans-serif"],
+        smash: ["cc-smash", "sans-serif"],
+        "smash-open": ["cc-smash-open", "sans-serif"],
       },
       colors: {
         night: {
@@ -31,5 +40,16 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        {
+          "smash-shadow": (value) => ({
+            "--smash-shadow-color": value,
+          }),
+        },
+        { values: flattenColorPalette(theme("colors")), type: "color" },
+      );
+    }),
+  ],
 };

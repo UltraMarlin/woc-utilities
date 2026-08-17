@@ -22,8 +22,8 @@ import {
 import { RangeSlider } from "../components/RangeSlider";
 import { lowerSanitize } from "../utils/formatting/sanitize";
 
-export const MIN_DESCRIPTION_LINEHEIGHT = 1.05;
-export const MAX_DESCRIPTION_LINEHEIGHT = 1.25;
+export const MIN_DESCRIPTION_LINEHEIGHT = 1.1;
+export const MAX_DESCRIPTION_LINEHEIGHT = 1.35;
 export const MIN_DESCRIPTION_FONTSIZE = 32;
 export const MAX_DESCRIPTION_FONTSIZE = 100;
 
