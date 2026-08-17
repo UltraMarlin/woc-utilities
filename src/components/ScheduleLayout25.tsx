@@ -71,9 +71,9 @@ export const ScheduleLayout25 = ({
     getAltText,
   ]);
 
-  if (hotReload && streamsStatus === "success") {
-    onLoad?.(getAltText());
-  }
+  useEffect(() => {
+    if (hotReload && streamsStatus === "success") onLoad?.(getAltText());
+  });
 
   return (
     <div

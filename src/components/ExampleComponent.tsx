@@ -46,9 +46,9 @@ export const ExampleComponent = ({
     if (streamsStatus === "success") onLoad?.();
   }, [streamsStatus, onLoad]);
 
-  if (hotReload && streamsStatus === "success") {
-    onLoad?.();
-  }
+  useEffect(() => {
+    if (hotReload && streamsStatus === "success") onLoad?.();
+  });
 
   return (
     <div

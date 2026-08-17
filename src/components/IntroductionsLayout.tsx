@@ -149,9 +149,9 @@ export const IntroductionsLayout = ({
     onLoad?.();
   }, [onLoad]);
 
-  if (hotReload) {
-    onLoad?.();
-  }
+  useEffect(() => {
+    if (hotReload) onLoad?.();
+  });
 
   useEffect(() => {
     setTimeout(() => {

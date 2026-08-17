@@ -1,9 +1,6 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import cn from "classnames";
-import {
-  downloadImage,
-  exportAsImage,
-} from "../utils/html2canvas/exportAsImage";
+import { downloadImage, exportAsImage } from "../utils/snapdom/exportAsImage";
 import { DownloadIcon } from "./icons/DownloadIcon";
 
 export type DownloadableComponentProps = {
@@ -30,22 +27,29 @@ export const DownloadWrapper = ({
   const [altText, setAltText] = useState("");
   const [loadEvent, setLoadEvent] = useState<{ alt?: string } | null>(null);
   const componentRef = useRef<HTMLDivElement>(null);
+  const capturePendingRef = useRef(false);
 
   const startDownload = () => {
     downloadImage(imgSrc, `${fileBaseName}.png`);
   };
 
-  const handleLoad = (alt?: string) => {
+  const handleLoad = useCallback((alt?: string) => {
+    if (capturePendingRef.current) return;
+    capturePendingRef.current = true;
     setLoadEvent({ alt });
-  };
+  }, []);
 
   useEffect(() => {
     if (!loadEvent) return;
     const timeout = setTimeout(async () => {
       if (loadEvent.alt) setAltText(loadEvent.alt);
       if (!componentRef.current) return;
-      const imageBlob = await exportAsImage(componentRef.current);
-      setImgSrc(imageBlob);
+      try {
+        const imageBlob = await exportAsImage(componentRef.current);
+        setImgSrc(imageBlob);
+      } finally {
+        capturePendingRef.current = false;
+      }
     }, delay);
 
     return () => clearTimeout(timeout);
@@ -54,6 +58,7 @@ export const DownloadWrapper = ({
   return (
     <div className={cn("relative flex items-center justify-center", className)}>
       <div ref={componentRef} className="absolute -left-[9999px]">
+        {/* eslint-disable-next-line react-hooks/refs -- children only call onLoad from effects, never during render */}
         {children({ onLoad: handleLoad })}
       </div>
       {imgSrc && <img className="peer" src={imgSrc} alt="" />}

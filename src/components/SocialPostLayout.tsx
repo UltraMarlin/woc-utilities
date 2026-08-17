@@ -65,9 +65,9 @@ export const SocialPostLayout = ({
     onLoad?.();
   }, [onLoad]);
 
-  if (hotReload) {
-    onLoad?.();
-  }
+  useEffect(() => {
+    if (hotReload) onLoad?.();
+  });
 
   return (
     <div

@@ -8,7 +8,6 @@ import {
 } from "react";
 import { PageContainer } from "../components/PageContainer";
 import { useSearchParams } from "react-router";
-import { useIsBrowserZoomed } from "../hooks/useIsBrowserZoomed";
 
 import { DownloadWrapper } from "../components/DownloadWrapper";
 import { RangeSlider } from "../components/RangeSlider";
@@ -30,7 +29,6 @@ export const SocialsPostImages = () => {
   } | null>(null);
 
   const [downloadActive, setDownloadActive] = useState(false);
-  const renderButtonDisabled = useIsBrowserZoomed();
   const [moreInfoTextShown, setMoreInfoTextShown] = useState(
     () => searchParams.get("moreInfoTextShown") !== "false"
   );
@@ -223,11 +221,6 @@ export const SocialsPostImages = () => {
         >
           Description Font Size
         </RangeSlider>
-        {renderButtonDisabled && !downloadActive && (
-          <div className="rounded-md border border-red-500/50 bg-red-500/10 px-2.5 py-2 text-red-200">
-            Browser zoom has to be at 100% to render the image!
-          </div>
-        )}
         <div className="relative flex justify-between">
           <div>
             <button
@@ -254,9 +247,8 @@ export const SocialsPostImages = () => {
 
           <button
             type="button"
-            className="mt-4 w-fit rounded border px-2 py-0.5 disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-4 w-fit rounded border px-2 py-0.5"
             onClick={toggleDownloadActive}
-            disabled={renderButtonDisabled && !downloadActive}
           >
             {downloadActive ? "Edit Image" : "Render Image"}
           </button>
