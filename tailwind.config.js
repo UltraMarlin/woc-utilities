@@ -34,6 +34,9 @@ export default {
           light: "#FFF0F4",
           dark: "#150477",
         },
+        yellow26: "#e8cb56",
+        purpleShadow26: "#472457",
+        purpleAccent26: "#4f1f66",
       },
       dropShadow: {
         "layout-dark": "4px 4px 0 #150477",

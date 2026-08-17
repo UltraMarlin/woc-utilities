@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import cn from "classnames";
 
 import { DownloadableComponentProps } from "./DownloadWrapper";
@@ -15,10 +15,12 @@ import {
   MIN_DESCRIPTION_LINEHEIGHT,
 } from "../pages/IntroductionImages";
 
+import bgIntroduction from "../assets/images/bg-introduction.png";
+import { SmashText } from "./SmashText";
+
 export type IntroductionsLayoutProps = DownloadableComponentProps & {
   scale?: number;
   className?: string;
-  mirrored?: boolean;
   name?: string;
   pronouns?: string;
   profilePicture?: string;
@@ -47,76 +49,24 @@ const getSocialIcon = (platform: SocialPlatform) => {
   }
 };
 
-const MAX_NAME_FONTSIZE = 124;
-const FONTSIZE_STEP = 2;
-const MIN_NAME_FONTSIZE = 96;
-
-const getOptimizedFontSize = (
-  value: string,
-  maxWidth: number,
-  parent: HTMLElement
-) => {
-  const testElement = document.createElement("span");
-  testElement.classList.add("font-bubbly");
-  testElement.innerHTML = value;
-  parent.appendChild(testElement);
-
-  let rect: DOMRect;
-  let fontSize = MAX_NAME_FONTSIZE + FONTSIZE_STEP;
-  do {
-    fontSize -= FONTSIZE_STEP;
-    if (fontSize <= MIN_NAME_FONTSIZE) break;
-    testElement.style.fontSize = `${fontSize}px`;
-    rect = testElement.getBoundingClientRect();
-  } while (maxWidth <= rect.width);
-
-  parent.removeChild(testElement);
-  const optimizedFontsize =
-    fontSize <= MIN_NAME_FONTSIZE ? MIN_NAME_FONTSIZE : fontSize;
-
-  return optimizedFontsize;
-};
-
-const formatWindowName = (name: string | undefined) => {
-  if (!name) return "";
-  return `${name
-    .replace(" ", "-")
-    .split(/[^a-zA-Z0-9-äöüÄÖÜß]+/g)[0]
-    .toLowerCase()}.png`;
-};
+const MAX_NAME_FONTSIZE = 192;
 
 const isWhitespaceString = (str: string) => str.replace(/\s/g, "").length > 0;
 
 export const IntroductionsLayout = ({
-  scale = 1,
   className,
   onLoad,
   hotReload = false,
-  mirrored,
   name,
   pronouns,
   profilePicture,
   picturePositionX = 50,
   picturePositionY = 50,
   socials,
-  descriptionIntro,
   description,
   descriptionFontSize,
 }: IntroductionsLayoutProps) => {
-  const [nameFontSize, setNameFontSize] = useState(MAX_NAME_FONTSIZE);
-  const cloudContainer = useRef<HTMLDivElement>(null);
-  const cloudTextRef = useRef<HTMLDivElement>(null);
-  const pronounsRef = useRef<HTMLDivElement>(null);
-  const cloudTextContainer = useRef<HTMLDivElement>(null);
   const layoutRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!cloudContainer.current) return;
-    cloudContainer.current.style.transform = "";
-    const y = cloudContainer.current.getBoundingClientRect().y;
-    const fractionalPartY = y - Math.floor(y);
-    cloudContainer.current.style.transform = `translateY(${fractionalPartY}px)`;
-  });
 
   const descriptionLineHeight = useMemo(() => {
     if (!descriptionFontSize) return MAX_DESCRIPTION_LINEHEIGHT;
@@ -141,40 +91,10 @@ export const IntroductionsLayout = ({
     if (hotReload) onLoad?.();
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        !name ||
-        !cloudTextRef.current ||
-        !pronounsRef.current ||
-        !cloudContainer.current ||
-        !cloudTextContainer.current ||
-        !layoutRef.current
-      )
-        return setNameFontSize(MAX_NAME_FONTSIZE);
-      const textContainerComputedStyle = window.getComputedStyle(
-        cloudTextContainer.current
-      );
-      const paddingLeft =
-        parseInt(textContainerComputedStyle.paddingLeft) * scale;
-      const paddingRight =
-        parseInt(textContainerComputedStyle.paddingRight) * scale;
-      const horizontalTextPadding = paddingLeft + paddingRight;
-      const gap =
-        parseInt(window.getComputedStyle(cloudTextRef.current).columnGap) *
-        scale;
-
-      const maxWidth =
-        cloudContainer.current.getBoundingClientRect().width -
-        horizontalTextPadding -
-        gap -
-        pronounsRef.current.getBoundingClientRect().width;
-
-      const fontSize = getOptimizedFontSize(name, maxWidth, layoutRef.current);
-
-      return setNameFontSize(fontSize);
-    });
-  }, [name, pronouns, scale]);
+  const nameFontSize =
+    name && name.length > 0
+      ? MAX_NAME_FONTSIZE / (1 + name.length ** 2.2 * 0.004)
+      : MAX_NAME_FONTSIZE;
 
   const sortedSocials = useMemo(() => {
     if (!socials) return [];
@@ -195,19 +115,14 @@ export const IntroductionsLayout = ({
     <div
       ref={layoutRef}
       className={cn(
-        "relative aspect-square size-[1584px] select-none bg-black text-5xl",
+        "bg-yellow26 relative aspect-square size-[1584px] select-none text-5xl",
         className
       )}
     >
-      <div
-        className={cn("absolute size-[530px] p-[5px]", {
-          "left-[53px] top-[305px]": !mirrored,
-          "left-[948px] top-[260px]": mirrored,
-        })}
-      >
+      <div className="absolute left-[68px] top-[36px] size-[654px]">
         {profilePicture && (
           <div
-            className="size-full bg-cover"
+            className="bg-yellow26 size-full rounded-full bg-cover"
             style={{
               backgroundImage: `url(${profilePicture})`,
               backgroundPosition: `${picturePositionX}% ${picturePositionY}%`,
@@ -215,53 +130,28 @@ export const IntroductionsLayout = ({
           />
         )}
       </div>
-      <div
-        className={cn("absolute font-pixel text-[28px] text-schedule25-dark", {
-          "left-[68px] top-[258px]": !mirrored,
-          "left-[963px] top-[213px]": mirrored,
-        })}
-      >
-        {formatWindowName(name)}
-      </div>
-      <div
-        className={cn(
-          "absolute top-[52px] flex h-[580px] w-[850px] items-center",
-          { "left-[640px]": !mirrored, "left-[64px]": mirrored }
-        )}
-      >
-        <div
-          className="grid w-full grid-rows-[165px_1fr_195px] *:col-start-1"
-          ref={cloudContainer}
-        >
-          <div
-            ref={cloudTextContainer}
-            className={cn("row-span-full pb-[90px] pt-[44px] text-[#303989]", {
-              "pl-[150px] pr-[64px]": !mirrored,
-              "pl-[64px] pr-[150px]": mirrored,
-            })}
-          >
-            <div
-              ref={cloudTextRef}
-              className="mb-2 flex w-fit flex-wrap gap-x-[16px] gap-y-2"
+      <img src={bgIntroduction} className="absolute size-[1584px]" />
+      <div className="absolute right-[76px] top-[64px] h-[460px] w-[980px]">
+        <div className="flex flex-col">
+          <div className="mb-6 flex h-[136px] max-w-[900px] items-center justify-center self-end pr-[162px]">
+            <SmashText
+              text={name || ""}
+              style={{ fontSize: nameFontSize }}
+              className="smash-shadow-purpleShadow26 text-right leading-[0.9] text-white"
             >
-              {name && (
-                <div
-                  style={{ fontSize: nameFontSize }}
-                  className="font-bubbly odd:*:text-[#ff9ae5] even:*:text-[#829eff]"
-                >
-                  {name.split("").map((letter, index) => (
-                    <span key={letter + index}>{letter}</span>
-                  ))}
-                </div>
-              )}
-              <div
-                ref={pronounsRef}
-                className="ml-auto self-end text-right font-bubbly text-[56px]"
-              >
-                {pronouns}
-              </div>
-            </div>
-            <ul className="mt-10 flex flex-col gap-6 pl-8 font-ubuntu text-[40px]">
+              {name}
+            </SmashText>
+          </div>
+          {pronouns && (
+            <SmashText
+              text={pronouns}
+              className="smash-shadow-purpleShadow26 self-end pr-[18px] text-[60px] text-white"
+            >
+              {pronouns}
+            </SmashText>
+          )}
+          <div className="border-purpleAccent26 absolute z-[-1] mt-[42px] flex w-[calc(100%-28px)] items-end rounded-[16px] border-[6px] border-solid pb-[22px] pl-[240px] pt-[240px]">
+            <ul className="font-exo text-purpleAccent26 flex flex-col gap-1.5 text-[44px] font-semibold italic">
               {sortedSocials?.map((social) => {
                 const SocialIcon = getSocialIcon(social.platform);
                 return (
@@ -275,35 +165,14 @@ export const IntroductionsLayout = ({
           </div>
         </div>
       </div>
-      {mirrored && (
-        <div className="absolute left-[124px] top-[720px] font-pixel text-[28px] text-schedule25-dark">
-          README.md
-        </div>
-      )}
-      <div
-        className={cn("absolute w-[1248px] px-6 py-3", {
-          "left-[246px] top-[746px]": !mirrored,
-          "left-[124px] top-[776px]": mirrored,
-        })}
-      >
-        <span
-          className={cn({
-            "float-start h-[110px] w-[360px]": !mirrored,
-            "float-end h-[32px] w-[424px]": mirrored,
-          })}
-        />
+      <div className="absolute left-[156px] top-[638px] w-[1310px] px-[58px] pt-[74px] text-white">
         <span
           style={{
             fontSize: descriptionFontSize,
             lineHeight: descriptionLineHeight,
           }}
-          className="schedule-layout-25-text-shadow-dark whitespace-pre-wrap font-ubuntu text-schedule25-light"
+          className="font-exo whitespace-pre-wrap font-medium"
         >
-          {descriptionIntro && (
-            <div className="flex h-[115px] items-center pb-[24px]">
-              {descriptionIntro}
-            </div>
-          )}
           {descriptionParts?.map((part) => (
             <p className="mb-[0.7em] last-of-type:mb-0" key={part}>
               {part}
@@ -311,7 +180,6 @@ export const IntroductionsLayout = ({
           ))}
         </span>
       </div>
-      <div className="bg-scan-lines pointer-events-none absolute inset-0" />
     </div>
   );
 };

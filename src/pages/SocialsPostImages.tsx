@@ -9,17 +9,16 @@ import {
 import { PageContainer } from "../components/PageContainer";
 import { useSearchParams } from "react-router";
 
+import {
+  MAX_DESCRIPTION_FONTSIZE,
+  MIN_DESCRIPTION_FONTSIZE,
+} from "../pages/IntroductionImages";
 import { DownloadWrapper } from "../components/DownloadWrapper";
 import { RangeSlider } from "../components/RangeSlider";
 import {
   SocialPostLayout,
   SocialPostLayoutProps,
 } from "../components/SocialPostLayout";
-
-export const MIN_DESCRIPTION_LINEHEIGHT = 1.05;
-export const MAX_DESCRIPTION_LINEHEIGHT = 1.25;
-export const MIN_DESCRIPTION_FONTSIZE = 32;
-export const MAX_DESCRIPTION_FONTSIZE = 120;
 
 export const SocialsPostImages = () => {
   const [searchParams] = useSearchParams();

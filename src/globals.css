@@ -133,7 +133,8 @@
     content: attr(data-text);
     position: absolute;
     inset: 0;
-    z-index: -1;
+    top: 0.025em;
+    z-index: 1;
     font-family: cc-smash-open, sans-serif;
     color: var(--smash-shadow-color, black);
     user-select: none;

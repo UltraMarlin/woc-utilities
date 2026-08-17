@@ -35,9 +35,6 @@ export const IntroductionImages = () => {
   } | null>(null);
 
   const [downloadActive, setDownloadActive] = useState(false);
-  const [mirrored, setMirrored] = useState(
-    () => !!searchParams.get("mirrored")
-  );
   const [name, setName] = useState(() => searchParams.get("name") || "");
   const [pronouns, setPronouns] = useState(
     () => searchParams.get("pronouns") || ""
@@ -48,9 +45,6 @@ export const IntroductionImages = () => {
   );
   const [picturePositionY, setPicturePositionY] = useState(
     () => parseInt(searchParams.get("y") || "") || 50
-  );
-  const [descriptionIntro, setDescriptionIntro] = useState(
-    () => searchParams.get("descriptionIntro") || ""
   );
   const [description, setDescription] = useState(
     () => searchParams.get("description") || ""
@@ -104,13 +98,6 @@ export const IntroductionImages = () => {
     setPicturePositionY(value);
   };
 
-  const handleMirroredChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setMirrored(event.target.checked);
-  };
-
   const handleNameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setDownloadActive(false);
     setName(event.target.value);
@@ -121,13 +108,6 @@ export const IntroductionImages = () => {
   ) => {
     setDownloadActive(false);
     setPronouns(event.target.value);
-  };
-
-  const handleDescriptionIntroChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setDescriptionIntro(event.target.value);
   };
 
   const handleDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (
@@ -158,11 +138,8 @@ export const IntroductionImages = () => {
 
   const handleCopyPress = () => {
     const paramsArray: string[][] = [];
-    if (mirrored) paramsArray.push(["mirrored", "true"]);
     if (name) paramsArray.push(["name", name]);
     if (pronouns) paramsArray.push(["pronouns", pronouns]);
-    if (descriptionIntro)
-      paramsArray.push(["descriptionIntro", descriptionIntro]);
     if (description) paramsArray.push(["description", description]);
     if (picturePositionX && picturePositionX !== 50)
       paramsArray.push(["x", `${picturePositionX}`]);
@@ -216,13 +193,11 @@ export const IntroductionImages = () => {
   };
 
   const thumbnailLayoutProps: IntroductionsLayoutProps = {
-    mirrored,
     name,
     pronouns,
     profilePicture,
     picturePositionX,
     picturePositionY,
-    descriptionIntro,
     description,
     descriptionFontSize,
     socials: socialLinks,
@@ -231,16 +206,6 @@ export const IntroductionImages = () => {
   return (
     <PageContainer className="grid grid-cols-[1fr_minmax(0,792px)] gap-4">
       <div className="flex h-fit flex-col gap-1 rounded bg-neutral-700 p-4 text-white">
-        <label className="flex w-fit cursor-pointer items-center gap-2 py-1 pr-2">
-          <span>Mirrored</span>
-          <input
-            type="checkbox"
-            className="size-4"
-            name="mirrored"
-            checked={mirrored}
-            onChange={handleMirroredChange}
-          />
-        </label>
         <div className="grid grid-cols-1 gap-x-4 gap-y-1 xl:grid-cols-2">
           <label className="flex w-full cursor-pointer flex-col">
             <span>Name</span>
@@ -310,16 +275,6 @@ export const IntroductionImages = () => {
             </label>
           ))}
         </div>
-        <label className="flex w-full cursor-pointer flex-col">
-          <span>Description Intro</span>
-          <input
-            className="text-lg text-black"
-            type="text"
-            name="description-intro"
-            value={descriptionIntro}
-            onChange={handleDescriptionIntroChange}
-          />
-        </label>
         <div className="mb-4 flex items-end gap-1.5">
           <label className="flex w-full cursor-pointer flex-col">
             <span>Description</span>
