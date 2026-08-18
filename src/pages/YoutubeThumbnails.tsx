@@ -1,58 +1,88 @@
-import { ChangeEventHandler, useState } from "react";
+import {
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { PageContainer } from "../components/PageContainer";
 import {
+  DEFAULT_FONT_SIZE,
+  DEFAULT_FREE_TEXT_X,
+  DEFAULT_FREE_TEXT_Y,
+  THUMBNAIL_HEIGHT,
+  THUMBNAIL_WIDTH,
   ThumbnailLayout,
   ThumbnailLayoutProps,
 } from "../components/ThumbnailLayout";
 import { DownloadWrapper } from "../components/DownloadWrapper";
+import { RangeSlider } from "../components/RangeSlider";
+import { usePersistentState } from "../utils/usePersistentState";
 import { lowerSanitize } from "../utils/formatting/sanitize";
 
+const MIN_FONTSIZE = 20;
+const MAX_FONTSIZE = 200;
+
+const DEFAULTS = {
+  game: "SPIEL",
+  gameFontSize: DEFAULT_FONT_SIZE,
+  streamer: "STREAMER*IN",
+  streamerFontSize: DEFAULT_FONT_SIZE,
+  freeText: "",
+  freeTextFontSize: DEFAULT_FONT_SIZE,
+  freeTextX: DEFAULT_FREE_TEXT_X,
+  freeTextY: DEFAULT_FREE_TEXT_Y,
+  freeTextShadow: false,
+};
+
+const clampFontSize = (size: number) =>
+  Math.min(Math.max(size, MIN_FONTSIZE), MAX_FONTSIZE);
+
+const parsePosition = (value: string, max: number) => {
+  const parsed = Number(value);
+  if (Number.isNaN(parsed)) return 0;
+  return Math.round(Math.min(Math.max(parsed, 0), max));
+};
+
 export const YoutubeThumbnails = () => {
-  const [downloadActive, setDownloadActive] = useState(false);
-  const [game, setGame] = useState("SPIEL");
-  const [gameFontSize, setGameFontSize] = useState("72");
-  const [streamer, setStreamer] = useState("STREAMER*IN");
-  const [streamerFontSize, setStreamerFontSize] = useState("72");
+  const [renderedLayoutKey, setRenderedLayoutKey] = useState<string | null>(
+    null
+  );
+  const [resetPending, setResetPending] = useState(false);
   const [background, setBackground] = useState("");
-
-  const toggleDownloadActive = () => {
-    setDownloadActive((prev) => !prev);
-  };
-
-  const handleBackgroundUpdate: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    const file = event.target.files?.[0];
-    if (!file) return;
-    setBackground(URL.createObjectURL(file));
-  };
-
-  const handleGameChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    setDownloadActive(false);
-    setGame(event.target.value);
-  };
-
-  const handleGameFontSizeChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setGameFontSize(event.target.value);
-  };
-
-  const handleStreamerChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setStreamer(event.target.value);
-  };
-
-  const handleStreamerFontSizeChange: ChangeEventHandler<HTMLInputElement> = (
-    event
-  ) => {
-    setDownloadActive(false);
-    setStreamerFontSize(event.target.value);
-  };
+  const [game, setGame] = usePersistentState("thumbnail.game", DEFAULTS.game);
+  const [gameFontSize, setGameFontSize] = usePersistentState(
+    "thumbnail.gameFontSize",
+    DEFAULTS.gameFontSize
+  );
+  const [streamer, setStreamer] = usePersistentState(
+    "thumbnail.streamer",
+    DEFAULTS.streamer
+  );
+  const [streamerFontSize, setStreamerFontSize] = usePersistentState(
+    "thumbnail.streamerFontSize",
+    DEFAULTS.streamerFontSize
+  );
+  const [freeText, setFreeText] = usePersistentState(
+    "thumbnail.freeText",
+    DEFAULTS.freeText
+  );
+  const [freeTextFontSize, setFreeTextFontSize] = usePersistentState(
+    "thumbnail.freeTextFontSize",
+    DEFAULTS.freeTextFontSize
+  );
+  const [freeTextX, setFreeTextX] = usePersistentState(
+    "thumbnail.freeTextX",
+    DEFAULTS.freeTextX
+  );
+  const [freeTextY, setFreeTextY] = usePersistentState(
+    "thumbnail.freeTextY",
+    DEFAULTS.freeTextY
+  );
+  const [freeTextShadow, setFreeTextShadow] = usePersistentState(
+    "thumbnail.freeTextShadow",
+    DEFAULTS.freeTextShadow
+  );
 
   const thumbnailLayoutProps: ThumbnailLayoutProps = {
     game,
@@ -60,70 +90,229 @@ export const YoutubeThumbnails = () => {
     streamer,
     streamerFontSize,
     backgroundSrc: background,
+    freeText,
+    freeTextFontSize,
+    freeTextX,
+    freeTextY,
+    freeTextShadow,
   };
+
+  const layoutKey = JSON.stringify(thumbnailLayoutProps);
+  const downloadActive = renderedLayoutKey === layoutKey;
+
+  const toggleDownloadActive = () => {
+    setRenderedLayoutKey(downloadActive ? null : layoutKey);
+  };
+
+  const backgroundUrlRef = useRef("");
+  const backgroundInputRef = useRef<HTMLInputElement>(null);
+
+  const updateBackground = useCallback((url: string) => {
+    if (backgroundUrlRef.current) URL.revokeObjectURL(backgroundUrlRef.current);
+    backgroundUrlRef.current = url;
+    setBackground(url);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (backgroundUrlRef.current)
+        URL.revokeObjectURL(backgroundUrlRef.current);
+    },
+    []
+  );
+
+  const handleReset = () => {
+    if (!resetPending) {
+      setResetPending(true);
+      return;
+    }
+    setGame(DEFAULTS.game);
+    setGameFontSize(DEFAULTS.gameFontSize);
+    setStreamer(DEFAULTS.streamer);
+    setStreamerFontSize(DEFAULTS.streamerFontSize);
+    setFreeText(DEFAULTS.freeText);
+    setFreeTextFontSize(DEFAULTS.freeTextFontSize);
+    setFreeTextX(DEFAULTS.freeTextX);
+    setFreeTextY(DEFAULTS.freeTextY);
+    setFreeTextShadow(DEFAULTS.freeTextShadow);
+    updateBackground("");
+    if (backgroundInputRef.current) backgroundInputRef.current.value = "";
+    setRenderedLayoutKey(null);
+    setResetPending(false);
+  };
+
+  const handleBackgroundUpdate: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    updateBackground(URL.createObjectURL(file));
+  };
+
+  const handleGameFontSizeScroll = useCallback(
+    (delta: number) => {
+      setGameFontSize((prev) => clampFontSize(prev + delta));
+    },
+    [setGameFontSize]
+  );
+
+  const handleStreamerFontSizeScroll = useCallback(
+    (delta: number) => {
+      setStreamerFontSize((prev) => clampFontSize(prev + delta));
+    },
+    [setStreamerFontSize]
+  );
+
+  const handleFreeTextFontSizeScroll = useCallback(
+    (delta: number) => {
+      setFreeTextFontSize((prev) => clampFontSize(prev + delta));
+    },
+    [setFreeTextFontSize]
+  );
+
+  const handleFreeTextMove = useCallback(
+    (x: number, y: number) => {
+      setFreeTextX(x);
+      setFreeTextY(y);
+    },
+    [setFreeTextX, setFreeTextY]
+  );
 
   return (
     <PageContainer>
-      <div className="mb-4 grid max-w-[1600px] grid-cols-[1fr_1fr_1fr_auto] items-center gap-x-8 rounded bg-neutral-700 px-4 py-2 text-white">
-        <div className="flex items-end gap-1.5">
-          <label className="flex w-full cursor-pointer flex-col">
+      <div className="mb-4 flex max-w-[1600px] flex-col gap-2 rounded bg-neutral-700 px-3 py-2 text-sm text-white">
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
+          <label className="flex min-w-48 max-w-[400px] flex-1 cursor-pointer flex-col">
             <span>Game</span>
             <input
               type="text"
-              className="text-lg text-black"
+              className="text-base text-black"
               name="game"
               value={game}
-              onChange={handleGameChange}
+              onChange={(event) => setGame(event.target.value)}
             />
           </label>
-          <label className="flex cursor-pointer flex-col">
-            <span>Font</span>
-            <input
-              type="number"
-              className="w-20 text-lg text-black"
-              value={gameFontSize}
-              onChange={handleGameFontSizeChange}
-            />
-          </label>
+          <RangeSlider
+            className="min-w-40 max-w-[400px] flex-1"
+            onChange={setGameFontSize}
+            value={gameFontSize}
+            min={MIN_FONTSIZE}
+            max={MAX_FONTSIZE}
+          >
+            Font Size
+          </RangeSlider>
         </div>
-        <div className="flex items-end gap-1.5">
-          <label className="flex w-full cursor-pointer flex-col">
-            <span>StreamerIn</span>
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
+          <label className="flex min-w-48 max-w-[400px] flex-1 cursor-pointer flex-col">
+            <span>Streamer</span>
             <input
-              className="text-lg text-black"
               type="text"
+              className="text-base text-black"
               name="streamer"
               value={streamer}
-              onChange={handleStreamerChange}
+              onChange={(event) => setStreamer(event.target.value)}
+            />
+          </label>
+          <RangeSlider
+            className="min-w-40 max-w-[400px] flex-1"
+            onChange={setStreamerFontSize}
+            value={streamerFontSize}
+            min={MIN_FONTSIZE}
+            max={MAX_FONTSIZE}
+          >
+            Font Size
+          </RangeSlider>
+        </div>
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
+          <label className="flex min-w-48 max-w-[400px] flex-1 cursor-pointer flex-col">
+            <span>Free Text (optional)</span>
+            <input
+              type="text"
+              className="text-base text-black"
+              name="freeText"
+              value={freeText}
+              onChange={(event) => setFreeText(event.target.value)}
+            />
+          </label>
+          <RangeSlider
+            className="min-w-40 max-w-[400px] flex-1"
+            onChange={setFreeTextFontSize}
+            value={freeTextFontSize}
+            min={MIN_FONTSIZE}
+            max={MAX_FONTSIZE}
+          >
+            Font Size
+          </RangeSlider>
+          <label className="flex cursor-pointer items-center gap-1.5">
+            <input
+              type="checkbox"
+              className="cursor-pointer"
+              checked={freeTextShadow}
+              onChange={(event) => setFreeTextShadow(event.target.checked)}
+            />
+            <span>Shadow</span>
+          </label>
+          <label className="flex cursor-pointer flex-col">
+            <span>X in px</span>
+            <input
+              type="number"
+              min={0}
+              max={THUMBNAIL_WIDTH}
+              className="w-24 text-base text-black"
+              value={freeTextX}
+              onChange={(event) =>
+                setFreeTextX(parsePosition(event.target.value, THUMBNAIL_WIDTH))
+              }
             />
           </label>
           <label className="flex cursor-pointer flex-col">
-            <span>Font</span>
+            <span>Y in px</span>
             <input
               type="number"
-              className="w-20 text-lg text-black"
-              value={streamerFontSize}
-              onChange={handleStreamerFontSizeChange}
+              min={0}
+              max={THUMBNAIL_HEIGHT}
+              className="w-24 text-base text-black"
+              value={freeTextY}
+              onChange={(event) =>
+                setFreeTextY(
+                  parsePosition(event.target.value, THUMBNAIL_HEIGHT)
+                )
+              }
             />
           </label>
         </div>
-        <label className="flex cursor-pointer flex-col">
-          <span>Background</span>
-          <input
-            type="file"
-            accept="image/png, image/jpeg"
-            name="background"
-            className="cursor-pointer"
-            onChange={handleBackgroundUpdate}
-          />
-        </label>
-        <button
-          type="button"
-          className="ml-auto mt-4 w-fit rounded border px-2 py-0.5"
-          onClick={toggleDownloadActive}
-        >
-          {downloadActive ? "Thumbnail Bearbeiten" : "Thumbnail Rendern"}
-        </button>
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
+          <label className="mr-auto flex w-fit max-w-[400px] cursor-pointer flex-col">
+            <span>Background</span>
+            <input
+              ref={backgroundInputRef}
+              type="file"
+              accept="image/png, image/jpeg"
+              name="background"
+              className="max-w-full cursor-pointer"
+              onChange={handleBackgroundUpdate}
+            />
+          </label>
+          <button
+            type="button"
+            className={
+              resetPending
+                ? "w-fit rounded border border-red-800 bg-red-800 px-2 py-0.5 font-semibold text-white"
+                : "w-fit rounded border px-2 py-0.5"
+            }
+            onClick={handleReset}
+            onBlur={() => setResetPending(false)}
+          >
+            {resetPending ? "Really Reset?" : "Reset all"}
+          </button>
+          <button
+            type="button"
+            className="w-fit rounded border px-2 py-0.5"
+            onClick={toggleDownloadActive}
+          >
+            {downloadActive ? "Edit Thumbnail" : "Render Thumbnail"}
+          </button>
+        </div>
       </div>
       <div className="overflow-scroll">
         {downloadActive ? (
@@ -137,7 +326,13 @@ export const YoutubeThumbnails = () => {
             )}
           </DownloadWrapper>
         ) : (
-          <ThumbnailLayout {...thumbnailLayoutProps} />
+          <ThumbnailLayout
+            {...thumbnailLayoutProps}
+            onFreeTextMove={handleFreeTextMove}
+            onGameFontSizeScroll={handleGameFontSizeScroll}
+            onStreamerFontSizeScroll={handleStreamerFontSizeScroll}
+            onFreeTextFontSizeScroll={handleFreeTextFontSizeScroll}
+          />
         )}
       </div>
     </PageContainer>

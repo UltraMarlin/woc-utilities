@@ -89,6 +89,10 @@
   text-shadow: 8px 10px 6px rgba(0, 0, 0, 1);
 }
 
+.yt-thumbnail-free-text-shadow {
+  text-shadow: 0.075em 0.1em 0.08em rgba(0, 0, 0, 0.75);
+}
+
 .checker-board {
   --checker-opacity: 0.87;
   background-image:
