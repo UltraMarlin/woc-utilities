@@ -32,7 +32,7 @@ const DEFAULTS = {
   freeTextFontSize: DEFAULT_FONT_SIZE,
   freeTextX: DEFAULT_FREE_TEXT_X,
   freeTextY: DEFAULT_FREE_TEXT_Y,
-  freeTextShadow: false,
+  freeTextShadow: true,
 };
 
 const clampFontSize = (size: number) =>
@@ -201,8 +201,9 @@ export const YoutubeThumbnails = () => {
           >
             Font Size
           </RangeSlider>
-          <div className="max-w-[16rem] opacity-80">
-            Hover the texts in the preview and use mousewheel to change size
+          <div className="max-w-[20rem] opacity-80">
+            Hover the texts in the preview and use mousewheel to change size, or
+            click them to edit directly.
           </div>
         </div>
         <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
@@ -284,7 +285,7 @@ export const YoutubeThumbnails = () => {
             />
           </label>
           <div className="max-w-[20rem] opacity-80">
-            Drag & drop the Free Text to move it around
+            Drag & drop the Free Text to move it around, double click it to edit
           </div>
         </div>
         <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
@@ -335,6 +336,9 @@ export const YoutubeThumbnails = () => {
           <ThumbnailLayout
             {...thumbnailLayoutProps}
             onFreeTextMove={handleFreeTextMove}
+            onGameChange={setGame}
+            onStreamerChange={setStreamer}
+            onFreeTextChange={setFreeText}
             onGameFontSizeScroll={handleGameFontSizeScroll}
             onStreamerFontSizeScroll={handleStreamerFontSizeScroll}
             onFreeTextFontSizeScroll={handleFreeTextFontSizeScroll}

@@ -1,8 +1,15 @@
 import cn from "classnames";
-import { PointerEventHandler, useEffect, useRef, useState } from "react";
+import {
+  MouseEventHandler,
+  PointerEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { DownloadableComponentProps } from "./DownloadWrapper";
 import shape from "../assets/images/thumbnail-shape.png";
 import { useFontSizeScroll } from "../utils/useFontSizeScroll";
+import { useEditableText } from "../utils/useEditableText";
 
 export const THUMBNAIL_WIDTH = 1600;
 export const THUMBNAIL_HEIGHT = 900;
@@ -12,7 +19,9 @@ export const DEFAULT_FREE_TEXT_X = THUMBNAIL_WIDTH / 2;
 export const DEFAULT_FREE_TEXT_Y = THUMBNAIL_HEIGHT / 4;
 
 const EDITABLE_OUTLINE =
-  "pointer-events-auto hover:outline hover:outline-2 hover:outline-red-500";
+  "pointer-events-auto outline-none hover:outline hover:outline-2 hover:outline-red-500 focus:outline focus:outline-2 focus:outline-red-500";
+
+const EDITABLE_TEXT = "min-w-[1em]";
 
 const clamp = (value: number, max: number) =>
   Math.round(Math.min(Math.max(value, 0), max));
@@ -29,6 +38,9 @@ export type ThumbnailLayoutProps = DownloadableComponentProps & {
   freeTextY?: number;
   freeTextShadow?: boolean;
   onFreeTextMove?: (x: number, y: number) => void;
+  onGameChange?: (value: string) => void;
+  onStreamerChange?: (value: string) => void;
+  onFreeTextChange?: (value: string) => void;
   onGameFontSizeScroll?: (delta: number) => void;
   onStreamerFontSizeScroll?: (delta: number) => void;
   onFreeTextFontSizeScroll?: (delta: number) => void;
@@ -46,8 +58,11 @@ export const ThumbnailLayout = ({
   freeTextFontSize = DEFAULT_FONT_SIZE,
   freeTextX = DEFAULT_FREE_TEXT_X,
   freeTextY = DEFAULT_FREE_TEXT_Y,
-  freeTextShadow = false,
+  freeTextShadow = true,
   onFreeTextMove,
+  onGameChange,
+  onStreamerChange,
+  onFreeTextChange,
   onGameFontSizeScroll,
   onStreamerFontSizeScroll,
   onFreeTextFontSizeScroll,
@@ -55,9 +70,21 @@ export const ThumbnailLayout = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
 
-  const gameRef = useFontSizeScroll(onGameFontSizeScroll);
-  const streamerRef = useFontSizeScroll(onStreamerFontSizeScroll);
-  const freeTextRef = useFontSizeScroll(onFreeTextFontSizeScroll);
+  const gameScrollRef = useFontSizeScroll(onGameFontSizeScroll);
+  const streamerScrollRef = useFontSizeScroll(onStreamerFontSizeScroll);
+  const freeTextScrollRef = useFontSizeScroll(onFreeTextFontSizeScroll);
+
+  const gameProps = useEditableText(game ?? "", onGameChange, gameScrollRef);
+  const streamerProps = useEditableText(
+    streamer ?? "",
+    onStreamerChange,
+    streamerScrollRef
+  );
+  const freeTextProps = useEditableText(
+    freeText ?? "",
+    onFreeTextChange,
+    freeTextScrollRef
+  );
 
   const grabOffsetRef = useRef({ x: 0, y: 0 });
   const pointerPositionRef = useRef<{ x: number; y: number } | null>(null);
@@ -90,6 +117,8 @@ export const ThumbnailLayout = ({
   const handlePointerDown: PointerEventHandler<HTMLSpanElement> = (event) => {
     const bounds = containerRef.current?.getBoundingClientRect();
     if (!onFreeTextMove || !bounds) return;
+    if (event.currentTarget === document.activeElement) return;
+    event.preventDefault();
     const pointer = toThumbnailCoordinates(
       event.clientX,
       event.clientY,
@@ -101,6 +130,17 @@ export const ThumbnailLayout = ({
     };
     event.currentTarget.setPointerCapture(event.pointerId);
     setDragging(true);
+  };
+
+  const handleDoubleClick: MouseEventHandler<HTMLSpanElement> = (event) => {
+    if (!onFreeTextChange) return;
+    const element = event.currentTarget;
+    element.focus();
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
   };
 
   const handlePointerUp: PointerEventHandler<HTMLSpanElement> = () => {
@@ -158,33 +198,42 @@ export const ThumbnailLayout = ({
       <img src={shape} alt="" className="absolute left-0 top-0 size-full" />
       <div className="absolute bottom-7 left-[32px] flex flex-col p-3 font-smash leading-[1.1]">
         <span
-          ref={gameRef}
-          className={cn("w-fit select-none", {
-            [EDITABLE_OUTLINE]: !!onGameFontSizeScroll,
+          {...gameProps}
+          className={cn("w-fit uppercase", {
+            "select-none": !onGameChange,
+            [`${EDITABLE_TEXT} cursor-text`]: !!onGameChange,
+            [EDITABLE_OUTLINE]: !!onGameFontSizeScroll || !!onGameChange,
           })}
           style={{ fontSize: `${gameFontSize}px` }}
         >
-          {game?.toUpperCase()}
+          {onGameChange ? null : game}
         </span>
         <span
-          ref={streamerRef}
-          className={cn("w-fit select-none", {
-            [EDITABLE_OUTLINE]: !!onStreamerFontSizeScroll,
+          {...streamerProps}
+          className={cn("w-fit uppercase", {
+            "select-none": !onStreamerChange,
+            [`${EDITABLE_TEXT} cursor-text`]: !!onStreamerChange,
+            [EDITABLE_OUTLINE]:
+              !!onStreamerFontSizeScroll || !!onStreamerChange,
           })}
           style={{ fontSize: `${streamerFontSize}px` }}
         >
-          {streamer?.toUpperCase()}
+          {onStreamerChange ? null : streamer}
         </span>
       </div>
-      {freeText && (
+      {(freeText || onFreeTextChange) && (
         <span
-          ref={freeTextRef}
+          {...freeTextProps}
           className={cn(
-            "absolute -translate-x-1/2 -translate-y-1/2 select-none whitespace-pre font-smash leading-[1.1]",
+            "absolute -translate-x-1/2 -translate-y-1/2 whitespace-pre font-smash leading-[1.1]",
             {
+              "select-none": !onFreeTextChange,
+              [EDITABLE_TEXT]: !!onFreeTextChange,
               [EDITABLE_OUTLINE]:
-                !!onFreeTextMove || !!onFreeTextFontSizeScroll,
-              "cursor-move": !!onFreeTextMove,
+                !!onFreeTextMove ||
+                !!onFreeTextFontSizeScroll ||
+                !!onFreeTextChange,
+              "cursor-move focus:cursor-text": !!onFreeTextMove,
               "yt-thumbnail-free-text-shadow": freeTextShadow,
               "outline outline-2 outline-red-500": dragging,
             }
@@ -198,8 +247,9 @@ export const ThumbnailLayout = ({
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
+          onDoubleClick={handleDoubleClick}
         >
-          {freeText}
+          {onFreeTextChange ? null : freeText}
         </span>
       )}
     </div>
