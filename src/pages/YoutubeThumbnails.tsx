@@ -201,6 +201,9 @@ export const YoutubeThumbnails = () => {
           >
             Font Size
           </RangeSlider>
+          <div className="max-w-[16rem] opacity-80">
+            Hover the texts in the preview and use mousewheel to change size
+          </div>
         </div>
         <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
           <label className="flex min-w-48 max-w-[400px] flex-1 cursor-pointer flex-col">
@@ -258,7 +261,7 @@ export const YoutubeThumbnails = () => {
               type="number"
               min={0}
               max={THUMBNAIL_WIDTH}
-              className="w-24 text-base text-black"
+              className="w-18 text-base text-black"
               value={freeTextX}
               onChange={(event) =>
                 setFreeTextX(parsePosition(event.target.value, THUMBNAIL_WIDTH))
@@ -271,7 +274,7 @@ export const YoutubeThumbnails = () => {
               type="number"
               min={0}
               max={THUMBNAIL_HEIGHT}
-              className="w-24 text-base text-black"
+              className="w-18 text-base text-black"
               value={freeTextY}
               onChange={(event) =>
                 setFreeTextY(
@@ -280,6 +283,9 @@ export const YoutubeThumbnails = () => {
               }
             />
           </label>
+          <div className="max-w-[20rem] opacity-80">
+            Drag & drop the Free Text to move it around
+          </div>
         </div>
         <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
           <label className="mr-auto flex w-fit max-w-[400px] cursor-pointer flex-col">
