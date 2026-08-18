@@ -180,7 +180,7 @@ export const YoutubeThumbnails = () => {
 
   return (
     <PageContainer>
-      <div className="mb-4 flex max-w-[1600px] flex-col gap-2 rounded bg-neutral-700 px-3 py-2 text-sm text-white">
+      <div className="mb-4 flex max-w-[1600px] flex-col gap-0.5 rounded bg-neutral-700 px-3 py-2 text-sm text-white">
         <div className="flex flex-wrap items-end gap-x-4 gap-y-2">
           <label className="flex min-w-48 max-w-[400px] flex-1 cursor-pointer flex-col">
             <span>Game</span>
@@ -321,7 +321,7 @@ export const YoutubeThumbnails = () => {
           </button>
         </div>
       </div>
-      <div className="overflow-scroll">
+      <div className="overflow-scroll [zoom:0.8]">
         {downloadActive ? (
           <DownloadWrapper
             className="aspect-video w-[1600px]"
