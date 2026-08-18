@@ -59,9 +59,7 @@ export const ExampleComponent = ({
       style={{ backgroundImage: `url(${exampleBg})` }}
     >
       <img src={exampleLogo} alt="" className="mb-24 mt-4 h-56" />
-      <h1 className="mb-10 text-center font-pixel text-[6rem]">
-        Upcoming Streams
-      </h1>
+      <h1 className="mb-10 text-center text-[6rem]">Upcoming Streams</h1>
 
       <div>
         {Object.entries(groupedStreams || {}).map(([date, streams]) => (

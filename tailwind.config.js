@@ -10,7 +10,6 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        pixel: ["DePixelHalbfett", "sans-serif"],
         standard: ["Carlito"],
         ubuntu: ["Ubuntu"],
         explorer: ["Explorer", "Pally", "sans-serif"],
@@ -30,13 +29,10 @@ export default {
           highlight: "#203737",
           background: "#E1DFAC",
         },
-        schedule25: {
-          light: "#FFF0F4",
-          dark: "#150477",
-        },
         yellow26: "#e8cb56",
         purpleShadow26: "#472457",
         purpleAccent26: "#4f1f66",
+        purpleLight26: "#68438c",
       },
       dropShadow: {
         "layout-dark": "4px 4px 0 #150477",
@@ -51,7 +47,7 @@ export default {
             "--smash-shadow-color": value,
           }),
         },
-        { values: flattenColorPalette(theme("colors")), type: "color" },
+        { values: flattenColorPalette(theme("colors")), type: "color" }
       );
     }),
   ],

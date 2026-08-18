@@ -3,13 +3,6 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "DePixelHalbfett";
-  src: url("assets/fonts/depixelhalbfett.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
   font-family: "Carlito";
   src: url("assets/fonts/Carlito-Regular.ttf") format("truetype");
   font-weight: normal;
@@ -132,7 +125,7 @@
   .font-smash-layered-shadow {
     position: absolute;
     inset: 0;
-    top: calc(1px + 0.025em);
+    top: calc(1px + 0.022em);
     z-index: 1;
     font-family: cc-smash-open, sans-serif;
     color: var(--smash-shadow-color, black);
@@ -145,21 +138,18 @@
     background-image: url("assets/images/bg-social-post.png");
   }
 
-  .schedule-layout-25-text-shadow-dark {
-    text-shadow: 5px 5px #150477;
+  .bg-schedule-post {
+    background-image: url("assets/images/bg-schedule-post.png");
   }
 
-  .bg-scan-lines {
-    opacity: 0.1;
-    --scan-line-thickness: 5px;
+  .bg-seperator {
     background: linear-gradient(
-      transparent,
-      transparent var(--scan-line-thickness),
-      black var(--scan-line-thickness),
-      black calc(2 * var(--scan-line-thickness))
+      to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      oklch(1 0 0 / 1) 25%,
+      oklch(1 0 0 / 1) 75%,
+      rgba(0, 0, 0, 0) 100%
     );
-    background-repeat: repeat-y;
-    background-size: 100% calc(2 * var(--scan-line-thickness));
   }
 }
 

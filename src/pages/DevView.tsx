@@ -1,12 +1,12 @@
 import { DownloadWrapper } from "../components/DownloadWrapper";
 import { PageContainer } from "../components/PageContainer";
-import { ScheduleLayout25 } from "../components/ScheduleLayout25";
+import { ScheduleLayout } from "../components/ScheduleLayout";
 
 export const DevView = () => {
-  const minEndTimestampUTC = "2025-09-15T12:00:00";
-  const maxEndTimestampUTC = "2025-09-15T23:00:00";
+  const minEndTimestampUTC = "2025-09-16T18:00:00";
+  const maxEndTimestampUTC = "2025-09-17T08:00:00";
 
-  const LayoutComponent = ScheduleLayout25;
+  const LayoutComponent = ScheduleLayout;
 
   return (
     <PageContainer>

@@ -6,10 +6,10 @@ type SmashTextProps = {
 } & HTMLAttributes<HTMLSpanElement>;
 
 export const SmashText = ({ text, className, ...props }: SmashTextProps) => (
-  <span className={cn("font-smash-layered", className)} {...props}>
-    <span className="font-smash-layered-shadow" aria-hidden="true">
+  <div className={cn("font-smash-layered", className)} {...props}>
+    <div className="font-smash-layered-shadow" aria-hidden="true">
       {text}
-    </span>
+    </div>
     {text}
-  </span>
+  </div>
 );
