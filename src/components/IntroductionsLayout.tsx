@@ -115,14 +115,35 @@ export const IntroductionsLayout = ({
     <div
       ref={layoutRef}
       className={cn(
-        "bg-yellow26 relative aspect-square size-[1584px] select-none text-5xl",
+        "relative aspect-square size-[1584px] select-none bg-yellow26 text-5xl",
         className
       )}
     >
+      <div className="absolute right-[107px] top-[102px] flex w-[980px] items-end rounded-[16px] border-[6px] border-solid border-purpleAccent26 pb-[26px] pl-[262px] pt-[242px]">
+        <ul
+          className={cn(
+            "flex flex-col font-exo font-semibold italic text-purpleAccent26",
+            {
+              "gap-1 text-[38px]": sortedSocials.length > 3,
+              "gap-2.5 py-3 text-[46px]": sortedSocials.length <= 3,
+            }
+          )}
+        >
+          {sortedSocials?.map((social) => {
+            const SocialIcon = getSocialIcon(social.platform);
+            return (
+              <li key={social.platform} className="flex items-center gap-4">
+                <SocialIcon className="mt-2 inline size-[0.9em]" />
+                <span>{social.link}</span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
       <div className="absolute left-[68px] top-[36px] size-[654px]">
         {profilePicture && (
           <div
-            className="bg-yellow26 size-full rounded-full bg-cover"
+            className="size-full rounded-full bg-yellow26 bg-cover"
             style={{
               backgroundImage: `url(${profilePicture})`,
               backgroundPosition: `${picturePositionX}% ${picturePositionY}%`,
@@ -131,38 +152,21 @@ export const IntroductionsLayout = ({
         )}
       </div>
       <img src={bgIntroduction} className="absolute size-[1584px]" />
-      <div className="absolute right-[76px] top-[64px] h-[460px] w-[980px]">
+      <div className="absolute right-[76px] top-[64px] w-[980px]">
         <div className="flex flex-col">
           <div className="mb-6 flex h-[136px] max-w-[900px] items-center justify-center self-end pr-[162px]">
             <SmashText
               text={name || ""}
               style={{ fontSize: nameFontSize }}
-              className="smash-shadow-purpleShadow26 text-right leading-[0.9] text-white"
-            >
-              {name}
-            </SmashText>
+              className="text-right leading-[0.9] text-white smash-shadow-purpleShadow26"
+            />
           </div>
           {pronouns && (
             <SmashText
               text={pronouns}
-              className="smash-shadow-purpleShadow26 self-end pr-[18px] text-[60px] text-white"
-            >
-              {pronouns}
-            </SmashText>
+              className="self-end pr-[18px] text-[60px] text-white smash-shadow-purpleShadow26"
+            />
           )}
-          <div className="border-purpleAccent26 absolute z-[-1] mt-[42px] flex w-[calc(100%-28px)] items-end rounded-[16px] border-[6px] border-solid pb-[22px] pl-[240px] pt-[240px]">
-            <ul className="font-exo text-purpleAccent26 flex flex-col gap-1.5 text-[44px] font-semibold italic">
-              {sortedSocials?.map((social) => {
-                const SocialIcon = getSocialIcon(social.platform);
-                return (
-                  <li key={social.platform} className="flex items-center gap-4">
-                    <SocialIcon className="inline size-9" />
-                    <span>{social.link}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
         </div>
       </div>
       <div className="absolute left-[156px] top-[638px] w-[1310px] px-[58px] pt-[74px] text-white">
@@ -171,7 +175,7 @@ export const IntroductionsLayout = ({
             fontSize: descriptionFontSize,
             lineHeight: descriptionLineHeight,
           }}
-          className="font-exo whitespace-pre-wrap font-medium"
+          className="whitespace-pre-wrap font-exo font-medium"
         >
           {descriptionParts?.map((part) => (
             <p className="mb-[0.7em] last-of-type:mb-0" key={part}>

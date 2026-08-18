@@ -129,11 +129,10 @@
     font-family: cc-smash, sans-serif;
   }
 
-  .font-smash-layered::before {
-    content: attr(data-text);
+  .font-smash-layered-shadow {
     position: absolute;
     inset: 0;
-    top: 0.025em;
+    top: calc(1px + 0.025em);
     z-index: 1;
     font-family: cc-smash-open, sans-serif;
     color: var(--smash-shadow-color, black);
