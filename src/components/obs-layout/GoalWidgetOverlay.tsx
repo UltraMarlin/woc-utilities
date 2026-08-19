@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import cn from "classnames";
 
 import { DonationGoal, useDonationGoals } from "../../hooks/useDonationGoals";
@@ -24,10 +24,6 @@ export const GoalWidgetOverlay = ({
   className,
 }: GoalWidgetOverlayProps) => {
   const [announcingGoalReached, setAnnouncingGoalReached] = useState(false);
-  const [currentDonation, setCurrentDonation] = useState<number>(0);
-  const [nextDonationGoal, setNextDonationGoal] = useState<number>();
-  const [nextDonationGoalText, setNextDonationGoalText] = useState<string>();
-  const [lastReachedGoalAmount, setLastReachedGoalAmount] = useState<number>(0);
 
   const skipReachedQueue = useRef<boolean>(true);
   const goalReachedQueue = useRef<DonationGoal[]>([]);
@@ -39,6 +35,35 @@ export const GoalWidgetOverlay = ({
   const { data: donationGoals, status: donationGoalsStatus } =
     useDonationGoals(language);
 
+  const { currentDonation, lastReachedGoalAmount, nextDonationGoalEntry } =
+    useMemo(() => {
+      if (!donations || !donationGoals)
+        return {
+          currentDonation: 0,
+          lastReachedGoalAmount: 0,
+          nextDonationGoalEntry: undefined,
+        };
+
+      const current = donations.donated_amount_in_cents / 100;
+
+      let lastIndex = -1;
+      donationGoals.forEach((goal, index) => {
+        if (goal.reached_at <= current) {
+          lastIndex = index;
+        }
+      });
+
+      return {
+        currentDonation: current,
+        lastReachedGoalAmount:
+          lastIndex >= 0 ? donationGoals[lastIndex].reached_at : 0,
+        nextDonationGoalEntry: donationGoals[lastIndex + 1],
+      };
+    }, [donations, donationGoals]);
+
+  const nextDonationGoal = nextDonationGoalEntry?.reached_at;
+  const nextDonationGoalText = nextDonationGoalEntry?.name;
+
   const moneyTarget =
     nextDonationGoal || getHighestDonationGoalAmount(donationGoals);
 
@@ -47,35 +72,6 @@ export const GoalWidgetOverlay = ({
       ? ((currentDonation - lastReachedGoalAmount) * 100) /
         (moneyTarget - lastReachedGoalAmount)
       : 0;
-
-  useEffect(() => {
-    if (!donations || !donationGoals) return;
-
-    const current = donations.donated_amount_in_cents / 100;
-    setCurrentDonation(current);
-
-    let lastIndex = -1;
-    donationGoals.forEach((goal, index) => {
-      if (goal.reached_at <= current) {
-        lastIndex = index;
-      }
-    });
-
-    setLastReachedGoalAmount(
-      lastIndex >= 0 ? donationGoals[lastIndex].reached_at : 0
-    );
-
-    setNextDonationGoal(
-      donationGoals.length > lastIndex + 1
-        ? donationGoals[lastIndex + 1].reached_at
-        : undefined
-    );
-    setNextDonationGoalText(
-      donationGoals.length > lastIndex + 1
-        ? donationGoals[lastIndex + 1].name
-        : undefined
-    );
-  }, [donations, donationGoals]);
 
   useEffect(() => {
     const getDonationGoalsText = () => {

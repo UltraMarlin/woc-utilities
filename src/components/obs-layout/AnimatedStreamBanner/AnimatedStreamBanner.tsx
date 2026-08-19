@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import cn from "classnames";
 
 import chessterWaveGif from "../../../assets/layout/donation_alert/Chesster_Animation_02.gif";
@@ -42,6 +42,7 @@ export const AnimatedStreamBanner = ({
   const [currentBanner, setCurrentBanner] = useState(-1);
   const [isBannerVisible, setBannerVisible] = useState(false);
   const [chessterState, setChessterState] = useState(ChessterState.HIDDEN_LEFT);
+  const bannerIndex = useRef(-1);
 
   const hideCurrentBanner = () => {
     setBannerVisible(false);
@@ -55,7 +56,15 @@ export const AnimatedStreamBanner = ({
   };
 
   const displayNextBanner = () => {
-    setCurrentBanner((prev) => (prev + 1) % streamBanners.length);
+    const nextBanner = (bannerIndex.current + 1) % streamBanners.length;
+    bannerIndex.current = nextBanner;
+    setCurrentBanner(nextBanner);
+
+    setChessterState(getChessterStateHidden(nextBanner));
+    setTimeout(
+      () => setChessterState(getChessterStateVisible(nextBanner)),
+      750
+    );
     setTimeout(() => {
       setBannerVisible(true);
     }, CHESSTER_ALONE_DURATION + 750);
@@ -70,14 +79,6 @@ export const AnimatedStreamBanner = ({
 
     return () => clearTimeout(timeout);
   }, [isBannerVisible]);
-
-  useEffect(() => {
-    setChessterState(getChessterStateHidden(currentBanner));
-    setTimeout(
-      () => setChessterState(getChessterStateVisible(currentBanner)),
-      750
-    );
-  }, [currentBanner]);
 
   const chessterLeft =
     chessterState === ChessterState.HIDDEN_LEFT ||

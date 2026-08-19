@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useBidwarResults } from "../../../hooks/useBidwarResults";
 
@@ -31,15 +31,13 @@ export const LayoutBidwarWidget = ({
 }: LayoutBidwarWidgetProps) => {
   const [showBidwars, setShowBidwars] = useState(false);
   const [currentBidwarIndex, setCurrentBidwarIndex] = useState<number>(0);
-  const [preparedBidwars, setPreparedBidwars] = useState<PreparedBidwar[]>([]);
-  const [styleList, setStyleList] = useState<React.CSSProperties[]>([]);
 
   const { data: bidwarResults, status: bidwarResultsStatus } =
     useBidwarResults();
 
-  useEffect(() => {
+  const preparedBidwars = useMemo<PreparedBidwar[]>(() => {
     const bidwars = bidwarResults?.results;
-    const newPreparedBidwars: PreparedBidwar[] =
+    return (
       bidwars
         ?.filter((bidwar) => bidwar.status === "active")
         ?.map((bidwar) => {
@@ -57,19 +55,20 @@ export const LayoutBidwarWidget = ({
               .sort((a, b) => b.amount - a.amount)
               .slice(0, MAX_BIDWAR_OPTION_AMOUNT),
           };
-        }) || [];
+        }) || []
+    );
+  }, [bidwarResults, language]);
 
-    setStyleList(
-      newPreparedBidwars.map((bidwar) => {
+  const styleList = useMemo<React.CSSProperties[]>(
+    () =>
+      preparedBidwars.map((bidwar) => {
         const difference = 10 + 26 * bidwar.options.length - 88;
         return {
           "--max-scroll-y": difference <= 0 ? "0px" : `-${difference}px`,
         };
-      })
-    );
-
-    setPreparedBidwars(newPreparedBidwars);
-  }, [bidwarResults, language]);
+      }),
+    [preparedBidwars]
+  );
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -90,13 +89,15 @@ export const LayoutBidwarWidget = ({
     };
 
     if (showBidwars) {
-      setCurrentBidwarIndex(0);
       startBidwarRotation();
       return;
     }
 
     const timeout = setTimeout(
-      () => setShowBidwars(true),
+      () => {
+        setCurrentBidwarIndex(0);
+        setShowBidwars(true);
+      },
       TOTAL_CYCLE_DURATION - preparedBidwars.length * SINGLE_BIDWAR_DURATION
     );
 

@@ -114,9 +114,9 @@ export const WidgetObsOverlay = () => {
     return () => clearTimeout(timeout);
   }, [playDonationAlert]);
 
-  useEffect(() => {
-    if (announcingGoalReached) setDisplayedGoalReached(announcingGoalReached);
-  }, [announcingGoalReached]);
+  if (announcingGoalReached && announcingGoalReached !== displayedGoalReached) {
+    setDisplayedGoalReached(announcingGoalReached);
+  }
 
   if (isPreloading) return <div className="text-7xl">Loading...</div>;
 

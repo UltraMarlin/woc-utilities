@@ -12,21 +12,27 @@ export const LayoutDonationName = ({
   animate,
   language,
 }: LayoutDonationNameProps) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [visibleName, setVisibleName] = useState({ name: "" });
+  const formattedName = name || (language === "en" ? "Anonymous" : "Anonym");
+
+  const [isAnimating, setIsAnimating] = useState(animate);
+  const [visibleName, setVisibleName] = useState({
+    name: animate ? "" : formattedName,
+  });
+  const [animatedInput, setAnimatedInput] = useState({
+    animate,
+    formattedName,
+  });
   const animationIntervalId = useRef<ReturnType<typeof setInterval>>(undefined);
   const animationTimeoutId = useRef<ReturnType<typeof setInterval>>(undefined);
 
-  const formattedName = name || (language === "en" ? "Anonymous" : "Anonym");
-
-  useEffect(() => {
-    if (animate) {
-      setVisibleName({ name: "" });
-    } else {
-      setVisibleName({ name: formattedName });
-    }
+  if (
+    animatedInput.animate !== animate ||
+    animatedInput.formattedName !== formattedName
+  ) {
+    setAnimatedInput({ animate, formattedName });
+    setVisibleName({ name: animate ? "" : formattedName });
     setIsAnimating(animate);
-  }, [animate, formattedName, language]);
+  }
 
   useEffect(() => {
     if (isAnimating) {
