@@ -155,6 +155,26 @@
       rgba(0, 0, 0, 0) 100%
     );
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@property --goalProgress {
+  initial-value: 0%;
+  inherits: false;
+  syntax: "<percentage>";
+}
+
+.goal-widget-overlay-progress-transition {
+  transition-property: --goalProgress, background-image;
+  transition-timing-function: ease-in-out;
+  transition-duration: 2000ms;
 }
 
 *:focus-visible {

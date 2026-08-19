@@ -1,16 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useMemo } from "react";
 
 export type Stream = {
-  id: number;
-  start: string;
-  end: string;
   activity: {
     id: number;
     icon: string;
     name: string;
   };
+  end: string;
   fellows: {
     people_id: {
       id: number;
@@ -18,6 +15,8 @@ export type Stream = {
       stream_link: string | null;
     };
   }[];
+  id: number;
+  start: string;
   language: StreamLanguage;
   streamer: {
     id: number;
@@ -38,13 +37,30 @@ export enum StreamLanguage {
   DEEN = "deen",
 }
 
+export const translateStream =
+  (lang: "de" | "en") => (stream: StreamWithAlternatives) => {
+    const { activity, ...rest } = stream;
+    const { name, name_en, ...restActivity } = activity;
+    return {
+      ...rest,
+      activity: {
+        ...restActivity,
+        name: lang === "de" || !name_en ? name : name_en,
+      },
+    } as Stream;
+  };
+
+export const translateStreams =
+  (lang: "de" | "en") => (streams: StreamWithAlternatives[]) =>
+    streams.filter((stream) => stream.activity).map(translateStream(lang));
+
 export const useStreams = (
   minEndTimestamp?: string,
   maxEndTimestamp?: string,
   lang: "de" | "en" = "de"
 ) => {
-  const rawQueryResult = useQuery({
-    queryKey: ["streams", minEndTimestamp, maxEndTimestamp],
+  return useQuery({
+    queryKey: ["streams", minEndTimestamp, maxEndTimestamp, lang],
     queryFn: async () => {
       const minFilter = minEndTimestamp
         ? `&filter[_and][0][end][_gt]=${minEndTimestamp}`
@@ -57,22 +73,6 @@ export const useStreams = (
       );
       return data.data;
     },
+    select: translateStreams(lang),
   });
-
-  const translatedData = useMemo(() => {
-    if (!rawQueryResult.data) return undefined;
-    return rawQueryResult.data.map((dataEntry) => {
-      const { activity, ...rest } = dataEntry;
-      const { name, name_en, ...restActivity } = activity;
-      return {
-        ...rest,
-        activity: {
-          ...restActivity,
-          name: lang === "de" || !name_en ? name : name_en,
-        },
-      } as Stream;
-    });
-  }, [lang, rawQueryResult.data]);
-
-  return { ...rawQueryResult, data: translatedData };
 };

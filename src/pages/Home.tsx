@@ -23,8 +23,8 @@ const links = [
     label: "Youtube Thumbnails",
   },
   {
-    href: "/widgets",
-    label: "Stream Widgets",
+    href: "/streaming",
+    label: "Streaming",
   },
 ];
 
