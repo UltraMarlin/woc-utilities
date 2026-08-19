@@ -83,14 +83,14 @@ export const ScheduleLayout = ({
     >
       <div className="absolute left-[130px] top-[289px] h-[1112px] w-[1310px] pl-[48px] pr-[30px] pt-[32px] text-white">
         <SmashText
-          className="mb-8 mr-6 mt-2 text-right text-[63px] uppercase leading-none tracking-[0.074em] smash-shadow-purpleShadow26"
+          className="mb-8 mr-6 mt-2 text-right text-[63px] uppercase leading-none tracking-[0.074em]"
           text="Upcoming Streams"
         />
         <div className="flex flex-col gap-6 font-exo">
           {Object.entries(groupedStreams || {}).map(([date, streams]) => {
             return (
               <div key={date}>
-                <h2 className="bg-purpleLight26 mb-3 rounded-[14px] p-1.5 pb-2 pl-6 text-[30px] font-semibold uppercase italic leading-none tracking-widest">
+                <h2 className="mb-3 rounded-[14px] bg-purpleLight26 p-1.5 pb-2 pl-6 text-[30px] font-semibold uppercase italic leading-none tracking-widest">
                   {formatDay(date)}
                 </h2>
                 <ul className="flex flex-col gap-3">
@@ -101,7 +101,7 @@ export const ScheduleLayout = ({
                       <li
                         key={start}
                         className={cn(
-                          "from-purpleLight26 grid h-[124px] grid-cols-[226px_4px_190px_4px_1fr] rounded-[14px] bg-gradient-to-r to-purpleAccent26 *:min-h-0",
+                          "grid h-[124px] grid-cols-[226px_4px_190px_4px_1fr] rounded-[14px] bg-gradient-to-r from-purpleLight26 to-purpleAccent26 *:min-h-0",
                           className
                         )}
                       >

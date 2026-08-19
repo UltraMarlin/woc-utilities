@@ -17,7 +17,10 @@ import {
 import { preloadDonationGifs } from "../utils/widgets/donationAlertGifs";
 
 import obsOverlay from "../assets/layout/obs-overlay.png";
-import dynamicBox from "../assets/layout/obs-overlay-dynamic-box.png";
+
+//TODO REMOVE
+import obsOverlayWITHTEXT from "../assets/layout/LayoutStreamMain-text.png";
+import { SmashText } from "../components/SmashText";
 
 export const WidgetObsOverlay = () => {
   const [donationGoalText, setDonationGoalText] = useState("");
@@ -121,7 +124,7 @@ export const WidgetObsOverlay = () => {
   if (isPreloading) return <div className="text-7xl">Loading...</div>;
 
   return (
-    <div className="grid h-[1080px] w-[1920px] overflow-hidden *:col-start-1 *:row-start-1">
+    <div className="grid h-[1080px] w-[1920px] overflow-hidden font-exo *:col-start-1 *:row-start-1">
       {alertonly === null && (
         <>
           <GoalWidgetOverlay
@@ -145,28 +148,30 @@ export const WidgetObsOverlay = () => {
           <div
             className={cn(
               "animate-donationAlert absolute left-[348px] top-[920px] z-10 flex h-[88px] w-[664px] items-center justify-center overflow-hidden px-4 text-center text-[18px] transition-opacity duration-1000",
-              {
-                "opacity-0": !announcingGoalReached,
-              }
+              { "opacity-0": !announcingGoalReached }
             )}
           >
             {language === "en" ? "GOAL REACHED:" : "ZIEL ERREICHT:"}{" "}
             {displayedGoalReached.split(" - ")[1] || displayedGoalReached}
           </div>
-          <div className="absolute top-[21px] z-10 w-80 overflow-hidden whitespace-nowrap px-5 text-center text-2xl leading-relaxed">
-            {name === "empty" ? "" : name}
-          </div>
-          <div className="absolute top-[59px] z-10 w-80 overflow-hidden whitespace-nowrap text-center text-[0.9375rem] leading-relaxed">
-            {pronouns === "empty" ? "" : pronouns}
-          </div>
+          <SmashText
+            className="absolute left-[64px] top-[21px] z-10 whitespace-nowrap text-[32px] tracking-wide"
+            shadowClassName="!top-[1px]"
+            text={name === "empty" ? "" : name || ""}
+          />
+          <SmashText
+            className="absolute left-[182px] top-[228px] z-10 whitespace-nowrap text-right text-[23px]"
+            shadowClassName="!top-[0.8px]"
+            text={pronouns === "empty" ? "" : pronouns || ""}
+          />
           <LayoutDonationList
-            className="absolute left-[1060px] top-[922px] z-10 w-96 overflow-hidden whitespace-nowrap text-center text-[1.1875rem]"
+            className="absolute left-[933px] top-[922px] z-10 h-[137px] w-[486px] overflow-hidden whitespace-nowrap text-center text-[1.1875rem]"
             headline={language === "en" ? "Top Donations" : "Höchste Spenden"}
             donations={highestDonations}
             language={language}
           />
           <LayoutDonationList
-            className="absolute left-[1508px] top-[922px] z-10 w-96 overflow-hidden whitespace-nowrap text-center text-[1.1875rem]"
+            className="absolute left-[1444px] top-[922px] z-10 h-[137px] w-[456px] overflow-hidden whitespace-nowrap text-center text-[1.1875rem]"
             headline={language === "en" ? "Last Donations" : "Letzte Spenden"}
             donations={newestDonations?.slice(0, 3)}
             language={language}
@@ -174,16 +179,13 @@ export const WidgetObsOverlay = () => {
           <AnimatedStreamBanner
             className="absolute left-[12px] top-[916px] z-10 h-[153px] w-[295px] text-center"
             language={language}
-          >
-            <img
-              className="absolute col-start-1 row-start-1 size-full"
-              alt=""
-              src={dynamicBox}
-            />
-          </AnimatedStreamBanner>
+          />
+          <div
+            className="z-50 opacity-20 hover:opacity-80"
+            style={{ backgroundImage: `url(${obsOverlayWITHTEXT})` }}
+          />
         </>
       )}
-
       <div
         className={cn(
           "absolute left-[1200px] top-[140px] z-10 w-[606px] overflow-hidden text-lg transition-[transform,opacity] duration-[500ms]",

@@ -1,15 +1,16 @@
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import cn from "classnames";
 
 import chessterWaveGif from "../../../assets/layout/donation_alert/Chesster_Animation_02.gif";
 import chessterJumpGif from "../../../assets/layout/donation_alert/Chesster_Animation_01.gif";
+import dynamicBox from "../../../assets/layout/obs-overlay-dynamic-box.png";
 
 import { streamBanners } from "./streamBannerData";
 
-export type AnimatedStreamBannerProps = PropsWithChildren<{
+export type AnimatedStreamBannerProps = {
   language: "de" | "en";
   className?: string;
-}>;
+};
 
 const BANNER_VISIBLE_DURATION = 12000;
 const BANNER_HIDDEN_DURATION = 30000;
@@ -37,7 +38,6 @@ const getChessterStateHidden = (bannerId: number) => {
 export const AnimatedStreamBanner = ({
   language,
   className,
-  children,
 }: AnimatedStreamBannerProps) => {
   const [currentBanner, setCurrentBanner] = useState(-1);
   const [isBannerVisible, setBannerVisible] = useState(false);
@@ -107,7 +107,11 @@ export const AnimatedStreamBanner = ({
         )}
       >
         <div className="animate-float">
-          {children}
+          <img
+            className="absolute inset-0 col-start-1 row-start-1 size-full"
+            alt=""
+            src={dynamicBox}
+          />
           <div className="absolute inset-0 flex flex-col items-center justify-center leading-7">
             {currentBanner >= 0 && streamBanners[currentBanner][language]}
             {currentBanner >= 0 && streamBanners[currentBanner].both}

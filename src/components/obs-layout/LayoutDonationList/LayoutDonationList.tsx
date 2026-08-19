@@ -3,6 +3,7 @@ import cn from "classnames";
 
 import type { Donation } from "../../../hooks/useDonations";
 import { LayoutDonationName } from "./LayoutDonationName";
+import { SmashText } from "../../SmashText";
 
 export type LayoutDonationListProps = {
   headline: string;
@@ -39,7 +40,11 @@ export const LayoutDonationList = ({
 
   return (
     <div className={className}>
-      <h2 className={cn("mb-[16px] px-5")}>{headline}</h2>
+      <SmashText
+        className="mr-[14px] text-right text-[32px]"
+        shadowClassName="!top-[0.6px]"
+        text={headline}
+      />
       <ul
         className={cn(
           "flex flex-col gap-1.5 pb-1.5 pl-8 pr-2 text-[15px]",

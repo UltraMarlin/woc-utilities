@@ -158,13 +158,13 @@ export const IntroductionsLayout = ({
             <SmashText
               text={name || ""}
               style={{ fontSize: nameFontSize }}
-              className="text-right leading-[0.9] text-white smash-shadow-purpleShadow26"
+              className="text-right leading-[0.9]"
             />
           </div>
           {pronouns && (
             <SmashText
               text={pronouns}
-              className="self-end pr-[18px] text-[60px] text-white smash-shadow-purpleShadow26"
+              className="self-end pr-[18px] text-[60px]"
             />
           )}
         </div>
