@@ -199,7 +199,7 @@ export const ThumbnailLayout = ({
       <div className="absolute bottom-7 left-[32px] flex flex-col p-3 font-smash leading-[1.1]">
         <span
           {...gameProps}
-          className={cn("w-fit uppercase", {
+          className={cn("w-fit whitespace-nowrap uppercase", {
             "select-none": !onGameChange,
             [`${EDITABLE_TEXT} cursor-text`]: !!onGameChange,
             [EDITABLE_OUTLINE]: !!onGameFontSizeScroll || !!onGameChange,
@@ -210,7 +210,7 @@ export const ThumbnailLayout = ({
         </span>
         <span
           {...streamerProps}
-          className={cn("w-fit uppercase", {
+          className={cn("w-fit whitespace-nowrap uppercase", {
             "select-none": !onStreamerChange,
             [`${EDITABLE_TEXT} cursor-text`]: !!onStreamerChange,
             [EDITABLE_OUTLINE]:
@@ -222,11 +222,16 @@ export const ThumbnailLayout = ({
         </span>
       </div>
       {(freeText || onFreeTextChange) && (
-        <span
-          {...freeTextProps}
-          className={cn(
-            "absolute -translate-x-1/2 -translate-y-1/2 whitespace-pre font-smash leading-[1.1]",
-            {
+        <div
+          className="absolute flex size-0 items-center justify-center"
+          style={{
+            left: `${(freeTextX / THUMBNAIL_WIDTH) * 100}%`,
+            top: `${(freeTextY / THUMBNAIL_HEIGHT) * 100}%`,
+          }}
+        >
+          <span
+            {...freeTextProps}
+            className={cn("flex-none whitespace-pre font-smash leading-[1.1]", {
               "select-none": !onFreeTextChange,
               [EDITABLE_TEXT]: !!onFreeTextChange,
               [EDITABLE_OUTLINE]:
@@ -236,21 +241,17 @@ export const ThumbnailLayout = ({
               "cursor-move focus:cursor-text": !!onFreeTextMove,
               "yt-thumbnail-free-text-shadow": freeTextShadow,
               "outline outline-2 outline-red-500": dragging,
-            }
-          )}
-          style={{
-            left: `${(freeTextX / THUMBNAIL_WIDTH) * 100}%`,
-            top: `${(freeTextY / THUMBNAIL_HEIGHT) * 100}%`,
-            fontSize: `${freeTextFontSize}px`,
-          }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-          onDoubleClick={handleDoubleClick}
-        >
-          {onFreeTextChange ? null : freeText}
-        </span>
+            })}
+            style={{ fontSize: `${freeTextFontSize}px` }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onDoubleClick={handleDoubleClick}
+          >
+            {onFreeTextChange ? null : freeText}
+          </span>
+        </div>
       )}
     </div>
   );
