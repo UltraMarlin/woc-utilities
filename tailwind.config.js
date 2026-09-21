@@ -43,7 +43,7 @@ export default {
           "100%": { backgroundPosition: "1270px 0" }, // 635 * 2
         },
         blink: {
-          "0%": { "border-right-width": "8px" },
+          "0%": { "border-right-width": "3px" },
           "50%": { "border-right-width": "0px" },
         },
         float: {

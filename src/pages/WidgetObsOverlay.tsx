@@ -9,6 +9,7 @@ import { LayoutDonationList } from "../components/obs-layout/LayoutDonationList"
 import { AnimatedStreamBanner } from "../components/obs-layout/AnimatedStreamBanner";
 import { LayoutBidwarWidget } from "../components/obs-layout/LayoutBidwarWidget";
 import { DonationAlert } from "../components/obs-layout/DonationAlert";
+import { SmashText } from "../components/SmashText";
 
 import {
   getAlertLengthFromDonationAmount,
@@ -17,10 +18,6 @@ import {
 import { preloadDonationGifs } from "../utils/widgets/donationAlertGifs";
 
 import obsOverlay from "../assets/layout/obs-overlay.png";
-
-//TODO REMOVE
-import obsOverlayWITHTEXT from "../assets/layout/LayoutStreamMain-text.png";
-import { SmashText } from "../components/SmashText";
 
 export const WidgetObsOverlay = () => {
   const [donationGoalText, setDonationGoalText] = useState("");
@@ -124,11 +121,11 @@ export const WidgetObsOverlay = () => {
   if (isPreloading) return <div className="text-7xl">Loading...</div>;
 
   return (
-    <div className="grid h-[1080px] w-[1920px] overflow-hidden font-exo *:col-start-1 *:row-start-1">
+    <div className="grid h-[1080px] w-[1920px] overflow-hidden font-exo text-purpleAccent26 *:col-start-1 *:row-start-1">
       {alertonly === null && (
         <>
           <GoalWidgetOverlay
-            className="absolute left-[346px] top-[916px] h-[153px] w-[667px] text-center"
+            className="absolute left-[326px] top-[922px] h-[137px] w-[580px] text-center"
             language={language}
             onDonationTextChange={setDonationGoalText}
             onGoalReachedTextChange={setAnnouncingGoalReached}
@@ -139,7 +136,7 @@ export const WidgetObsOverlay = () => {
           />
           <LayoutBidwarWidget
             className={cn(
-              "absolute left-[348px] top-[920px] z-10 flex h-[88px] w-[664px] items-center justify-center overflow-hidden text-center text-[18px] transition-opacity duration-1000",
+              "absolute left-[326px] top-[922px] z-10 flex h-[76px] w-[580px] items-center justify-center overflow-hidden text-center text-[18px] transition-opacity duration-1000",
               { "opacity-0": announcingGoalReached }
             )}
             language={language}
@@ -147,7 +144,7 @@ export const WidgetObsOverlay = () => {
           />
           <div
             className={cn(
-              "animate-donationAlert absolute left-[348px] top-[920px] z-10 flex h-[88px] w-[664px] items-center justify-center overflow-hidden px-4 text-center text-[18px] transition-opacity duration-1000",
+              "absolute left-[326px] top-[922px] z-10 flex h-[76px] w-[580px] animate-donationAlert items-center justify-center overflow-hidden px-4 text-center text-[18px] transition-opacity duration-1000",
               { "opacity-0": !announcingGoalReached }
             )}
           >
@@ -179,10 +176,6 @@ export const WidgetObsOverlay = () => {
           <AnimatedStreamBanner
             className="absolute left-[12px] top-[916px] z-10 h-[153px] w-[295px] text-center"
             language={language}
-          />
-          <div
-            className="z-50 opacity-20 hover:opacity-80"
-            style={{ backgroundImage: `url(${obsOverlayWITHTEXT})` }}
           />
         </>
       )}

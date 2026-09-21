@@ -108,7 +108,7 @@ export const LayoutBidwarWidget = ({
     <div className={className}>
       <div
         className={cn(
-          "absolute flex size-full items-center justify-center px-4 transition-opacity duration-[2000ms] ease-in",
+          "absolute flex size-full items-center justify-center px-4 text-[26px]/none font-bold transition-opacity duration-[2000ms] ease-in",
           { "opacity-0": showBidwars }
         )}
       >
@@ -135,13 +135,13 @@ export const LayoutBidwarWidget = ({
                 </span>
               ))}
             </div>
-            <div className="animate-scrollY relative h-full w-[56%] text-[15px]">
+            <div className="relative h-full w-[56%] animate-scrollY text-[15px]">
               <div className="grid w-full">
                 {preparedBidwars.map((bidwar, index) => (
                   <div
                     key={`${bidwar.name}-${index}`}
                     className={cn(
-                      "animate-scrollY top-0 col-start-1 row-start-1 h-fit w-full py-[5px] pl-3 pr-4 transition-opacity duration-[2000ms] ease-in",
+                      "top-0 col-start-1 row-start-1 h-fit w-full animate-scrollY py-[5px] pl-3 pr-4 transition-opacity duration-[2000ms] ease-in",
                       { "opacity-0": index !== currentBidwarIndex }
                     )}
                     style={styleList[index]}

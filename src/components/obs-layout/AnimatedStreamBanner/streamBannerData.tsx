@@ -14,12 +14,7 @@ export const streamBanners: MultiLanguageBanner[] = [
   {
     de: "Alle Spenden gehen an",
     en: "All donations go to",
-    both: (
-      <>
-        <br />
-        <span className="mt-1 text-xl">Islamic Relief</span>
-      </>
-    ),
+    both: <div className="text-[32px]">Sanktionsfrei</div>,
   },
   {
     de: (
@@ -28,7 +23,7 @@ export const streamBanners: MultiLanguageBanner[] = [
         <br />
         Spenden schreibt
         <br />
-        <span className="my-1 text-xl">! spenden</span>
+        <span className="text-3xl">!spenden</span>
         in den Chat
       </>
     ),
@@ -38,7 +33,7 @@ export const streamBanners: MultiLanguageBanner[] = [
         <br />
         link write
         <br />
-        <span className="my-1 text-xl">! donate</span>
+        <span className="text-3xl">!donate</span>
         in the chat
       </>
     ),
@@ -47,12 +42,12 @@ export const streamBanners: MultiLanguageBanner[] = [
     de: "Folgt uns auf",
     en: "Follow us on",
     both: (
-      <div className="mt-2 flex flex-col gap-1.5 text-[15px] *:flex *:items-center *:justify-center *:leading-6">
-        <span className="gap-1 tracking-tighter" key="mastodon">
+      <div className="my-2 flex flex-col gap-1.5 text-[20px] *:flex *:items-center *:justify-center *:leading-5">
+        <span className="gap-1 tracking-tight" key="mastodon">
           <FaMastodon size="1.5rem" />
           WeekOfCharity@tech.lgbt
         </span>
-        <span className="gap-1 tracking-[-0.07em]" key="bluesky">
+        <span className="gap-1 tracking-tight" key="bluesky">
           <FaBluesky size="1.5rem" />
           chesster.weekofcharity.de
         </span>
@@ -63,7 +58,7 @@ export const streamBanners: MultiLanguageBanner[] = [
     de: "Folgt uns auf",
     en: "Follow us on",
     both: (
-      <div className="mt-2 flex flex-col gap-1.5 text-[15px] *:flex *:items-center *:justify-center *:gap-2 *:leading-5 *:tracking-tighter">
+      <div className="mt-2 flex flex-col gap-1.5 text-[20px] *:flex *:items-center *:justify-center *:gap-2 *:leading-5">
         <span key="youtube">
           <FaYoutube size="1.5rem" />
           @WeekOfCharity

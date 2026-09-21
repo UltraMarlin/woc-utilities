@@ -4,6 +4,7 @@ import cn from "classnames";
 import { DonationGoal, useDonationGoals } from "../../hooks/useDonationGoals";
 import { useExternalDonationTotal } from "../../hooks/useExternalDonationTotal";
 import { customConfetti } from "../../utils/widgets/confettiEffect";
+import { formatEuro } from "../../utils/formatting/formatMoney";
 
 export type GoalWidgetOverlayProps = {
   language: "de" | "en";
@@ -65,7 +66,7 @@ export const GoalWidgetOverlay = ({
   const nextDonationGoalText = nextDonationGoalEntry?.name;
 
   const moneyTarget =
-    nextDonationGoal || getHighestDonationGoalAmount(donationGoals);
+    nextDonationGoal || getHighestDonationGoalAmount(donationGoals) || 500000; // TODO: Remove fallback
 
   const targetProgress =
     moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
@@ -171,10 +172,10 @@ export const GoalWidgetOverlay = ({
               "linear-gradient(to right, black var(--goalProgress), transparent var(--goalProgress))",
           }}
         />
-        <div className="absolute flex size-full items-center justify-center gap-2.5 pb-px text-[19px]">
-          {currentDonation || 0}
+        <div className="absolute flex size-full items-center justify-center gap-1.5 text-[24px]/none font-bold">
+          {formatEuro(currentDonation * 100 || 0)}
           <span>{language === "en" ? "of" : "von"}</span>
-          {moneyTarget}
+          {formatEuro(moneyTarget)}
         </div>
       </div>
     </div>

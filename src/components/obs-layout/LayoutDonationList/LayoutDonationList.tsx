@@ -4,6 +4,9 @@ import cn from "classnames";
 import type { Donation } from "../../../hooks/useDonations";
 import { LayoutDonationName } from "./LayoutDonationName";
 import { SmashText } from "../../SmashText";
+import { formatEuro } from "../../../utils/formatting/formatMoney";
+
+import heartIcon from "../../../assets/layout/heart-icon.png";
 
 export type LayoutDonationListProps = {
   headline: string;
@@ -41,26 +44,33 @@ export const LayoutDonationList = ({
   return (
     <div className={className}>
       <SmashText
-        className="mr-[14px] text-right text-[32px]"
+        className="mb-1 mr-[14px] mt-2 text-right text-[32px]/none"
         shadowClassName="!top-[0.6px]"
         text={headline}
       />
       <ul
         className={cn(
-          "flex flex-col gap-1.5 pb-1.5 pl-8 pr-2 text-[15px]",
+          "flex flex-col pb-1.5 pl-3 pr-2 text-[23.6px]/tight font-bold",
           listClassName
         )}
       >
         {donations?.map((donation) => (
           <li key={donation.id} className="flex justify-between">
-            <LayoutDonationName
-              name={donation.donator_name}
-              animate={newDonationIds.includes(donation.id)}
-              language={language}
-            />
-            {donation.donated_amount_in_cents !== null
-              ? donation.donated_amount_in_cents / 100
-              : null}
+            <span className="flex">
+              <img
+                className="mr-1 shrink-0 object-contain"
+                src={heartIcon}
+                alt=""
+                width={23}
+                height={25}
+              />
+              <LayoutDonationName
+                name={donation.donator_name}
+                animate={newDonationIds.includes(donation.id)}
+                language={language}
+              />
+            </span>
+            {formatEuro(donation.donated_amount_in_cents)}
           </li>
         ))}
       </ul>

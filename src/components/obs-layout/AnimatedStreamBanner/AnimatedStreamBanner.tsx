@@ -112,7 +112,7 @@ export const AnimatedStreamBanner = ({
             alt=""
             src={dynamicBox}
           />
-          <div className="absolute inset-0 flex flex-col items-center justify-center leading-7">
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-[24px]/tight">
             {currentBanner >= 0 && streamBanners[currentBanner][language]}
             {currentBanner >= 0 && streamBanners[currentBanner].both}
           </div>
