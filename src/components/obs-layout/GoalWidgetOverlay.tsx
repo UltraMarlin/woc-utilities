@@ -66,7 +66,7 @@ export const GoalWidgetOverlay = ({
   const nextDonationGoalText = nextDonationGoalEntry?.name;
 
   const moneyTarget =
-    nextDonationGoal || getHighestDonationGoalAmount(donationGoals) || 500000; // TODO: Remove fallback
+    nextDonationGoal || getHighestDonationGoalAmount(donationGoals);
 
   const targetProgress =
     moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
@@ -173,9 +173,9 @@ export const GoalWidgetOverlay = ({
           }}
         />
         <div className="absolute flex size-full items-center justify-center gap-1.5 text-[24px]/none font-bold">
-          {formatEuro(currentDonation * 100 || 0)}
+          {formatEuro((currentDonation || 0) * 100)}
           <span>{language === "en" ? "of" : "von"}</span>
-          {formatEuro(moneyTarget)}
+          {formatEuro((moneyTarget || 0) * 100)}
         </div>
       </div>
     </div>
