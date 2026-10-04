@@ -1,8 +1,19 @@
-const numberFormatter = new Intl.NumberFormat("de-DE", {
+const euroFormatter = new Intl.NumberFormat("de-DE", {
   style: "currency",
   currency: "EUR",
 });
 
-export const formatEuro = (cents: number | null | undefined) => {
-  return cents != null ? numberFormatter.format(cents / 100) : null;
+const euroFormatterFractionless = new Intl.NumberFormat("de-DE", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+
+export const formatEuro = (
+  cents: number | null | undefined,
+  fractionless: boolean = false
+) => {
+  if (cents == null) return "";
+  if (fractionless) return euroFormatterFractionless.format(cents / 100);
+  return euroFormatter.format(cents / 100);
 };

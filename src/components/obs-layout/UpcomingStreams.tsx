@@ -19,7 +19,7 @@ export const UpcomingStreams = ({ className }: UpcomingStreamsProps) => {
   );
 
   return (
-    <div className={cn("grid grid-rows-3", className)}>
+    <div className={cn("mt-8 grid grid-rows-3 gap-y-4 px-3.5", className)}>
       {streamsStatus === "pending" && <span>Laden...</span>}
       {streamsStatus === "error" && <span>Fehler beim Laden der Streams</span>}
       {streamsStatus === "success" &&

@@ -5,6 +5,7 @@ import { DonationGoal, useDonationGoals } from "../../hooks/useDonationGoals";
 import { useExternalDonationTotal } from "../../hooks/useExternalDonationTotal";
 import { customConfetti } from "../../utils/widgets/confettiEffect";
 import { formatEuro } from "../../utils/formatting/formatMoney";
+import { GoalWaveFill } from "./GoalWaveFill";
 
 export type GoalWidgetOverlayProps = {
   language: "de" | "en";
@@ -161,17 +162,8 @@ export const GoalWidgetOverlay = ({
 
   return (
     <div className={cn("flex flex-col", className)}>
-      <div className="relative mx-4 mt-auto h-10 overflow-hidden rounded-[18px]">
-        <div
-          className={cn(
-            "goal-widget-overlay-progress-transition absolute size-full animate-bgGoalsWidgetOverlay bg-[length:200%_100%] bg-repeat"
-          )}
-          style={{
-            "--goalProgress": `${targetProgress}%`,
-            maskImage:
-              "linear-gradient(to right, black var(--goalProgress), transparent var(--goalProgress))",
-          }}
-        />
+      <div className="relative mt-auto h-9 overflow-hidden rounded-[18px]">
+        <GoalWaveFill progress={targetProgress} className="absolute" />
         <div className="absolute flex size-full items-center justify-center gap-1.5 text-[24px]/none font-bold">
           {formatEuro((currentDonation || 0) * 100)}
           <span>{language === "en" ? "of" : "von"}</span>

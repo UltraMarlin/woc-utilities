@@ -24,7 +24,7 @@ export const LayoutBidwarOptionText = ({
   return (
     <span
       ref={spanRef}
-      className="inline-block animate-scrollX whitespace-nowrap tracking-[-0.06em]"
+      className="inline-block animate-scrollX whitespace-nowrap"
       style={styles}
     >
       {text}

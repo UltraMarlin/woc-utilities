@@ -4,6 +4,9 @@ import cn from "classnames";
 import { DonationGoal, useDonationGoals } from "../../hooks/useDonationGoals";
 import { useExternalDonationTotal } from "../../hooks/useExternalDonationTotal";
 import { formatEuro } from "../../utils/formatting/formatMoney";
+import { GoalWaveFill } from "./GoalWaveFill";
+
+import donationBar from "../../assets/layout/donation-bar.png";
 
 export type GoalWidgetProps = {
   language?: "de" | "en";
@@ -81,33 +84,32 @@ export const GoalWidgetIntermission = ({
   return (
     <div
       className={cn(
-        "flex h-full flex-col items-center justify-center gap-6",
+        "absolute flex h-full flex-col justify-center gap-10 px-4",
         className
       )}
     >
       <div
-        className={cn("text-balance text-center", {
-          "text-2xl/9": donationGoalText.length <= 40,
-          "text-lg": donationGoalText.length > 40,
-        })}
+        className={cn(
+          "w-full text-balance rounded-lg bg-purpleLight26 py-5 text-center",
+          {
+            "text-2xl/9": donationGoalText.length <= 40,
+            "text-lg": donationGoalText.length > 40,
+          }
+        )}
       >
         {donationGoalText}
       </div>
-      <div className="relative h-[63px] w-[576px]">
-        <div className="absolute size-full overflow-hidden rounded-[32px] bg-[#2d056873]">
-          <div
-            className="goal-widget-overlay-progress-transition size-full bg-[length:300%_100%] bg-repeat"
-            style={{
-              "--goalProgress": `${targetProgress}%`,
-              maskImage:
-                "linear-gradient(to right, black var(--goalProgress), transparent var(--goalProgress))",
-            }}
-          />
+      <div className="relative h-[49px] w-[695px]">
+        <div className="absolute flex size-full items-stretch p-1.5">
+          <div className="w-full overflow-hidden rounded-full">
+            <GoalWaveFill progress={targetProgress} />
+          </div>
         </div>
-        <div className="absolute flex size-full items-center justify-center gap-1.5 text-[24px]/none font-bold">
+        <img className="absolute" src={donationBar} alt="" />
+        <div className="absolute flex size-full items-center justify-center gap-1.5 text-[30px]/none font-bold text-purpleAccent26">
           {formatEuro((currentDonation || 0) * 100)}
           <span>{language === "en" ? "of" : "von"}</span>
-          {formatEuro((moneyTarget || 0) * 100)}
+          {formatEuro((moneyTarget || 0) * 100, true)}
         </div>
       </div>
     </div>

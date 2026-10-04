@@ -1,5 +1,5 @@
 import cn from "classnames";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useBidwarResults } from "../../hooks/useBidwarResults";
 
 import { formatEuro } from "../../utils/formatting/formatMoney";
@@ -93,51 +93,54 @@ export const IntermissionBidwarWidget = ({
   }, [preparedBidwars.length, individualBidwarDuration]);
 
   return (
-    <div className={cn("grid *:col-start-1 *:row-start-1", className)}>
+    <div
+      className={cn(
+        "mt-6 grid w-full px-3 *:col-start-1 *:row-start-1",
+        className
+      )}
+    >
       {bidwarResultsStatus === "success" &&
         currentBidwarIndex < preparedBidwars.length &&
         preparedBidwars.map((bidwar, index) => {
-          const text = `! bidwar: ${bidwar.name}`;
+          const text = `!bidwar: ${bidwar.name}`;
           return (
             <div
               key={`${bidwar.name}-${index}`}
               className={cn(
-                "flex h-full flex-col transition-opacity duration-[2000ms] ease-in",
+                "flex size-full flex-col rounded-lg bg-purpleLight26 transition-opacity duration-[2000ms] ease-in",
                 {
                   "opacity-0": index !== currentBidwarIndex,
                 }
               )}
             >
-              <div className="relative grid text-center text-xl/7">
-                <span className="font-bold">{text}</span>
+              <div className="mb-1.5 mt-2 text-center text-[24px] uppercase italic tracking-[0.067em]">
+                {text}
               </div>
-              <div className="relative h-full">
-                <div
-                  className={cn(
-                    "absolute top-0 grid w-full grid-cols-[max-content_1fr_max-content] gap-x-2 pl-1 pr-3 *:-mb-1.5",
-                    {
-                      "text-[15px]/[30px]": bidwar.options.length > 3,
-                      "text-[17px]/[35px]": bidwar.options.length <= 3,
-                    }
-                  )}
-                >
-                  {bidwar.options.map((option, optionIndex) => (
-                    <Fragment key={option.name}>
-                      <div>{optionIndex + 1}.</div>
-                      <div className="no-scrollbar flex overflow-x-hidden text-nowrap text-left">
-                        <LayoutBidwarOptionText
-                          text={option.name}
-                          maxWidth={494}
-                        />
-                      </div>
-                      <div className="flex items-start justify-end">
-                        {formatEuro(
-                          option.amount !== null ? option.amount : null
-                        )}
-                      </div>
-                    </Fragment>
-                  ))}
-                </div>
+              <div className="mb-2.5 grid w-full grid-cols-[max-content_1fr_max-content] gap-x-2 text-[23px]/[25px] font-semibold uppercase tracking-widest">
+                {bidwar.options.map((option, optionIndex) => (
+                  <div
+                    key={option.name}
+                    className={cn(
+                      "col-span-full grid grid-rows-subgrid pl-11 pr-7",
+                      {
+                        "bg-purpleMuted26": optionIndex % 2 === 0,
+                      }
+                    )}
+                  >
+                    <div className="tracking-tight">{optionIndex + 1}.</div>
+                    <div className="no-scrollbar ml-10 flex overflow-x-hidden text-nowrap text-left">
+                      <LayoutBidwarOptionText
+                        text={option.name}
+                        maxWidth={494}
+                      />
+                    </div>
+                    <div className="flex items-start justify-end tracking-wider">
+                      {formatEuro(
+                        option.amount !== null ? option.amount : null
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           );

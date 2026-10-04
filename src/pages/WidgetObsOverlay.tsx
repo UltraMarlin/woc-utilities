@@ -123,7 +123,7 @@ export const WidgetObsOverlay = () => {
       {alertonly === null && (
         <>
           <GoalWidgetOverlay
-            className="absolute left-[326px] top-[922px] h-[137px] w-[580px] text-center"
+            className="absolute left-[324px] top-[922px] h-[137px] w-[584px] text-center"
             language={language}
             onDonationTextChange={setDonationGoalText}
             onGoalReachedTextChange={setAnnouncingGoalReached}

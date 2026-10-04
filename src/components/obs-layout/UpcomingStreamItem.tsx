@@ -23,41 +23,55 @@ export const UpcomingStreamItem = ({
   const startDate = start ? new Date(start + "+02:00") : undefined;
   const timeUntilStart = (startDate?.getTime() || 0) - new Date().getTime();
   const startString =
-    timeUntilStart < 0 ? "Now!" : formatTimestampInGermany(start);
+    timeUntilStart < 0 ? "NOW!" : formatTimestampInGermany(start);
 
   return (
-    <div className={cn("relative flex items-center gap-6 px-3", className)}>
-      <div className="size-[112px] shrink-0 overflow-hidden rounded-lg">
+    <div
+      className={cn(
+        "relative flex h-[90px] items-center gap-2.5 rounded-lg bg-purpleLight26 p-1.5 pr-3.5",
+        className
+      )}
+    >
+      <div className="h-[76px] w-[84px] shrink-0 overflow-hidden rounded-md">
         {activityIcon && (
           <img
-            src={`${import.meta.env.VITE_API_BASE_URL}/assets/${activityIcon}?width=256&height=256&quality=75&fit=cover&format=webp`}
+            src={`${import.meta.env.VITE_API_BASE_URL}/assets/${activityIcon}?width=128&height=128&quality=100&fit=cover&format=webp`}
             alt=""
           />
         )}
       </div>
       <div className="grid w-full grid-cols-[1fr_max-content] gap-3 py-2">
-        <div className="flex flex-col justify-center gap-3">
+        <div className="relative">
           {activityName && (
             <div
-              className={cn({
-                "text-[32px]/[1.25]": activityName.length <= 20,
-                "text-[30px]/[1.25]":
-                  activityName.length > 20 && activityName.length <= 30,
-                "text-[25px]/[1.2]":
-                  activityName.length > 30 && activityName.length <= 48,
-                "text-[23px]/[1.15]": activityName.length > 48,
-              })}
+              className={cn(
+                "absolute flex h-[50px] items-center text-balance",
+                {
+                  "text-[36px]/[1.2]": activityName.length <= 20,
+                  "text-[32px]/[1.2]":
+                    activityName.length > 20 && activityName.length <= 30,
+                  "text-[28px]/[1.15]":
+                    activityName.length > 30 && activityName.length <= 48,
+                  "text-[24px]/none": activityName.length > 48,
+                }
+              )}
             >
               {activityName}
             </div>
           )}
           {streamerLink && (
-            <div>twitch.tv/{getTwitchUsername(streamerLink)}</div>
+            <div className="absolute bottom-1 text-[23px]/none italic tracking-wider opacity-70">
+              twitch.tv/{getTwitchUsername(streamerLink)}
+            </div>
           )}
         </div>
-        <div className="flex flex-col items-center justify-center text-xl">
-          <div>{startString}</div>
-          <div className="mb-2.5 text-2xl/4">-</div>
+        <div className="mt-1 flex flex-col items-center justify-center text-[24px]/none tabular-nums tracking-wide">
+          <div className={cn({ "font-bold": startString === "NOW!" })}>
+            {startString}
+          </div>
+          <div className="mb-2.5 translate-y-1 text-[22px]/4 font-extrabold">
+            -
+          </div>
           <div>{formatTimestampInGermany(end)}</div>
         </div>
       </div>

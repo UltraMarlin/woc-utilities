@@ -4,13 +4,13 @@ import { useSearchParams } from "react-router-dom";
 
 import { Donation, DonationSorting, useDonations } from "../hooks/useDonations";
 
+import { SmashText } from "../components/SmashText";
 import { DonationAlert } from "../components/obs-layout/DonationAlert";
-
 import { IntermissionClock } from "../components/obs-layout/IntermissionClock";
-
 import { UpcomingStreams } from "../components/obs-layout/UpcomingStreams";
 import { GoalWidgetIntermission } from "../components/obs-layout/GoalWidgetIntermission";
 import { TextDocumentWidget } from "../components/obs-layout/TextDocumentWidget";
+import { IntermissionBidwarWidget } from "../components/obs-layout/IntermissionBidwarWidget";
 
 import {
   getAlertLengthFromDonationAmount,
@@ -23,7 +23,10 @@ import headerPause from "../assets/layout/header-pause.png";
 import headerStart from "../assets/layout/header-start.png";
 import headerEnde from "../assets/layout/header-ende.png";
 import headerFin from "../assets/layout/header-fin.png";
-import { IntermissionBidwarWidget } from "../components/obs-layout/IntermissionBidwarWidget";
+import intermissionOverlay from "../assets/layout/obs-intermission-overlay.png";
+
+import intermissionComparison from "../assets/layout/INTERMISSION_TEST_GOALS.png";
+import { IntermissionIndicator } from "../components/obs-layout/IntermissionIndicator";
 
 const validHeaderTypes = ["pause", "start", "fin"];
 
@@ -136,44 +139,76 @@ export const WidgetObsIntermission = () => {
   return (
     <div
       className={cn(
-        "relative grid h-[1080px] w-[1920px] overflow-hidden *:col-start-1 *:row-start-1"
+        "relative grid h-[1080px] w-[1920px] overflow-hidden bg-yellow26 font-exo text-white *:col-start-1 *:row-start-1"
       )}
     >
-      <div className="absolute left-[49px] top-[156px] flex w-[450px] justify-center">
-        <img src={headerImage} alt="" />
-      </div>
-      <UpcomingStreams className="px-4 py-7" />
-
-      <div className="size-full backdrop-blur-[7px]">
+      <div className="absolute right-[51px] top-[74px] h-[724px] w-[508px] overflow-hidden rounded-xl">
         <img
+          className="h-[784px] -translate-y-3 object-cover object-[32%_50%]"
           src={bigArtwork}
           alt=""
-          className="h-full object-cover object-[35%_50%]"
         />
       </div>
-
-      <TextDocumentWidget language={language} />
-
-      <div
-        className={cn(
-          "absolute left-[687px] top-[630px] z-10 w-[675px] transition-[transform,opacity] duration-[800ms]",
-          {
-            "translate-y-[300px] scale-0": activeWindow !== "donationGoals",
-          }
-        )}
-      >
-        <GoalWidgetIntermission language={language} />
+      <img className="absolute inset-0" src={intermissionOverlay} alt="" />
+      <div className="absolute left-[36px] top-[29px] flex h-[296px] w-[706px] items-center justify-center">
+        <img src={headerImage} alt="" />
       </div>
 
-      <div
-        className={cn(
-          "absolute left-[687px] top-[630px] z-10 w-[675px] transition-[transform,opacity] duration-[800ms]",
-          {
-            "translate-y-[300px] scale-0": activeWindow !== "bidwars",
-          }
-        )}
-      >
-        <div className="h-full p-4">
+      <SmashText
+        text="Chesster"
+        shadowClassName="!top-[1px]"
+        className="absolute right-[68px] top-[98px] text-[42px]/none uppercase tracking-[0.09em]"
+      />
+
+      <SmashText
+        text="Upcoming Streams"
+        shadowClassName="!top-[1px]"
+        className="absolute right-[666px] top-[280px] text-[42px]/none uppercase tracking-[0.09em]"
+      />
+      <div className="absolute left-[562px] top-[306px] h-[346px] w-[726px]">
+        <UpcomingStreams />
+      </div>
+
+      <SmashText
+        text="Message Board"
+        shadowClassName="!top-[0.6px]"
+        className="absolute left-[97px] top-[347px] text-[33px]/none uppercase tracking-widest"
+      />
+      <div className="absolute left-[79px] top-[373px] h-[380px] w-[371px]">
+        <TextDocumentWidget language={language} />
+      </div>
+
+      <SmashText
+        text="Donation Goals"
+        shadowClassName="!top-[0.6px]"
+        className="tracking-wides absolute left-[568px] top-[735px] text-[33px]/none uppercase tracking-widest"
+      />
+      <IntermissionIndicator className="absolute left-[505px] top-[720px]" />
+      <SmashText
+        text="Bidwars"
+        shadowClassName="!top-[0.6px]"
+        className="tracking-wides absolute right-[702px] top-[735px] text-[33px]/none uppercase tracking-widest"
+      />
+      <IntermissionIndicator className="absolute right-[869px] top-[720px]" />
+      <div className="absolute left-[514px] top-[760px] h-[246px] w-[726px]">
+        <div
+          className={cn(
+            "absolute inset-0 transition-[transform,opacity] duration-[800ms]",
+            {
+              "translate-y-[24px] opacity-0": activeWindow !== "donationGoals",
+            }
+          )}
+        >
+          <GoalWidgetIntermission language={language} />
+        </div>
+        <div
+          className={cn(
+            "absolute inset-0 transition-[transform,opacity] duration-[800ms]",
+            {
+              "translate-y-[24px] opacity-0": activeWindow !== "bidwars",
+            }
+          )}
+        >
           <IntermissionBidwarWidget
             totalBidwarDuration={SWITCH_BIDWAR_GOAL_INTERVAL}
             language={language}
@@ -181,7 +216,7 @@ export const WidgetObsIntermission = () => {
         </div>
       </div>
 
-      <IntermissionClock className="ml-auto" />
+      <IntermissionClock className="absolute bottom-[52px] right-[136px] h-[112px] w-[304px]" />
       <div
         className={cn(
           "absolute left-[120px] top-[258px] z-50 w-[606px] overflow-hidden text-lg transition-[transform,opacity] duration-[500ms]",
@@ -195,9 +230,13 @@ export const WidgetObsIntermission = () => {
           comment={donationAlertComment}
           name={donationAlertName}
           language={language}
-          withBgBlur
         />
       </div>
+      <img
+        className="absolute inset-0 z-50 opacity-0 transition-opacity duration-500 hover:opacity-80"
+        src={intermissionComparison}
+        alt=""
+      />
     </div>
   );
 };

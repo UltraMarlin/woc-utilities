@@ -23,9 +23,10 @@ export const IntermissionClock = ({ className }: IntermissionClockProps) => {
   }, []);
 
   return (
-    <div className={cn("flex w-[90px] flex-col items-center", className)}>
-      <div className="text-[22px]">{time}</div>
-      <div className="pb-0.5 text-[16px]/5">UTC+2</div>
+    <div className={cn("font-smash text-[58px]/none", className)}>
+      <div className="rotate3 ml-[35px] mr-[24px] mt-[45px] text-center tabular-nums tracking-widest">
+        {time}
+      </div>
     </div>
   );
 };

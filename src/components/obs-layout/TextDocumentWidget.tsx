@@ -74,19 +74,25 @@ export const TextDocumentWidget = ({
       : "Schreibe deine Nachricht mit !txt im Chat!";
 
   return (
-    <div className={cn("flex h-full flex-col items-start", className)}>
-      <div className="mt-2 flex w-full flex-col overflow-hidden">
-        <div className="mb-4 border-y-[3px] border-[#d7d4ff] pb-1.5 pt-2 text-center text-[#d7d4ff]">
-          {helperText}
-        </div>
-        <div className="flex max-w-[488px] flex-col-reverse overflow-hidden pb-3 text-base/7 text-[#d7d4ff]">
+    <div
+      className={cn(
+        "flex h-full flex-col items-start p-2 pb-1 text-[15px]/[1.14]",
+        className
+      )}
+    >
+      <div className="mt-4 flex h-[386px] w-full flex-col overflow-hidden rounded-lg bg-gradient-to-b from-purpleAccent26 to-purpleLight26 px-3.5 py-2.5 font-normal tracking-wider">
+        <div className="flex flex-col-reverse overflow-hidden pb-1">
           <div>
             <span>{visibleDocumentText}</span>
-            <span className="inline-flex pl-0.5">
-              <span className="h-5 translate-y-0.5 animate-blink border-current" />
+            <span className="inline-flex h-[0.8lh] pl-0.5">
+              <span className="translate-y-0.5 animate-blink border-current" />
             </span>
           </div>
         </div>
+      </div>
+      <div className="h-[140px] w-full"></div>
+      <div className="w-full rounded bg-purpleLight26 text-center text-sm/[1.6] font-semibold uppercase italic tracking-wider">
+        {helperText}
       </div>
     </div>
   );

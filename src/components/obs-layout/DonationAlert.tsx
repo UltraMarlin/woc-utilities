@@ -5,7 +5,6 @@ export type DonationAlertProps = {
   name?: string | null;
   amount?: number | null;
   comment?: string | null;
-  withBgBlur?: boolean;
   language: "de" | "en";
 };
 

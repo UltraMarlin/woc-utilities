@@ -32,6 +32,7 @@ export default {
         yellow26: "#e8cb56",
         purpleShadow26: "#472457",
         purpleAccent26: "#4f1f66",
+        purpleMuted26: "#533670",
         purpleLight26: "#68438c",
         purpleDark26: "#240728",
       },
@@ -42,6 +43,10 @@ export default {
         bgGoalsWidgetOverlay: {
           "0%": { backgroundPosition: "0 0" },
           "100%": { backgroundPosition: "1270px 0" }, // 635 * 2
+        },
+        goalWave: {
+          "0%": { maskPosition: "0 0, 100% 0" },
+          "100%": { maskPosition: "0 0, 100% 47px" },
         },
         blink: {
           "0%": { "border-right-width": "3px" },
@@ -78,6 +83,7 @@ export default {
       },
       animation: {
         bgGoalsWidgetOverlay: "bgGoalsWidgetOverlay 10s linear infinite",
+        goalWave: "goalWave 3.9s linear infinite",
         blink: "blink step-end infinite 1.25s",
         donationAlert: "donationAlert infinite 1920ms",
         float: "float infinite ease-in 3s",
