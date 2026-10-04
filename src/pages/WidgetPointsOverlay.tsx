@@ -1,20 +1,9 @@
 import { usePointsWidget } from "../hooks/usePointsWidget";
 import { PointsPanel } from "../components/pointsOverlay/PointsPanel";
-import { useEffect } from "react";
 
 export const WidgetPointsOverlay = () => {
-  const {
-    data: pointsWidgetEntries,
-    status: pointsWidgetStatus,
-    refetch: refetchPointsWidget,
-  } = usePointsWidget();
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      void refetchPointsWidget();
-    }, 5 * 1000);
-    return () => clearInterval(id);
-  }, [refetchPointsWidget]);
+  const { data: pointsWidgetEntries, status: pointsWidgetStatus } =
+    usePointsWidget();
 
   if (pointsWidgetStatus !== "success") return "Loading...";
 

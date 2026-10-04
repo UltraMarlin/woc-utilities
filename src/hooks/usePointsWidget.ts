@@ -26,6 +26,9 @@ export const usePointsWidget = () => {
       );
       return data.data;
     },
+    staleTime: 5 * 1000,
+    refetchInterval: 5 * 1000,
+    refetchIntervalInBackground: true,
   });
 
   const pointsWidgetEntries: PointWidgetEntry[] =

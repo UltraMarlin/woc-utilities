@@ -11,4 +11,14 @@ export const formatShortTime = (date: Date) => {
   return germanTimeFormatter.format(date);
 };
 
+export const formatTimestampInGermany = (dateString?: string) =>
+  dateString
+    ? germanTimeFormatter.format(new Date(dateString + "+02:00"))
+    : dateString;
+
+export const getGermanTimestamp = (offsetSeconds = 0) =>
+  new Date(Date.now() + offsetSeconds * 1000)
+    .toLocaleString("sv-SE", { timeZone: "Europe/Berlin" })
+    .replace(" ", "T");
+
 export const formatTimeAlt = (date: Date) => `${date.getHours()} Uhr`;

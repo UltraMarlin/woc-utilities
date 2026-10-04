@@ -15,7 +15,7 @@ export enum DonationSorting {
 
 export const useDonations = (sorting?: DonationSorting, limit: number = 3) => {
   return useQuery({
-    queryKey: ["donations", sorting],
+    queryKey: ["donations", sorting, limit],
     queryFn: async () => {
       const { data } = await axios.get<{ data: Donation[] }>(
         `${import.meta.env.VITE_API_BASE_URL}/items/donations?fields=id,donated_amount_in_cents,donator_name,donation_comment&limit=${limit}${sorting ? `&sort=${sorting}` : ""}${sorting === DonationSorting.HIGHEST ? "&filter[donated_amount_in_cents][_nnull]=true" : ""}&filter[hide_from_layout][_neq]=true`

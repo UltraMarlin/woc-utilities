@@ -15,6 +15,7 @@ import { WidgetsHome } from "./pages/WidgetsHome.tsx";
 import { WidgetPointsOverlay } from "./pages/WidgetPointsOverlay.tsx";
 import { WidgetObsOverlay } from "./pages/WidgetObsOverlay.tsx";
 import { WidgetObsOverlayBackground } from "./pages/WidgetObsOverlayBackground.tsx";
+import { WidgetObsIntermission } from "./pages/WidgetObsIntermission.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -41,6 +42,10 @@ createRoot(document.getElementById("root")!).render(
           <Route
             path="streaming/obs-background"
             element={<WidgetObsOverlayBackground />}
+          />
+          <Route
+            path="streaming/obs-intermission"
+            element={<WidgetObsIntermission />}
           />
         </Route>
       </Routes>

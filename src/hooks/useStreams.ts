@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
+import { getGermanTimestamp } from "../utils/formatting/time";
+
 export type Stream = {
   activity: {
     id: number;
@@ -37,6 +39,16 @@ export enum StreamLanguage {
   DEEN = "deen",
 }
 
+export enum StreamFilter {
+  UPCOMING = "upcoming",
+}
+
+export type UseStreamsOptions = {
+  filter?: StreamFilter;
+  limit?: number;
+  refetchInterval?: number;
+};
+
 export const translateStream =
   (lang: "de" | "en") => (stream: StreamWithAlternatives) => {
     const { activity, ...rest } = stream;
@@ -57,10 +69,18 @@ export const translateStreams =
 export const useStreams = (
   minEndTimestamp?: string,
   maxEndTimestamp?: string,
-  lang: "de" | "en" = "de"
+  lang: "de" | "en" = "de",
+  { filter, limit, refetchInterval }: UseStreamsOptions = {}
 ) => {
   return useQuery({
-    queryKey: ["streams", minEndTimestamp, maxEndTimestamp, lang],
+    queryKey: [
+      "streams",
+      minEndTimestamp,
+      maxEndTimestamp,
+      lang,
+      filter,
+      limit,
+    ],
     queryFn: async () => {
       const minFilter = minEndTimestamp
         ? `&filter[_and][0][end][_gt]=${minEndTimestamp}`
@@ -68,11 +88,18 @@ export const useStreams = (
       const maxFilter = maxEndTimestamp
         ? `&filter[_and][1][end][_lte]=${maxEndTimestamp}`
         : "";
+      const upcomingFilter =
+        filter === StreamFilter.UPCOMING
+          ? `&filter[_and][2][start][_gt]=${getGermanTimestamp(-30 * 60)}`
+          : "";
+      const limitOption = limit ? `&limit=${limit}` : "";
       const { data } = await axios.get<{ data: StreamWithAlternatives[] }>(
-        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,fellows.people_id.id,fellows.people_id.name,fellows.people_id.stream_link,streamer.id,streamer.stream_link,streamer.name&sort=start${minFilter}${maxFilter}`
+        `${import.meta.env.VITE_API_BASE_URL}/items/timeslots?fields=id,start,end,language,activity.icon,activity.id,activity.name,activity.name_en,fellows.people_id.id,fellows.people_id.name,fellows.people_id.stream_link,streamer.id,streamer.stream_link,streamer.name&sort=start${minFilter}${maxFilter}${upcomingFilter}${limitOption}`
       );
       return data.data;
     },
     select: translateStreams(lang),
+    refetchInterval,
+    refetchIntervalInBackground: true,
   });
 };

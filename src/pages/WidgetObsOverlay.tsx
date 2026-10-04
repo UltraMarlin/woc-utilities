@@ -33,9 +33,7 @@ export const WidgetObsOverlay = () => {
   const [displayedGoalReached, setDisplayedGoalReached] = useState<string>("");
   const [isPreloading, setPreloading] = useState(true);
   const [searchParams] = useSearchParams();
-  // Unused, but will be needed later
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const theme = searchParams.get("theme");
+  // const theme = searchParams.get("theme");
   const name = searchParams.get("name");
   const pronouns = searchParams.get("pronouns");
   const lang = searchParams.get("lang");
