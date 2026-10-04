@@ -84,16 +84,16 @@ export const GoalWidgetIntermission = ({
   return (
     <div
       className={cn(
-        "absolute flex h-full flex-col justify-center gap-10 px-4",
+        "absolute mt-1 flex h-full flex-col justify-center gap-6 px-4",
         className
       )}
     >
       <div
         className={cn(
-          "w-full text-balance rounded-lg bg-purpleLight26 py-5 text-center",
+          "flex h-[120px] w-full items-center justify-center text-balance rounded-lg bg-gradient-to-b from-purpleAccent26 to-purpleLight26 px-4 text-center font-semibold tracking-wide",
           {
-            "text-2xl/9": donationGoalText.length <= 40,
-            "text-lg": donationGoalText.length > 40,
+            "text-[32px]/[1.05]": donationGoalText.length <= 80,
+            "text-[26px]/[1.2]": donationGoalText.length > 80,
           }
         )}
       >
