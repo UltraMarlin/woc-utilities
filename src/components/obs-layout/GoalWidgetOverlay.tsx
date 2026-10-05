@@ -71,8 +71,12 @@ export const GoalWidgetOverlay = ({
   const moneyTarget =
     nextDonationGoal || getHighestDonationGoalAmount(donationGoals);
 
-  const targetProgress =
-    moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
+  const allGoalsReached =
+    typeof moneyTarget !== "undefined" && currentDonation >= moneyTarget;
+
+  const targetProgress = allGoalsReached
+    ? 100
+    : moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
       ? ((currentDonation - lastReachedGoalAmount) * 100) /
         (moneyTarget - lastReachedGoalAmount)
       : 0;

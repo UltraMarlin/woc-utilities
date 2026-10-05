@@ -10,6 +10,7 @@ import donationBar from "../../assets/layout/donation-bar.png";
 
 export type GoalWidgetProps = {
   language?: "de" | "en";
+  theme?: "dark" | "light";
   className?: string;
 };
 
@@ -20,6 +21,7 @@ const getHighestDonationGoalAmount = (goals: DonationGoal[] | undefined) => {
 
 export const GoalWidgetIntermission = ({
   language = "de",
+  theme,
   className,
 }: GoalWidgetProps) => {
   const { data: donations, status: donationsStatus } =
@@ -60,8 +62,12 @@ export const GoalWidgetIntermission = ({
   const moneyTarget =
     nextDonationGoal || getHighestDonationGoalAmount(donationGoals);
 
-  const targetProgress =
-    moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
+  const allGoalsReached =
+    typeof moneyTarget !== "undefined" && currentDonation >= moneyTarget;
+
+  const targetProgress = allGoalsReached
+    ? 100
+    : moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
       ? ((currentDonation - lastReachedGoalAmount) * 100) /
         (moneyTarget - lastReachedGoalAmount)
       : 0;
@@ -102,7 +108,7 @@ export const GoalWidgetIntermission = ({
       <div className="relative h-[49px] w-[695px]">
         <div className="absolute flex size-full items-stretch p-1.5">
           <div className="w-full overflow-hidden rounded-full">
-            <GoalWaveFill progress={targetProgress} />
+            <GoalWaveFill progress={targetProgress} theme={theme} />
           </div>
         </div>
         <img className="absolute" src={donationBar} alt="" />

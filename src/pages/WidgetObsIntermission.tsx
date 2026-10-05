@@ -228,7 +228,7 @@ export const WidgetObsIntermission = () => {
             }
           )}
         >
-          <GoalWidgetIntermission language={language} />
+          <GoalWidgetIntermission language={language} theme={theme} />
         </div>
         <div
           className={cn(

@@ -12,7 +12,7 @@ export type GoalWaveFillProps = {
 
 export const GoalWaveFill = ({
   progress,
-  theme,
+  theme = "light",
   className,
 }: GoalWaveFillProps) => (
   <div
