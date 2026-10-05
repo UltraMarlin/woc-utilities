@@ -3,6 +3,10 @@ import { PageContainer } from "../components/PageContainer";
 
 const links = [
   {
+    href: "/streaming/obs-setup",
+    label: "OBS Setup",
+  },
+  {
     href: "/streaming/points-overlay",
     label: "Points Overlay",
   },

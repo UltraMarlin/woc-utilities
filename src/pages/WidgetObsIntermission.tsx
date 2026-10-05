@@ -63,8 +63,10 @@ export const WidgetObsIntermission = () => {
   const [playDonationAlert, setPlayDonationAlert] = useState(false);
   const [isPreloading, setPreloading] = useState(true);
   const [searchParams] = useSearchParams();
-  const enParam = searchParams.get("en");
-  const language = enParam !== null ? "en" : "de";
+  const language =
+    searchParams.get("lang") === "en" || searchParams.get("en") !== null
+      ? "en"
+      : "de";
   const testalert = searchParams.get("testalert");
   const type = searchParams.get("type");
   const theme = getTheme(searchParams.get("theme"));

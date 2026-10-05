@@ -19,11 +19,30 @@ import {
 import { preloadDonationGifs } from "../utils/widgets/donationAlertGifs";
 
 import obsOverlay from "../assets/layout/obs-overlay.png";
+import obsOverlayNoCam from "../assets/layout/obs-overlay-no-cam.png";
 
 const GOALS_PHASE_DURATION = 10 * 60 * 1000;
 const BIDWAR_DURATION = 60 * 1000;
 const MAX_BIDWAR_PHASE_DURATION = 4 * 60 * 1000;
 const SWITCH_DURATION = 2200;
+
+const getNoCamNameFontSize = (name: string) => {
+  if (name.length <= 4) return 62;
+  if (name.length <= 6) return 52;
+  if (name.length <= 8) return 46;
+  if (name.length <= 12) return 34;
+  if (name.length <= 30) return 28;
+  return 22;
+};
+
+const getNoCamNameFontShadowOffsetClassName = (name: string) => {
+  if (name.length <= 4) return "!top-[3px]";
+  if (name.length <= 6) return "!top-[2px]";
+  if (name.length <= 8) return "!top-[2px]";
+  if (name.length <= 12) return "!top-[0.6px]";
+  if (name.length <= 30) return "!top-[0.6px]";
+  return "!top-[0.6px]";
+};
 
 export const WidgetObsOverlay = () => {
   const { activeWindow, currentBidwarId } = useWidgetRotation({
@@ -52,6 +71,11 @@ export const WidgetObsOverlay = () => {
   const lang = searchParams.get("lang");
   const testalert = searchParams.get("testalert");
   const alertonly = searchParams.get("alertonly");
+  const noCam = searchParams.get("nocam") !== null;
+  const displayedName = name === "empty" ? "" : name || "";
+  const noCamNameFontSize = getNoCamNameFontSize(displayedName);
+  const noCamNameFontShadowOffsetClassName =
+    getNoCamNameFontShadowOffsetClassName(displayedName);
   const language = lang === "en" ? "en" : "de";
 
   const skipAlerts = useRef<boolean>(true);
@@ -152,7 +176,9 @@ export const WidgetObsOverlay = () => {
           />
           <div
             className="z-10"
-            style={{ backgroundImage: `url(${obsOverlay})` }}
+            style={{
+              backgroundImage: `url(${noCam ? obsOverlayNoCam : obsOverlay})`,
+            }}
           />
           <LayoutBidwarWidget
             className={cn(
@@ -173,14 +199,32 @@ export const WidgetObsOverlay = () => {
             {language === "en" ? "GOAL REACHED:" : "ZIEL ERREICHT:"}{" "}
             {displayedGoalReached.split(" - ")[1] || displayedGoalReached}
           </div>
+          {noCam ? (
+            <div className="absolute left-[32px] top-[4px] z-10 flex h-[62px] w-[266px] items-center">
+              <SmashText
+                className={cn("leading-none tracking-wide", {
+                  "whitespace-nowrap": noCamNameFontSize > 28,
+                })}
+                style={{ fontSize: `${noCamNameFontSize}px` }}
+                shadowClassName={noCamNameFontShadowOffsetClassName}
+                text={displayedName}
+              />
+            </div>
+          ) : (
+            <SmashText
+              className="absolute left-[64px] top-[21px] z-10 whitespace-nowrap text-[32px] tracking-wide"
+              shadowClassName="!top-[1px]"
+              text={displayedName}
+            />
+          )}
           <SmashText
-            className="absolute left-[64px] top-[21px] z-10 whitespace-nowrap text-[32px] tracking-wide"
-            shadowClassName="!top-[1px]"
-            text={name === "empty" ? "" : name || ""}
-          />
-          <SmashText
-            className="absolute left-[182px] top-[228px] z-10 whitespace-nowrap text-right text-[23px]"
-            shadowClassName="!top-[0.8px]"
+            className={cn(
+              "absolute z-10 whitespace-nowrap text-right",
+              noCam
+                ? "left-[298px] top-[74px] -translate-x-full text-[25px]"
+                : "left-[182px] top-[228px] text-[23px]"
+            )}
+            shadowClassName={cn(noCam ? "!top-[1px]" : "!top-[0.8px]")}
             text={pronouns === "empty" ? "" : pronouns || ""}
           />
           <LayoutDonationList

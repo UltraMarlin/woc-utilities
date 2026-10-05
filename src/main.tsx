@@ -16,6 +16,7 @@ import { WidgetPointsOverlay } from "./pages/WidgetPointsOverlay.tsx";
 import { WidgetObsOverlay } from "./pages/WidgetObsOverlay.tsx";
 import { WidgetObsOverlayBackground } from "./pages/WidgetObsOverlayBackground.tsx";
 import { WidgetObsIntermission } from "./pages/WidgetObsIntermission.tsx";
+import { WidgetObsSetup } from "./pages/WidgetObsSetup.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -34,6 +35,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="introductions" element={<IntroductionImages />} />
           <Route path="social-posts" element={<SocialsPostImages />} />
           <Route path="streaming" element={<WidgetsHome />} />
+          <Route path="streaming/obs-setup" element={<WidgetObsSetup />} />
           <Route
             path="streaming/points-overlay"
             element={<WidgetPointsOverlay />}
