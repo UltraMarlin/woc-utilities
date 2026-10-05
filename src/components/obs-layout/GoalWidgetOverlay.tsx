@@ -12,6 +12,7 @@ export type GoalWidgetOverlayProps = {
   onDonationTextChange?: (donationGoalText: string) => void;
   onGoalReachedTextChange?: (announcingName: string | undefined) => void;
   className?: string;
+  theme?: "dark" | "light";
 };
 
 const getHighestDonationGoalAmount = (goals: DonationGoal[] | undefined) => {
@@ -24,6 +25,7 @@ export const GoalWidgetOverlay = ({
   onDonationTextChange,
   onGoalReachedTextChange,
   className,
+  theme,
 }: GoalWidgetOverlayProps) => {
   const [announcingGoalReached, setAnnouncingGoalReached] = useState(false);
 
@@ -163,7 +165,11 @@ export const GoalWidgetOverlay = ({
   return (
     <div className={cn("flex flex-col", className)}>
       <div className="relative mt-auto h-9 overflow-hidden rounded-[18px]">
-        <GoalWaveFill progress={targetProgress} className="absolute" />
+        <GoalWaveFill
+          progress={targetProgress}
+          className="absolute"
+          theme={theme}
+        />
         <div className="absolute flex size-full items-center justify-center gap-1.5 text-[24px]/none font-bold">
           {formatEuro((currentDonation || 0) * 100)}
           <span>{language === "en" ? "of" : "von"}</span>

@@ -6,13 +6,22 @@ const WAVE_EDGE_MASK = `data:image/svg+xml,${encodeURIComponent(
 
 export type GoalWaveFillProps = {
   progress: number;
+  theme?: "dark" | "light";
   className?: string;
 };
 
-export const GoalWaveFill = ({ progress, className }: GoalWaveFillProps) => (
+export const GoalWaveFill = ({
+  progress,
+  theme,
+  className,
+}: GoalWaveFillProps) => (
   <div
     className={cn(
-      "goal-widget-overlay-progress-transition animate-goalWave h-full bg-gradient-to-t from-[#74fee4] via-[#72dcd4] via-60% to-[#6c86ac]",
+      "goal-widget-overlay-progress-transition h-full animate-goalWave bg-gradient-to-t",
+      {
+        "from-[#74fee4] via-[#72dcd4] via-60% to-[#6c86ac]": theme === "light",
+        "from-[#4e6b95] via-[#7e3c9d] via-70% to-[#9e4a9e]": theme === "dark",
+      },
       className
     )}
     style={{

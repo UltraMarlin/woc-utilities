@@ -19,6 +19,7 @@ import {
   playSound,
 } from "../utils/widgets/donationAlertSounds";
 import { preloadDonationGifs } from "../utils/widgets/donationAlertGifs";
+import { getTheme } from "../utils/layout/getTheme";
 
 import bigArtwork from "../assets/layout/chesster.png";
 import headerPause from "../assets/layout/header-pause.png";
@@ -26,6 +27,8 @@ import headerStart from "../assets/layout/header-start.png";
 import headerEnde from "../assets/layout/header-ende.png";
 import headerFin from "../assets/layout/header-fin.png";
 import intermissionOverlay from "../assets/layout/obs-intermission-overlay.png";
+import lightBackgroundAnimation from "../assets/layout/Animation BG Light_1.webm";
+import darkBackgroundAnimation from "../assets/layout/Animation Dark BG_1.webm";
 
 const validHeaderTypes = ["pause", "start", "fin"];
 
@@ -64,6 +67,7 @@ export const WidgetObsIntermission = () => {
   const language = enParam !== null ? "en" : "de";
   const testalert = searchParams.get("testalert");
   const type = searchParams.get("type");
+  const theme = getTheme(searchParams.get("theme"));
   const headerImage =
     type && validHeaderTypes.includes(type)
       ? getHeaderSrc(type, language)
@@ -144,9 +148,23 @@ export const WidgetObsIntermission = () => {
   return (
     <div
       className={cn(
-        "relative grid h-[1080px] w-[1920px] overflow-hidden bg-yellow26 font-exo text-white *:col-start-1 *:row-start-1"
+        "relative grid h-[1080px] w-[1920px] overflow-hidden font-exo text-white *:col-start-1 *:row-start-1",
+        {
+          "bg-yellow26": theme === "light",
+          "bg-purpleDark26": theme === "dark",
+        }
       )}
     >
+      <video
+        src={
+          theme === "light" ? lightBackgroundAnimation : darkBackgroundAnimation
+        }
+        autoPlay
+        muted
+        loop
+        width={1920}
+        height={1080}
+      />
       <div className="absolute right-[51px] top-[74px] h-[724px] w-[508px] overflow-hidden rounded-xl">
         <img
           className="h-[784px] -translate-y-3 object-cover object-[32%_50%]"

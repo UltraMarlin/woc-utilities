@@ -45,7 +45,8 @@ export const WidgetObsOverlay = () => {
   const [displayedGoalReached, setDisplayedGoalReached] = useState<string>("");
   const [isPreloading, setPreloading] = useState(true);
   const [searchParams] = useSearchParams();
-  // const theme = searchParams.get("theme");
+  const theme = searchParams.get("theme");
+  const validTheme = theme === "dark" ? "dark" : "light";
   const name = searchParams.get("name");
   const pronouns = searchParams.get("pronouns");
   const lang = searchParams.get("lang");
@@ -131,7 +132,12 @@ export const WidgetObsOverlay = () => {
   if (isPreloading) return <div className="text-7xl">Loading...</div>;
 
   return (
-    <div className="grid h-[1080px] w-[1920px] overflow-hidden font-exo text-purpleAccent26 *:col-start-1 *:row-start-1">
+    <div
+      className={cn(
+        "grid h-[1080px] w-[1920px] overflow-hidden font-exo text-purpleAccent26 *:col-start-1 *:row-start-1",
+        { "text-white": validTheme === "dark" }
+      )}
+    >
       {alertonly === null && (
         <>
           <GoalWidgetOverlay
@@ -139,6 +145,7 @@ export const WidgetObsOverlay = () => {
             language={language}
             onDonationTextChange={setDonationGoalText}
             onGoalReachedTextChange={setAnnouncingGoalReached}
+            theme={validTheme}
           />
           <div
             className="z-10"
