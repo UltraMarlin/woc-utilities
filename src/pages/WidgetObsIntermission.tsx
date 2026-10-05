@@ -11,6 +11,7 @@ import { UpcomingStreams } from "../components/obs-layout/UpcomingStreams";
 import { GoalWidgetIntermission } from "../components/obs-layout/GoalWidgetIntermission";
 import { TextDocumentWidget } from "../components/obs-layout/TextDocumentWidget";
 import { IntermissionBidwarWidget } from "../components/obs-layout/IntermissionBidwarWidget";
+import { IntermissionIndicator } from "../components/obs-layout/IntermissionIndicator";
 
 import {
   getAlertLengthFromDonationAmount,
@@ -24,9 +25,6 @@ import headerStart from "../assets/layout/header-start.png";
 import headerEnde from "../assets/layout/header-ende.png";
 import headerFin from "../assets/layout/header-fin.png";
 import intermissionOverlay from "../assets/layout/obs-intermission-overlay.png";
-
-import intermissionComparison from "../assets/layout/INTERMISSION_TEST_GOALS.png";
-import { IntermissionIndicator } from "../components/obs-layout/IntermissionIndicator";
 
 const validHeaderTypes = ["pause", "start", "fin"];
 
@@ -232,11 +230,6 @@ export const WidgetObsIntermission = () => {
           language={language}
         />
       </div>
-      <img
-        className="absolute inset-0 z-50 opacity-0 transition-opacity duration-500 hover:opacity-80"
-        src={intermissionComparison}
-        alt=""
-      />
     </div>
   );
 };
