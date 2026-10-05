@@ -13,7 +13,7 @@ export const IntermissionIndicator = ({
   return (
     <img
       className={cn(
-        "transition-[filter]",
+        "transition-[filter] duration-[800ms]",
         { "grayscale-[0.8]": !active },
         className
       )}

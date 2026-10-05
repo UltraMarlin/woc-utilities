@@ -3,6 +3,7 @@ import cn from "classnames";
 import { useSearchParams } from "react-router-dom";
 
 import { Donation, DonationSorting, useDonations } from "../hooks/useDonations";
+import { useWidgetRotation } from "../hooks/useWidgetRotation";
 
 import { SmashText } from "../components/SmashText";
 import { DonationAlert } from "../components/obs-layout/DonationAlert";
@@ -37,12 +38,18 @@ const getHeaderSrc = (type: string, language: "de" | "en") => {
   return headerPause;
 };
 
-const SWITCH_BIDWAR_GOAL_INTERVAL = 70;
+const GOALS_PHASE_DURATION = 60 * 1000;
+const BIDWAR_DURATION = 15 * 1000;
+const MAX_BIDWAR_PHASE_DURATION = 75 * 1000;
+const SWITCH_DURATION = 1000;
 
 export const WidgetObsIntermission = () => {
-  const [activeWindow] = useState<"donationGoals" | "bidwars" | null>(
-    "donationGoals"
-  );
+  const { activeWindow, currentBidwarId } = useWidgetRotation({
+    goalsPhaseDuration: GOALS_PHASE_DURATION,
+    bidwarDuration: BIDWAR_DURATION,
+    maxBidwarPhaseDuration: MAX_BIDWAR_PHASE_DURATION,
+    switchDuration: SWITCH_DURATION,
+  });
   const [donationAlertComment, setDonationAlertComment] = useState<
     string | null
   >();
@@ -181,13 +188,19 @@ export const WidgetObsIntermission = () => {
         shadowClassName="!top-[0.6px]"
         className="tracking-wides absolute left-[568px] top-[735px] text-[33px]/none uppercase tracking-widest"
       />
-      <IntermissionIndicator className="absolute left-[505px] top-[720px]" />
+      <IntermissionIndicator
+        className="absolute left-[505px] top-[720px]"
+        active={activeWindow === "donationGoals"}
+      />
       <SmashText
         text="Bidwars"
         shadowClassName="!top-[0.6px]"
         className="tracking-wides absolute right-[702px] top-[735px] text-[33px]/none uppercase tracking-widest"
       />
-      <IntermissionIndicator className="absolute right-[869px] top-[720px]" />
+      <IntermissionIndicator
+        className="absolute right-[869px] top-[720px]"
+        active={activeWindow === "bidwars"}
+      />
       <div className="absolute left-[514px] top-[760px] h-[246px] w-[726px]">
         <div
           className={cn(
@@ -208,7 +221,7 @@ export const WidgetObsIntermission = () => {
           )}
         >
           <IntermissionBidwarWidget
-            totalBidwarDuration={SWITCH_BIDWAR_GOAL_INTERVAL}
+            currentBidwarId={currentBidwarId}
             language={language}
           />
         </div>

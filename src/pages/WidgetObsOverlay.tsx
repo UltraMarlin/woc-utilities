@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import cn from "classnames";
 
 import { Donation, DonationSorting, useDonations } from "../hooks/useDonations";
+import { useWidgetRotation } from "../hooks/useWidgetRotation";
 
 import { GoalWidgetOverlay } from "../components/obs-layout/GoalWidgetOverlay";
 import { LayoutDonationList } from "../components/obs-layout/LayoutDonationList";
@@ -19,7 +20,18 @@ import { preloadDonationGifs } from "../utils/widgets/donationAlertGifs";
 
 import obsOverlay from "../assets/layout/obs-overlay.png";
 
+const GOALS_PHASE_DURATION = 10 * 60 * 1000;
+const BIDWAR_DURATION = 60 * 1000;
+const MAX_BIDWAR_PHASE_DURATION = 4 * 60 * 1000;
+const SWITCH_DURATION = 2200;
+
 export const WidgetObsOverlay = () => {
+  const { activeWindow, currentBidwarId } = useWidgetRotation({
+    goalsPhaseDuration: GOALS_PHASE_DURATION,
+    bidwarDuration: BIDWAR_DURATION,
+    maxBidwarPhaseDuration: MAX_BIDWAR_PHASE_DURATION,
+    switchDuration: SWITCH_DURATION,
+  });
   const [donationGoalText, setDonationGoalText] = useState("");
   const [donationAlertComment, setDonationAlertComment] = useState<
     string | null
@@ -139,6 +151,8 @@ export const WidgetObsOverlay = () => {
             )}
             language={language}
             donationGoalsText={donationGoalText}
+            activeWindow={activeWindow}
+            currentBidwarId={currentBidwarId}
           />
           <div
             className={cn(

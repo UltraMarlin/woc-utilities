@@ -1,22 +1,28 @@
 import cn from "classnames";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 import { useBidwarResults } from "../../../hooks/useBidwarResults";
+import type { WidgetRotationWindow } from "../../../hooks/useWidgetRotation";
 
+import { formatEuro } from "../../../utils/formatting/formatMoney";
 import { LayoutBidwarOptionText } from "./LayoutBidwarOptionText";
 
 export type LayoutBidwarWidgetProps = {
   language: "de" | "en";
   donationGoalsText?: string;
+  activeWindow: WidgetRotationWindow | null;
+  currentBidwarId?: number;
   className?: string;
 };
 
-const TOTAL_CYCLE_DURATION = 15 * 60 * 1000;
-const SINGLE_BIDWAR_DURATION = 1 * 60 * 1000;
-
 const MAX_BIDWAR_OPTION_AMOUNT = 6;
+// keep in sync with the h-[22px] rows and pt-[3px] pb-[7px] of the option list
+const OPTION_ROW_HEIGHT = 22;
+const OPTION_LIST_TOTAL_PADDING_Y = 3 + 7;
+const OPTION_LIST_VISIBLE_HEIGHT = 76;
 
 type PreparedBidwar = {
+  id: number;
   name: string;
   options: {
     name: string;
@@ -27,10 +33,11 @@ type PreparedBidwar = {
 export const LayoutBidwarWidget = ({
   language,
   donationGoalsText,
+  activeWindow,
+  currentBidwarId,
   className,
 }: LayoutBidwarWidgetProps) => {
-  const [showBidwars, setShowBidwars] = useState(false);
-  const [currentBidwarIndex, setCurrentBidwarIndex] = useState<number>(0);
+  const optionListRefs = useRef(new Map<number, HTMLDivElement>());
 
   const { data: bidwarResults, status: bidwarResultsStatus } =
     useBidwarResults();
@@ -43,6 +50,7 @@ export const LayoutBidwarWidget = ({
         ?.map((bidwar) => {
           const optionNames = Object.keys(bidwar.options);
           return {
+            id: bidwar.id,
             name:
               language === "en" && bidwar.bidwar_name_en
                 ? bidwar.bidwar_name_en
@@ -62,7 +70,10 @@ export const LayoutBidwarWidget = ({
   const styleList = useMemo<React.CSSProperties[]>(
     () =>
       preparedBidwars.map((bidwar) => {
-        const difference = 10 + 26 * bidwar.options.length - 88;
+        const difference =
+          OPTION_ROW_HEIGHT * bidwar.options.length +
+          OPTION_LIST_TOTAL_PADDING_Y -
+          OPTION_LIST_VISIBLE_HEIGHT;
         return {
           "--max-scroll-y": difference <= 0 ? "0px" : `-${difference}px`,
         };
@@ -71,104 +82,89 @@ export const LayoutBidwarWidget = ({
   );
 
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (preparedBidwars.length === 0) return;
-
-    const startBidwarRotation = () => {
-      clearInterval(interval);
-      interval = setInterval(() => {
-        setCurrentBidwarIndex((prev) => {
-          if (prev < preparedBidwars.length - 1) return prev + 1;
-          else {
-            setShowBidwars(false);
-            clearInterval(interval);
-            return prev;
-          }
-        });
-      }, SINGLE_BIDWAR_DURATION);
-    };
-
-    if (showBidwars) {
-      startBidwarRotation();
-      return;
-    }
-
-    const timeout = setTimeout(
-      () => {
-        setCurrentBidwarIndex(0);
-        setShowBidwars(true);
-      },
-      TOTAL_CYCLE_DURATION - preparedBidwars.length * SINGLE_BIDWAR_DURATION
-    );
-
-    return () => clearTimeout(timeout);
-  }, [preparedBidwars.length, showBidwars]);
+    if (activeWindow !== "bidwars" || currentBidwarId === undefined) return;
+    optionListRefs.current
+      .get(currentBidwarId)
+      ?.getAnimations()
+      .forEach((animation) => {
+        if (animation instanceof CSSAnimation) animation.currentTime = 0;
+      });
+  }, [activeWindow, currentBidwarId]);
 
   return (
     <div className={className}>
       <div
         className={cn(
           "absolute flex size-full items-center justify-center px-4 text-[26px]/none font-bold transition-opacity duration-[2000ms] ease-in",
-          { "opacity-0": showBidwars }
+          { "opacity-0": activeWindow !== "donationGoals" }
         )}
       >
         {donationGoalsText}
       </div>
-      {bidwarResultsStatus === "success" &&
-        currentBidwarIndex < preparedBidwars.length && (
-          <div
-            className={cn(
-              "absolute flex size-full items-center justify-center transition-opacity duration-[2000ms] ease-in",
-              { "opacity-0": !showBidwars }
-            )}
-          >
-            <div className="relative top-0 h-full w-[44%] text-base">
-              {preparedBidwars.map((bidwar, index) => (
-                <span
-                  key={`${bidwar.name}-${index}`}
+      {bidwarResultsStatus === "success" && (
+        <div
+          className={cn(
+            "absolute flex size-full items-stretch gap-3 pl-[14px] pr-[7px] transition-opacity duration-[2000ms] ease-in",
+            { "opacity-0": activeWindow !== "bidwars" }
+          )}
+        >
+          <div className="relative flex w-[232px] shrink-0 flex-col items-center py-1.5">
+            <div className="text-[21px]/[1.15] font-bold tracking-wide">
+              !bidwar
+            </div>
+            <div className="relative w-full grow">
+              {preparedBidwars.map((bidwar) => (
+                <div
+                  key={bidwar.id}
                   className={cn(
-                    "absolute left-0 flex size-full items-center justify-center px-3 transition-opacity duration-[2000ms] ease-in",
-                    { "opacity-0": index !== currentBidwarIndex }
+                    "absolute inset-0 flex items-center justify-center text-balance text-center font-bold transition-opacity duration-[2000ms] ease-in",
+                    {
+                      "opacity-0": bidwar.id !== currentBidwarId,
+                      "text-[19px]/[1.05]": bidwar.name.length <= 30,
+                      "text-[17px]/[1.05]": bidwar.name.length > 30,
+                    }
                   )}
                 >
-                  ! bidwar: {bidwar.name}
-                </span>
+                  {bidwar.name}
+                </div>
               ))}
             </div>
-            <div className="relative h-full w-[56%] animate-scrollY text-[15px]">
-              <div className="grid w-full">
-                {preparedBidwars.map((bidwar, index) => (
+          </div>
+          <div className="relative grid grow overflow-hidden">
+            {preparedBidwars.map((bidwar, index) => (
+              <div
+                key={bidwar.id}
+                ref={(element) => {
+                  if (element) optionListRefs.current.set(bidwar.id, element);
+                  return () => {
+                    optionListRefs.current.delete(bidwar.id);
+                  };
+                }}
+                className={cn(
+                  "col-start-1 row-start-1 grid h-fit animate-scrollY grid-cols-[max-content_1fr_max-content] pb-[7px] pt-[3px] text-[19px] font-bold transition-opacity duration-[2000ms] ease-in",
+                  { "opacity-0": bidwar.id !== currentBidwarId }
+                )}
+                style={styleList[index]}
+              >
+                {bidwar.options.map((option, optionIndex) => (
                   <div
-                    key={`${bidwar.name}-${index}`}
-                    className={cn(
-                      "top-0 col-start-1 row-start-1 h-fit w-full animate-scrollY py-[5px] pl-3 pr-4 transition-opacity duration-[2000ms] ease-in",
-                      { "opacity-0": index !== currentBidwarIndex }
-                    )}
-                    style={styleList[index]}
+                    key={option.name}
+                    className="col-span-full grid h-[22px] grid-cols-subgrid items-center gap-x-2 px-1"
                   >
-                    {bidwar.options.map((option, optionIndex) => (
-                      <span
-                        key={option.name}
-                        className="relative flex h-[26px] w-full justify-between"
-                      >
-                        <span className="flex items-center">
-                          {optionIndex + 1}.
-                          <div className="no-scrollbar absolute flex h-full w-[230px] translate-x-5 items-center overflow-x-hidden text-nowrap px-2 text-left">
-                            <LayoutBidwarOptionText
-                              text={option.name}
-                              maxWidth={236}
-                            />
-                          </div>
-                        </span>
-                        {option.amount !== null ? option.amount / 100 : null}
-                      </span>
-                    ))}
+                    <span>{optionIndex + 1}.</span>
+                    <span className="no-scrollbar flex overflow-x-hidden whitespace-nowrap">
+                      <LayoutBidwarOptionText text={option.name} />
+                    </span>
+                    <span className="text-right">
+                      {formatEuro(option.amount)}
+                    </span>
                   </div>
                 ))}
               </div>
-            </div>
+            ))}
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };
