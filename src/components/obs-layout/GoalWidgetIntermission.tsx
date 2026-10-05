@@ -10,7 +10,6 @@ import donationBar from "../../assets/layout/donation-bar.png";
 
 export type GoalWidgetProps = {
   language?: "de" | "en";
-  theme?: "dark" | "light";
   className?: string;
 };
 
@@ -21,7 +20,6 @@ const getHighestDonationGoalAmount = (goals: DonationGoal[] | undefined) => {
 
 export const GoalWidgetIntermission = ({
   language = "de",
-  theme,
   className,
 }: GoalWidgetProps) => {
   const { data: donations, status: donationsStatus } =
@@ -108,7 +106,7 @@ export const GoalWidgetIntermission = ({
       <div className="relative h-[49px] w-[695px]">
         <div className="absolute flex size-full items-stretch p-1.5">
           <div className="w-full overflow-hidden rounded-full">
-            <GoalWaveFill progress={targetProgress} theme={theme} />
+            <GoalWaveFill progress={targetProgress} theme="light" />
           </div>
         </div>
         <img className="absolute" src={donationBar} alt="" />

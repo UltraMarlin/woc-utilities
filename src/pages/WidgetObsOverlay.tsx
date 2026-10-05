@@ -200,7 +200,7 @@ export const WidgetObsOverlay = () => {
       )}
       <div
         className={cn(
-          "absolute left-[1200px] top-[140px] z-10 w-[606px] overflow-hidden text-lg transition-[transform,opacity] duration-[500ms]",
+          "absolute left-[1200px] top-[140px] z-10 transition-[transform,opacity] duration-[500ms]",
           {
             "scale-[0.4] opacity-0": !playDonationAlert,
           }
@@ -211,6 +211,7 @@ export const WidgetObsOverlay = () => {
           comment={donationAlertComment}
           name={donationAlertName}
           language={language}
+          active={playDonationAlert}
         />
       </div>
       {!name && (

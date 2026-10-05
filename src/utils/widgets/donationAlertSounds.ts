@@ -3,16 +3,11 @@ import alertSound2 from "../../assets/layout/donation_alert/alert_2.mp3";
 import alertSound3 from "../../assets/layout/donation_alert/alert_3.mp3";
 import alertSound4 from "../../assets/layout/donation_alert/alert_4.mp3";
 import alertSound5 from "../../assets/layout/donation_alert/alert_5.mp3";
+import { getAlertTimingFromDonationAmount } from "./donationAlertTiers";
 
 export const getAlertLengthFromDonationAmount = (
   donated_amount_in_cents: number | null | undefined
-) => {
-  if (!donated_amount_in_cents || donated_amount_in_cents < 500) return 8000;
-  if (donated_amount_in_cents < 1000) return 8000;
-  if (donated_amount_in_cents < 2000) return 8000;
-  if (donated_amount_in_cents < 5000) return 8000;
-  return 10000;
-};
+) => getAlertTimingFromDonationAmount(donated_amount_in_cents).duration;
 
 export const getAlertSoundFromDonationAmount = (
   donated_amount_in_cents: number | null | undefined

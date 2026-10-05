@@ -228,7 +228,7 @@ export const WidgetObsIntermission = () => {
             }
           )}
         >
-          <GoalWidgetIntermission language={language} theme={theme} />
+          <GoalWidgetIntermission language={language} />
         </div>
         <div
           className={cn(
@@ -248,7 +248,7 @@ export const WidgetObsIntermission = () => {
       <IntermissionClock className="absolute bottom-[52px] right-[136px] h-[112px] w-[304px]" />
       <div
         className={cn(
-          "absolute left-[120px] top-[258px] z-50 w-[606px] overflow-hidden text-lg transition-[transform,opacity] duration-[500ms]",
+          "absolute left-[546px] top-[146px] z-50 transition-[transform,opacity] duration-[500ms]",
           {
             "scale-[0.4] opacity-0": !playDonationAlert,
           }
@@ -259,6 +259,7 @@ export const WidgetObsIntermission = () => {
           comment={donationAlertComment}
           name={donationAlertName}
           language={language}
+          active={playDonationAlert}
         />
       </div>
     </div>
