@@ -134,8 +134,11 @@ export const WidgetObsOverlay = () => {
   return (
     <div
       className={cn(
-        "grid h-[1080px] w-[1920px] overflow-hidden font-exo text-purpleAccent26 *:col-start-1 *:row-start-1",
-        { "text-white": validTheme === "dark" }
+        "grid h-[1080px] w-[1920px] overflow-hidden font-exo *:col-start-1 *:row-start-1",
+        {
+          "text-white": validTheme === "dark",
+          "text-purpleAccent26": validTheme === "light",
+        }
       )}
     >
       {alertonly === null && (
@@ -212,6 +215,7 @@ export const WidgetObsOverlay = () => {
           name={donationAlertName}
           language={language}
           active={playDonationAlert}
+          theme={validTheme}
         />
       </div>
       {!name && (

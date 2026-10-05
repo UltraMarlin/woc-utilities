@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import cn from "classnames";
 
 import { SmashText } from "../SmashText";
 import { formatEuro } from "../../utils/formatting/formatMoney";
@@ -14,6 +15,7 @@ export type DonationAlertProps = {
   comment?: string | null;
   language: "de" | "en";
   active: boolean;
+  theme?: "light" | "dark";
 };
 
 enum BubbleState {
@@ -53,6 +55,7 @@ export const DonationAlert = ({
   comment,
   language,
   active,
+  theme = "light",
 }: DonationAlertProps) => {
   const [bubbleState, setBubbleState] = useState(BubbleState.HIDDEN);
 
@@ -97,7 +100,12 @@ export const DonationAlert = ({
   } ${formatEuro(amount)}`;
 
   return (
-    <div className="relative h-[752px] w-[706px] font-exo text-purpleAccent26">
+    <div
+      className={cn("relative h-[752px] w-[706px] font-exo", {
+        "text-white": theme === "dark",
+        "text-purpleAccent26": theme === "light",
+      })}
+    >
       <img
         className="donation-alert-bubble-transition absolute left-0 top-[256px] h-[496px] w-[706px]"
         src={alertBackground}
@@ -105,7 +113,12 @@ export const DonationAlert = ({
         style={{ ...bubbleStyle, maskImage: BUBBLE_MASK }}
       />
       <div className="absolute left-[62px] top-[360px] h-[270px] w-[520px]">
-        <div className="absolute inset-[3px] rounded-[16px] bg-yellow26" />
+        <div
+          className={cn("absolute inset-[3px] rounded-[16px]", {
+            "bg-yellow26": theme === "light",
+            "bg-purpleDark26": theme === "dark",
+          })}
+        />
         <img className="absolute inset-0 size-full" src={dynamicBox} alt="" />
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-9 py-6 text-center">
           <SmashText
