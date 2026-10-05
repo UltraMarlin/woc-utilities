@@ -1,5 +1,4 @@
 import { getAlertGifFromDonationAmount } from "../../utils/widgets/donationAlertGifs";
-import { getAlertChessterIconFromDonationAmount } from "../../utils/widgets/donationAlertAssets";
 
 export type DonationAlertProps = {
   name?: string | null;
@@ -23,7 +22,6 @@ export const DonationAlert = ({
   language,
 }: DonationAlertProps) => {
   const gifSrc = getAlertGifFromDonationAmount(amount);
-  const chessterIcon = getAlertChessterIconFromDonationAmount(amount);
   const commentFontSize = getDonationCommentFontSize(comment);
 
   return (
@@ -35,13 +33,6 @@ export const DonationAlert = ({
       />
       <div className="h-[258px] w-[606px]">
         <div className="flex size-full gap-4 p-4">
-          <img
-            className="mb-4 object-contain"
-            src={chessterIcon}
-            alt=""
-            width={117}
-            height={108}
-          />
           <div className="flex">
             <div className="my-auto flex flex-col gap-2">
               <div className="text-[1.375rem]">
