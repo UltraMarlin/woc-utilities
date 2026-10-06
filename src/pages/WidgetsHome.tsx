@@ -10,18 +10,6 @@ const links = [
     href: "/streaming/points-overlay",
     label: "Points Overlay",
   },
-  {
-    href: "/streaming/obs-overlay",
-    label: "OBS Overlay",
-  },
-  {
-    href: "/streaming/obs-background",
-    label: "OBS Background",
-  },
-  {
-    href: "/streaming/obs-intermission",
-    label: "OBS Intermission",
-  },
 ];
 
 export const WidgetsHome = () => {
