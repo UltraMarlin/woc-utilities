@@ -52,6 +52,9 @@ export default {
           "0%": { "border-right-width": "3px" },
           "50%": { "border-right-width": "0px" },
         },
+        colonBlink: {
+          "50%": { opacity: "0" },
+        },
         float: {
           "0%, 100%": {
             transform: "translateY(-4px)",

@@ -24,8 +24,21 @@ export const IntermissionClock = ({ className }: IntermissionClockProps) => {
 
   return (
     <div className={cn("font-smash text-[58px]/none", className)}>
-      <div className="rotate3 ml-[35px] mr-[24px] mt-[45px] text-center tabular-nums tracking-widest">
-        {time}
+      <div className="mt-[45px] text-center">
+        {time.split("").map((char, i) =>
+          char === ":" ? (
+            <span
+              key={i}
+              className="ml-1 inline-block w-[0.4em] animate-[colonBlink_2s_step-end_infinite]"
+            >
+              :
+            </span>
+          ) : (
+            <span key={i} className="inline-block w-[0.78em]">
+              {char}
+            </span>
+          )
+        )}
       </div>
     </div>
   );
