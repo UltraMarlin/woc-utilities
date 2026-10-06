@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import cn from "classnames";
 import { PageContainer } from "../components/PageContainer";
 import { usePersistentState } from "../utils/usePersistentState";
+import { getTwitchUsername } from "../utils/formatting/twitch";
 
 type QueryParam = [key: string, value: string | boolean];
 
@@ -145,6 +146,10 @@ export const WidgetObsSetup = () => {
   const [name, setName] = usePersistentState("obsSetup.name", "");
   const [pronouns, setPronouns] = usePersistentState("obsSetup.pronouns", "");
   const [noCam, setNoCam] = usePersistentState("obsSetup.noCam", false);
+  const [twitchChannel, setTwitchChannel] = usePersistentState(
+    "obsSetup.twitchChannel",
+    ""
+  );
 
   const backgroundUrl = buildUrl("/streaming/obs-background", [
     ["theme", theme],
@@ -156,6 +161,7 @@ export const WidgetObsSetup = () => {
     ["name", name.trim() || "empty"],
     ["pronouns", pronouns.trim() || "empty"],
     ["nocam", noCam],
+    ["twitch", getTwitchUsername(twitchChannel.trim()) || false],
   ]);
 
   return (
@@ -217,6 +223,16 @@ export const WidgetObsSetup = () => {
                 name="pronouns"
                 value={pronouns}
                 onChange={(event) => setPronouns(event.target.value)}
+              />
+            </label>
+            <label className="flex min-w-48 max-w-[300px] flex-1 cursor-pointer flex-col">
+              <span>Twitch channel (chat)</span>
+              <input
+                type="text"
+                className="text-base text-black"
+                name="twitchChannel"
+                value={twitchChannel}
+                onChange={(event) => setTwitchChannel(event.target.value)}
               />
             </label>
           </div>

@@ -10,6 +10,7 @@ import { LayoutDonationList } from "../components/obs-layout/LayoutDonationList"
 import { AnimatedStreamBanner } from "../components/obs-layout/AnimatedStreamBanner";
 import { LayoutBidwarWidget } from "../components/obs-layout/LayoutBidwarWidget";
 import { DonationAlert } from "../components/obs-layout/DonationAlert";
+import { LayoutChat } from "../components/obs-layout/LayoutChat";
 import { SmashText } from "../components/SmashText";
 
 import {
@@ -72,6 +73,7 @@ export const WidgetObsOverlay = () => {
   const testalert = searchParams.get("testalert");
   const alertonly = searchParams.get("alertonly");
   const noCam = searchParams.get("nocam") !== null;
+  const twitchChannel = searchParams.get("twitch");
   const displayedName = name === "empty" ? "" : name || "";
   const noCamNameFontSize = getNoCamNameFontSize(displayedName);
   const noCamNameFontShadowOffsetClassName =
@@ -174,6 +176,17 @@ export const WidgetObsOverlay = () => {
             onGoalReachedTextChange={setAnnouncingGoalReached}
             theme={validTheme}
           />
+          {twitchChannel && (
+            <LayoutChat
+              key={twitchChannel}
+              className={cn(
+                "absolute left-[19px] w-[282px]",
+                noCam ? "top-[138px] h-[756px]" : "top-[294px] h-[599px]"
+              )}
+              channel={twitchChannel}
+              theme={validTheme}
+            />
+          )}
           <div
             className="z-10"
             style={{
@@ -212,8 +225,8 @@ export const WidgetObsOverlay = () => {
             </div>
           ) : (
             <SmashText
-              className="absolute left-[64px] top-[21px] z-10 whitespace-nowrap text-[32px] tracking-wide"
-              shadowClassName="!top-[1px]"
+              className="absolute left-[64px] top-[21px] z-10 whitespace-nowrap text-[33px] tracking-wide"
+              shadowClassName="!top-[0.7px]"
               text={displayedName}
             />
           )}

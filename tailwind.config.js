@@ -72,6 +72,34 @@ export default {
             "animation-timing-function": "cubic-bezier(0,0,0.2,1)",
           },
         },
+        chatMessageSpawn: {
+          "0%": { opacity: "0" },
+          "20%": { opacity: "1" },
+          "50%": { transform: "rotate(1deg) scale(1.06)" },
+          "70%": { transform: "rotate(1deg) scale(1.02)" },
+          "100%": { transform: "rotate(0) scale(1)" },
+        },
+        chatMessagePop: {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "40%": { transform: "scale(1.06)", opacity: "1" },
+          "100%": { transform: "scale(1.15)", opacity: "0" },
+        },
+        chatBubbleParticle: {
+          "0%": {
+            transform: "translate(0, 0) rotate(var(--rotate)) scale(0.3)",
+            opacity: "0",
+          },
+          "20%": {
+            transform:
+              "translate(calc(var(--drift) * 0.2), calc(var(--rise) * -0.2)) rotate(var(--rotate)) scale(1)",
+            opacity: "1",
+          },
+          "100%": {
+            transform:
+              "translate(var(--drift), calc(var(--rise) * -1)) rotate(calc(var(--rotate) + 45deg)) scale(0.8)",
+            opacity: "0",
+          },
+        },
         scrollX: {
           "0%, 100%": { transform: "translate(0, 0)" },
           "50%": { transform: "translate(var(--max-scroll-x), 0)" },
@@ -87,6 +115,9 @@ export default {
         blink: "blink step-end infinite 1.25s",
         donationAlert: "donationAlert infinite 1920ms",
         float: "float infinite ease-in 3s",
+        chatMessageSpawn: "chatMessageSpawn 0.5s ease-out both",
+        chatMessagePop: "chatMessagePop 0.25s ease-in both",
+        chatBubbleParticle: "chatBubbleParticle ease-out both",
         scrollX: "scrollX 10s cubic-bezier(0.37, 0, 0.63, 1) infinite",
         scrollY: "scrollY 30s ease-in-out infinite",
       },
