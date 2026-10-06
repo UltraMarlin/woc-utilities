@@ -5,6 +5,9 @@ import {
   ChatDocumentMessage,
   useChatDocumentMessages,
 } from "../../hooks/useChatDocumentMessages";
+import chessterGif1 from "../../assets/layout/donation_alert/Chesster_Animation_01.gif";
+import chessterGif5 from "../../assets/layout/donation_alert/Chesster_Animation_05.gif";
+import chessterGif3 from "../../assets/layout/donation_alert/Chesster_Animation_03.gif";
 
 export type TextDocumentWidgetProps = {
   language?: "de" | "en";
@@ -90,7 +93,15 @@ export const TextDocumentWidget = ({
           </div>
         </div>
       </div>
-      <div className="h-[140px] w-full"></div>
+      <div className="-mt-4 flex h-[102px] w-full items-end justify-between px-2 pb-1">
+        <img className="h-[94px] object-contain" src={chessterGif5} alt="" />
+        <img
+          className="mb-2 h-[100px] object-contain"
+          src={chessterGif1}
+          alt=""
+        />
+        <img className="h-[100px] object-contain" src={chessterGif3} alt="" />
+      </div>
       <div className="w-full rounded bg-purpleLight26 text-center text-sm/[1.6] font-semibold uppercase italic tracking-wider">
         {helperText}
       </div>
