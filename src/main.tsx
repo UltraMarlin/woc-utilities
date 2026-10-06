@@ -28,7 +28,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="schedule-images/dev" element={<DevView />} />
           <Route
             path="schedule-images/specific"
-            element={<SpecificDownloadViewERROR />}
+            element={<SpecificDownloadView />}
           />
           <Route path="yt-descriptions" element={<YoutubeDescriptions />} />
           <Route path="yt-thumbnails" element={<YoutubeThumbnails />} />
