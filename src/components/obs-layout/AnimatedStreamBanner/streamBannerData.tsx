@@ -4,17 +4,61 @@ import { FaBluesky } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa6";
 
+import cn from "classnames";
+import cardgourmetLogo from "../../../assets/images/cardgourmet_cat_logo_66.png";
+
+export type ChessterSide = "left" | "right";
+
 type MultiLanguageBanner = {
   de?: React.ReactNode;
   en?: React.ReactNode;
   both?: React.ReactNode;
+  chessterSide?: ChessterSide;
 };
 
-export const streamBanners: MultiLanguageBanner[] = [
+export const getStreamBanners = (
+  theme: "light" | "dark" = "light"
+): MultiLanguageBanner[] => [
+  {
+    de: (
+      <div className="ml-5 self-start text-left text-[20px]/none">
+        Gesponsert von
+      </div>
+    ),
+    en: (
+      <div className="ml-5 self-start text-left text-[20px]/none">
+        Sponsored by
+      </div>
+    ),
+    both: (
+      <div className="h-2/3 w-full text-left">
+        <img
+          className="absolute right-3 top-11"
+          alt=""
+          src={cardgourmetLogo}
+          width={66}
+        />
+        <div className="ml-5 mt-[20px] w-full">
+          <p className="mb-2 text-[25px]/[1.15] tracking-tight">
+            cardgourmet.com
+          </p>
+          <p
+            className={cn("text-[20px] italic", {
+              "text-[#a2abfd]": theme === "dark",
+              "text-purpleLight26": theme === "light",
+            })}
+          >
+            A TCG Card Browser
+          </p>
+        </div>
+      </div>
+    ),
+  },
   {
     de: "Alle Spenden gehen an",
     en: "All donations go to",
     both: <div className="text-[32px]">Sanktionsfrei</div>,
+    chessterSide: "left",
   },
   {
     de: (
@@ -37,6 +81,7 @@ export const streamBanners: MultiLanguageBanner[] = [
         in the chat
       </>
     ),
+    chessterSide: "right",
   },
   {
     de: "Folgt uns auf",
@@ -73,5 +118,6 @@ export const streamBanners: MultiLanguageBanner[] = [
         </span>
       </div>
     ),
+    chessterSide: "left",
   },
 ];

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import cn from "classnames";
 
 import chessterWaveGif from "../../../assets/layout/donation_alert/Chesster_Animation_02.gif";
@@ -7,7 +7,7 @@ import dynamicBox from "../../../assets/layout/obs-overlay-dynamic-box.png";
 
 import { getPanelBackgroundClassName } from "../../../utils/layout/getPanelBackgroundClassName";
 
-import { streamBanners } from "./streamBannerData";
+import { type ChessterSide, getStreamBanners } from "./streamBannerData";
 
 export type AnimatedStreamBannerProps = {
   language: "de" | "en";
@@ -26,15 +26,14 @@ enum ChessterState {
   RIGHT = "right",
 }
 
-const getChessterStateVisible = (bannerId: number) => {
-  if (bannerId === 1 || bannerId === 4) return ChessterState.LEFT;
-  if (bannerId === 2) return ChessterState.RIGHT;
+const getChessterStateVisible = (side?: ChessterSide) => {
+  if (side === "left") return ChessterState.LEFT;
+  if (side === "right") return ChessterState.RIGHT;
   return ChessterState.HIDDEN_LEFT;
 };
 
-const getChessterStateHidden = (bannerId: number) => {
-  if (bannerId === 1 || bannerId === 4) return ChessterState.HIDDEN_LEFT;
-  if (bannerId === 2) return ChessterState.HIDDEN_RIGHT;
+const getChessterStateHidden = (side?: ChessterSide) => {
+  if (side === "right") return ChessterState.HIDDEN_RIGHT;
   return ChessterState.HIDDEN_LEFT;
 };
 
@@ -48,6 +47,8 @@ export const AnimatedStreamBanner = ({
   const [chessterState, setChessterState] = useState(ChessterState.HIDDEN_LEFT);
   const bannerIndex = useRef(-1);
 
+  const streamBanners = useMemo(() => getStreamBanners(theme), [theme]);
+
   const hideCurrentBanner = () => {
     setBannerVisible(false);
     setTimeout(() => {
@@ -59,20 +60,21 @@ export const AnimatedStreamBanner = ({
     }, CHESSTER_ALONE_DURATION);
   };
 
-  const displayNextBanner = () => {
+  const displayNextBanner = useCallback(() => {
     const nextBanner = (bannerIndex.current + 1) % streamBanners.length;
     bannerIndex.current = nextBanner;
     setCurrentBanner(nextBanner);
 
-    setChessterState(getChessterStateHidden(nextBanner));
+    const { chessterSide } = streamBanners[nextBanner];
+    setChessterState(getChessterStateHidden(chessterSide));
     setTimeout(
-      () => setChessterState(getChessterStateVisible(nextBanner)),
+      () => setChessterState(getChessterStateVisible(chessterSide)),
       750
     );
     setTimeout(() => {
       setBannerVisible(true);
     }, CHESSTER_ALONE_DURATION + 750);
-  };
+  }, [streamBanners]);
 
   useEffect(() => {
     let timeout;
@@ -82,7 +84,7 @@ export const AnimatedStreamBanner = ({
     else timeout = setTimeout(displayNextBanner, BANNER_HIDDEN_DURATION);
 
     return () => clearTimeout(timeout);
-  }, [isBannerVisible]);
+  }, [isBannerVisible, displayNextBanner]);
 
   const chessterLeft =
     chessterState === ChessterState.HIDDEN_LEFT ||
