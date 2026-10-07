@@ -205,7 +205,7 @@ export const WidgetObsOverlay = () => {
           />
           <div
             className={cn(
-              "absolute left-[326px] top-[922px] z-10 flex h-[76px] w-[580px] animate-donationAlert items-center justify-center overflow-hidden px-4 text-center text-[18px] transition-opacity duration-1000",
+              "absolute left-[326px] top-[922px] z-10 flex h-[76px] w-[580px] animate-donationAlert items-center justify-center overflow-hidden px-4 text-center text-[26px]/none font-bold transition-opacity duration-1000",
               { "opacity-0": !announcingGoalReached }
             )}
           >

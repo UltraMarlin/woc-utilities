@@ -104,11 +104,11 @@ export const LayoutBidwarWidget = ({
       {bidwarResultsStatus === "success" && (
         <div
           className={cn(
-            "absolute flex size-full items-stretch gap-3 pl-[14px] pr-[7px] transition-opacity duration-[2000ms] ease-in",
+            "absolute flex size-full items-stretch gap-3 pl-[8px] pr-[4px] transition-opacity duration-[2000ms] ease-in",
             { "opacity-0": activeWindow !== "bidwars" }
           )}
         >
-          <div className="relative flex w-[232px] shrink-0 flex-col items-center py-1.5">
+          <div className="relative flex w-[174px] shrink-0 flex-col items-center py-1.5">
             <div className="text-[21px]/[1.15] font-bold tracking-wide">
               !bidwar
             </div>
@@ -120,8 +120,11 @@ export const LayoutBidwarWidget = ({
                     "absolute inset-0 flex items-center justify-center text-balance text-center font-bold transition-opacity duration-[2000ms] ease-in",
                     {
                       "opacity-0": bidwar.id !== currentBidwarId,
-                      "text-[19px]/[1.05]": bidwar.name.length <= 30,
-                      "text-[17px]/[1.05]": bidwar.name.length > 30,
+                      "text-[18px]/[1]": bidwar.name.length <= 30,
+                      "text-[16px]/[1.05] tracking-tight":
+                        bidwar.name.length > 30 && bidwar.name.length <= 40,
+                      "text-[15px]/[1.05] tracking-tighter":
+                        bidwar.name.length > 40,
                     }
                   )}
                 >

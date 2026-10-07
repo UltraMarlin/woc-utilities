@@ -99,10 +99,10 @@ export const IntermissionBidwarWidget = ({
                     )}
                   >
                     <div className="tracking-tight">{optionIndex + 1}.</div>
-                    <div className="no-scrollbar ml-10 flex overflow-x-hidden text-nowrap text-left">
+                    <div className="no-scrollbar ml-[40px] mr-[124px] flex overflow-x-hidden text-nowrap text-left">
                       <LayoutBidwarOptionText
                         text={option.name}
-                        maxWidth={494}
+                        maxWidth={478}
                       />
                     </div>
                     <div className="flex items-start justify-end tracking-wider">
