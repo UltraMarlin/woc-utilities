@@ -7,7 +7,6 @@ import {
   parseChatMessage,
 } from "@twurple/chat";
 
-// Safety cap only: the chat view dismisses messages long before this.
 const MAX_MESSAGES = 20;
 
 export type TwitchChatBadge = "broadcaster" | "moderator" | "vip";

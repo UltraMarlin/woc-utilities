@@ -165,18 +165,6 @@
   }
 }
 
-@property --goalProgress {
-  initial-value: 0%;
-  inherits: false;
-  syntax: "<percentage>";
-}
-
-.goal-widget-overlay-progress-transition {
-  transition-property: --goalProgress, background-image;
-  transition-timing-function: ease-in-out;
-  transition-duration: 2000ms;
-}
-
 @property --bubbleRevealStart {
   initial-value: 0%;
   inherits: false;

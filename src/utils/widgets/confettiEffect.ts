@@ -7,14 +7,14 @@ const commonConfettiProps: confetti.Options = {
   decay: 0.9,
   scalar: 1.5,
   colors: [
-    "#f532c0",
-    "#ae41f0",
-    "#E17FD7",
-    "#707AF2",
-    "#211AA9",
-    "#7F196F",
-    "#1486ff",
-    "#61d7e7",
+    "#d8adf8",
+    "#74fee4",
+    "#f0dd90",
+    "#68438c",
+    "#4f1f66",
+    "#ffdc50",
+    "#7ea1eb",
+    "#573371",
   ],
 };
 

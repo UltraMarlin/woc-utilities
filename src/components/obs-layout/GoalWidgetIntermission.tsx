@@ -1,8 +1,6 @@
-import { useMemo } from "react";
 import cn from "classnames";
 
-import { DonationGoal, useDonationGoals } from "../../hooks/useDonationGoals";
-import { useExternalDonationTotal } from "../../hooks/useExternalDonationTotal";
+import { useAnimatedGoalBar } from "../../hooks/useAnimatedGoalBar";
 import { formatEuro } from "../../utils/formatting/formatMoney";
 import { GoalWaveFill } from "./GoalWaveFill";
 
@@ -13,78 +11,15 @@ export type GoalWidgetProps = {
   className?: string;
 };
 
-const getHighestDonationGoalAmount = (goals: DonationGoal[] | undefined) => {
-  if (!goals || goals.length === 0) return undefined;
-  return goals[goals.length - 1].reached_at;
-};
+const GOAL_REACHED_PAUSE_MS = 1000;
 
 export const GoalWidgetIntermission = ({
   language = "de",
   className,
 }: GoalWidgetProps) => {
-  const { data: donations, status: donationsStatus } =
-    useExternalDonationTotal();
+  const { progress, fadedOut, currentDonation, moneyTarget, donationGoalText } =
+    useAnimatedGoalBar(language, GOAL_REACHED_PAUSE_MS);
 
-  const { data: donationGoals, status: donationGoalsStatus } =
-    useDonationGoals(language);
-
-  const { currentDonation, lastReachedGoalAmount, nextDonationGoalEntry } =
-    useMemo(() => {
-      if (!donations || !donationGoals)
-        return {
-          currentDonation: 0,
-          lastReachedGoalAmount: 0,
-          nextDonationGoalEntry: undefined,
-        };
-
-      const current = donations.donated_amount_in_cents / 100;
-
-      let lastIndex = -1;
-      donationGoals.forEach((goal, index) => {
-        if (goal.reached_at <= current) {
-          lastIndex = index;
-        }
-      });
-
-      return {
-        currentDonation: current,
-        lastReachedGoalAmount:
-          lastIndex >= 0 ? donationGoals[lastIndex].reached_at : 0,
-        nextDonationGoalEntry: donationGoals[lastIndex + 1],
-      };
-    }, [donations, donationGoals]);
-
-  const nextDonationGoal = nextDonationGoalEntry?.reached_at;
-  const nextDonationGoalText = nextDonationGoalEntry?.name;
-
-  const moneyTarget =
-    nextDonationGoal || getHighestDonationGoalAmount(donationGoals);
-
-  const allGoalsReached =
-    typeof moneyTarget !== "undefined" && currentDonation >= moneyTarget;
-
-  const targetProgress = allGoalsReached
-    ? 100
-    : moneyTarget && moneyTarget - lastReachedGoalAmount !== 0
-      ? ((currentDonation - lastReachedGoalAmount) * 100) /
-        (moneyTarget - lastReachedGoalAmount)
-      : 0;
-
-  const getDonationGoalsText = () => {
-    if (typeof nextDonationGoal !== "undefined")
-      return nextDonationGoalText || "";
-    if (donationsStatus !== "success" || donationGoalsStatus !== "success")
-      return "";
-    return donationGoals && donationGoals.length > 0
-      ? language === "en"
-        ? "All goals have been met!"
-        : "Alle Goals wurden erreicht!"
-      : language === "en"
-        ? "Currently there are no goals!"
-        : "Es gibt aktuell keine Goals!";
-  };
-
-  const donationGoalText = getDonationGoalsText();
   return (
     <div
       className={cn(
@@ -106,14 +41,18 @@ export const GoalWidgetIntermission = ({
       <div className="relative h-[49px] w-[695px]">
         <div className="absolute flex size-full items-stretch p-1.5">
           <div className="w-full overflow-hidden rounded-full">
-            <GoalWaveFill progress={targetProgress} theme="light" />
+            <GoalWaveFill
+              progress={progress}
+              fadedOut={fadedOut}
+              theme="light"
+            />
           </div>
         </div>
         <img className="absolute" src={donationBar} alt="" />
         <div className="absolute flex size-full items-center justify-center gap-1.5 text-[30px]/none font-bold text-purpleAccent26">
-          {formatEuro((currentDonation || 0) * 100)}
+          {formatEuro(currentDonation * 100)}
           <span>{language === "en" ? "of" : "von"}</span>
-          {formatEuro((moneyTarget || 0) * 100, true)}
+          {formatEuro(moneyTarget * 100, true)}
         </div>
       </div>
     </div>
