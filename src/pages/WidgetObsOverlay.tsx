@@ -48,9 +48,9 @@ const getNoCamNameFontSize = (name: string) => {
 };
 
 const getNoCamNameFontShadowOffsetClassName = (name: string) => {
-  if (name.length <= 4) return "!top-[3px]";
-  if (name.length <= 6) return "!top-[2px]";
-  if (name.length <= 8) return "!top-[2px]";
+  if (name.length <= 4) return "!top-[2px]";
+  if (name.length <= 6) return "!top-[1px]";
+  if (name.length <= 8) return "!top-[1px]";
   if (name.length <= 12) return "!top-[0.6px]";
   if (name.length <= 30) return "!top-[0.6px]";
   return "!top-[0.6px]";
