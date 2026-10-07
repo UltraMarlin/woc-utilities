@@ -18,6 +18,7 @@ import {
   playSound,
 } from "../utils/widgets/donationAlertSounds";
 import { preloadDonationGifs } from "../utils/widgets/donationAlertGifs";
+import { getPanelBackgroundClassName } from "../utils/layout/getPanelBackgroundClassName";
 
 import obsOverlay from "../assets/layout/obs-overlay.png";
 import obsOverlayNoCam from "../assets/layout/obs-overlay-no-cam.png";
@@ -26,6 +27,16 @@ const GOALS_PHASE_DURATION = 10 * 60 * 1000;
 const BIDWAR_DURATION = 60 * 1000;
 const MAX_BIDWAR_PHASE_DURATION = 4 * 60 * 1000;
 const SWITCH_DURATION = 2200;
+
+const getPanelRects = (noCam: boolean) => [
+  noCam
+    ? "left-[15px] top-[134px] h-[763px] w-[290px] rounded-[6px]"
+    : "left-[15px] top-[290px] h-[606px] w-[290px] rounded-[6px]",
+  "left-[322px] top-[919px] h-[82px] w-[589px] rounded-[6px]",
+  "left-[322px] top-[1020px] h-[42px] w-[588px] rounded-full",
+  "left-[930px] top-[920px] h-[142px] w-[492px] rounded-[6px]",
+  "left-[1441px] top-[920px] h-[142px] w-[462px] rounded-[6px]",
+];
 
 const getNoCamNameFontSize = (name: string) => {
   if (name.length <= 4) return 62;
@@ -169,6 +180,16 @@ export const WidgetObsOverlay = () => {
     >
       {alertonly === null && (
         <>
+          {getPanelRects(noCam).map((rectClassName) => (
+            <div
+              key={rectClassName}
+              className={cn(
+                "absolute",
+                rectClassName,
+                getPanelBackgroundClassName(validTheme)
+              )}
+            />
+          ))}
           <GoalWidgetOverlay
             className="absolute left-[324px] top-[922px] h-[137px] w-[584px] text-center"
             language={language}
@@ -255,6 +276,7 @@ export const WidgetObsOverlay = () => {
           <AnimatedStreamBanner
             className="absolute left-[12px] top-[916px] z-10 h-[153px] w-[295px] text-center"
             language={language}
+            theme={validTheme}
           />
         </>
       )}

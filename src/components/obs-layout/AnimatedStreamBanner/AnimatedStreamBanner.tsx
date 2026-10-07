@@ -5,11 +5,14 @@ import chessterWaveGif from "../../../assets/layout/donation_alert/Chesster_Anim
 import chessterJumpGif from "../../../assets/layout/donation_alert/Chesster_Animation_01.gif";
 import dynamicBox from "../../../assets/layout/obs-overlay-dynamic-box.png";
 
+import { getPanelBackgroundClassName } from "../../../utils/layout/getPanelBackgroundClassName";
+
 import { streamBanners } from "./streamBannerData";
 
 export type AnimatedStreamBannerProps = {
   language: "de" | "en";
   className?: string;
+  theme?: "light" | "dark";
 };
 
 const BANNER_VISIBLE_DURATION = 12000;
@@ -38,6 +41,7 @@ const getChessterStateHidden = (bannerId: number) => {
 export const AnimatedStreamBanner = ({
   language,
   className,
+  theme = "light",
 }: AnimatedStreamBannerProps) => {
   const [currentBanner, setCurrentBanner] = useState(-1);
   const [isBannerVisible, setBannerVisible] = useState(false);
@@ -107,6 +111,12 @@ export const AnimatedStreamBanner = ({
         )}
       >
         <div className="animate-float">
+          <div
+            className={cn(
+              "absolute inset-[3px] rounded-[6px]",
+              getPanelBackgroundClassName(theme)
+            )}
+          />
           <img
             className="absolute inset-0 col-start-1 row-start-1 size-full"
             alt=""
