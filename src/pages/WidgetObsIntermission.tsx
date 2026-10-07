@@ -186,7 +186,7 @@ export const WidgetObsIntermission = () => {
       />
 
       <SmashText
-        text="Upcoming Streams"
+        text={language === "en" ? "Upcoming Streams" : "Nächste Streams"}
         shadowClassName="!top-[1px]"
         className="absolute right-[666px] top-[280px] text-[42px]/none uppercase tracking-[0.09em]"
       />
