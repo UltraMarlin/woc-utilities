@@ -7,7 +7,7 @@ import lightBackgroundAnimation from "../assets/layout/Animation BG Light_1.webm
 import darkBackgroundAnimation from "../assets/layout/Animation Dark BG_1.webm";
 
 const cutout =
-  "path('m 0 0 l 0 1080 l 1920 0 l 0 -182 l -1595 -1 l -1 -898 z')";
+  "path('M 0 0 L 0 1080 L 1920 1080 L 1920 902 L 324 902 L 324 -1 Z')";
 
 const CLIP_PATH_ENABLED = true;
 
